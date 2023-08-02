@@ -2,6 +2,7 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,32 +13,51 @@ namespace DLL.Repos
     {
         public bool Create(User obj)
         {
-            throw new NotImplementedException();
+            _context.Users.Add(obj);
+            int chk = _context.SaveChanges();
+            return chk > 0;
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var userInDb = _context.Users.Find(id);
+            _context.Users.Remove(userInDb);
+
+            int chk = _context.SaveChanges();
+            return chk > 0;
         }
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Users.ToList();
         }
 
         public User GetByID(int id)
         {
-            throw new NotImplementedException();
+            var userInDb = _context.Users.FirstOrDefault(u => u.UserID == id);
+            return userInDb;
         }
 
         public User GetByName(string name)
         {
-            throw new NotImplementedException();
+            var userInDb = _context.Users
+                .Where(u => u.Name.Contains(name))
+                .FirstOrDefault();
+            if (userInDb != null)
+                return userInDb;
+            return new User { UserID = -1, Name = null, UserName = "", Password = "" };
         }
 
         public bool Update(User obj)
         {
-            throw new NotImplementedException();
+            var userInDb = _context.Users.Find(obj.UserID);
+            if (userInDb != null)
+            {
+                _context.Entry(userInDb).State = EntityState.Modified;
+                int chk = _context.SaveChanges();
+                return chk > 0;
+            }
+            return false;
         }
     }
 }
