@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Interfaces
 {
-    internal interface IUserRepo<MODELCLASS,NUMBER,LOGIC,OTHERS>
+    public interface IRepo<MODELCLASS,NUMBER,LOGIC,OTHERS>
     {
         List<MODELCLASS> GetAll();
         MODELCLASS GetByID(NUMBER id);

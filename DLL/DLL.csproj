@@ -56,8 +56,10 @@
     <Compile Include="EF\Models\Job.cs" />
     <Compile Include="EF\Models\Post.cs" />
     <Compile Include="EF\Models\Session.cs" />
+    <Compile Include="EF\Models\Token.cs" />
     <Compile Include="EF\Models\User.cs" />
-    <Compile Include="Interfaces\IUserRepo.cs" />
+    <Compile Include="Interfaces\IAuth.cs" />
+    <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Migrations\202308022004438_DBInIt.cs" />
     <Compile Include="Migrations\202308022004438_DBInIt.designer.cs">
       <DependentUpon>202308022004438_DBInIt.cs</DependentUpon>
@@ -66,9 +68,14 @@
     <Compile Include="Migrations\202308022029393_UserPropertyUpdated.designer.cs">
       <DependentUpon>202308022029393_UserPropertyUpdated.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202308031745061_TokenTableAdded.cs" />
+    <Compile Include="Migrations\202308031745061_TokenTableAdded.designer.cs">
+      <DependentUpon>202308031745061_TokenTableAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repos\DataRepository.cs" />
+    <Compile Include="Repos\TokenRepo.cs" />
     <Compile Include="Repos\UserRepo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308022029393_UserPropertyUpdated.resx">
       <DependentUpon>202308022029393_UserPropertyUpdated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308031745061_TokenTableAdded.resx">
+      <DependentUpon>202308031745061_TokenTableAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

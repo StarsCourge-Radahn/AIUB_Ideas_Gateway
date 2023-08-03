@@ -9,8 +9,18 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class UserRepo : DataRepository, IUserRepo<User, int, bool, string>
+    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth
     {
+        public User Authenticate(string username, string password)
+        {
+            var data = from u in _context.Users
+                       where u.UserName.Equals(username)
+                       && u.Password.Equals(password)
+                       select u;
+
+            return data.SingleOrDefault();
+        }
+
         public bool Create(User obj)
         {
             _context.Users.Add(obj);
