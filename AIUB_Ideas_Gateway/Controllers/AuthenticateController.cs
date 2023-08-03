@@ -32,7 +32,15 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
-            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+
+
+        [HttpPost]
+        [Route("api/register/")]
+        public HttpResponseMessage Register()
+        {
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
     }
 }
