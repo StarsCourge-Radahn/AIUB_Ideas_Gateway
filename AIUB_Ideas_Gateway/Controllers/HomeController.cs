@@ -9,5 +9,16 @@ namespace AIUB_Ideas_Gateway.Controllers
 {
     public class HomeController : ApiController
     {
+        [HttpGet]
+        [Route("api/home")]
+        [Route("api/aig")]
+        public HttpResponseMessage AllPosts()
+        {
+
+
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
     }
 }

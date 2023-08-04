@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class UserService
+    public class UserServices
     {
         public static bool CreateUser(string username, string name, string pass)
         {

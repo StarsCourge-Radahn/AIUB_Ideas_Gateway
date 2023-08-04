@@ -23,5 +23,10 @@ namespace DLL
         {
             return new TokenRepo();
         }
+
+        public static IRepo<Post,int,bool,string> PostDataAccess()
+        {
+            return new PostRepo();
+        }
     }
 }

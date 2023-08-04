@@ -10,7 +10,7 @@ using AutoMapper;
 
 namespace BLL.Services
 {
-    public class AuthService
+    public class AuthServices
     {
         public static TokenDTO Login(string username, string password)
         {

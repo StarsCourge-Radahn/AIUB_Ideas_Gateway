@@ -25,7 +25,9 @@ namespace DLL.Repos
         {
             _context.Users.Add(obj);
             int chk = _context.SaveChanges();
-            return chk > 0;
+            if(chk>0)
+                return true;
+            else return false;
         }
 
         public bool Delete(int id)
@@ -34,7 +36,8 @@ namespace DLL.Repos
             _context.Users.Remove(userInDb);
 
             int chk = _context.SaveChanges();
-            return chk > 0;
+            if(chk>0) return true;
+            else return false;
         }
 
         public List<User> GetAll()
@@ -55,7 +58,8 @@ namespace DLL.Repos
                 .FirstOrDefault();
             if (userInDb != null)
                 return userInDb;
-            return new User { UserID = -1, Name = null, UserName = "", Password = "" };
+            //return new User { UserID = -1, Name = null, UserName = "", Password = "" };
+            return null;
         }
 
         public bool Update(User obj)
@@ -65,7 +69,8 @@ namespace DLL.Repos
             {
                 _context.Entry(userInDb).State = EntityState.Modified;
                 int chk = _context.SaveChanges();
-                return chk > 0;
+                if (chk>0) return true;
+                else return false;
             }
             return false;
         }

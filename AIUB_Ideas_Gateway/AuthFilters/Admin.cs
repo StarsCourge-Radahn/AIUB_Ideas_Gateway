@@ -21,7 +21,7 @@ namespace AIUB_Ideas_Gateway.AuthFilters
             else
             {
                 var token = header.ToString();
-                if (token != null && !AuthService.IsAdmin(token))
+                if (token != null && !AuthServices.IsAdmin(token))
                 {
                     actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized, new { Msg = "Supplied token in invalid or expired" });
                 }

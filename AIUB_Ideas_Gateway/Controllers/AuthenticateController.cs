@@ -17,7 +17,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var token = AuthService.Login(login.UserName, login.Password);
+                var token = AuthServices.Login(login.UserName, login.Password);
                 if (token != null)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, token);
@@ -41,7 +41,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var res = UserService.CreateUser(obj.UserName, obj.Name,obj.Password);
+                var res = UserServices.CreateUser(obj.UserName, obj.Name,obj.Password);
                 if (res == true)
                 {
                     return Request.CreateResponse(HttpStatusCode.Created, new { Msg = "User account created. Back to login" });
