@@ -37,10 +37,23 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         [HttpPost]
         [Route("api/register/")]
-        public HttpResponseMessage Register()
+        public HttpResponseMessage Register(RegisterModel obj)
         {
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            try
+            {
+                var res = UserService.CreateUser(obj.UserName, obj.Name,obj.Password);
+                if (res == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.Created, new { Msg = "User account created. Back to login" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+            return Request.CreateResponse(HttpStatusCode.InternalServerError, new {Msg="Something went wrong!"});
         }
+
+
     }
 }
