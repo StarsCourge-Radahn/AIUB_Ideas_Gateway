@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,11 +15,15 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/aig")]
         public HttpResponseMessage AllPosts()
         {
-
-
-
-            return Request.CreateResponse(HttpStatusCode.OK);
+            try
+            {
+                var posts = PostServices.AllPosts();
+                return Request.CreateResponse(HttpStatusCode.OK, posts);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
-
     }
 }
