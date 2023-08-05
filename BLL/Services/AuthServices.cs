@@ -24,7 +24,8 @@ namespace BLL.Services
                 token.ExpiredAt = null;
                 var tk = DataAccessFactory.TokenDataAccess().Create(token);
 
-                var config = new MapperConfiguration(cfg => {
+                var config = new MapperConfiguration(cfg =>
+                {
                     cfg.CreateMap<Token, TokenDTO>();
                 });
                 var mapper = new Mapper(config);
@@ -40,6 +41,7 @@ namespace BLL.Services
                       where t.TokenKey.Equals(token)
                       && t.ExpiredAt == null
                       select t).SingleOrDefault();
+
             if (tk != null)
             {
                 return true;
@@ -55,6 +57,15 @@ namespace BLL.Services
                       && t.User.Role.Equals("admin")
                       select t).SingleOrDefault();
             return tk != null;
+        }
+
+        public static int GetUserID(string token)
+        {
+            var id = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+                      where t.TokenKey.Equals(token)
+                      && t.ExpiredAt == null
+                      select t.UserId).SingleOrDefault();
+            return id;
         }
     }
 }
