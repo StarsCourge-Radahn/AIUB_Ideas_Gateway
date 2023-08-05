@@ -36,7 +36,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
 
         [HttpPost]
-        [Route("api/register/")]
+        [Route("api/register")]
         public HttpResponseMessage Register(RegisterModel obj)
         {
             try
