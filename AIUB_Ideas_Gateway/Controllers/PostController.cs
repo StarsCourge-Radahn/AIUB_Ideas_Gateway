@@ -1,4 +1,5 @@
 ﻿using AIUB_Ideas_Gateway.Models;
+using BLL.DTOs;
 using BLL.Services;
 using System;
 using System.Collections.Generic;
@@ -28,20 +29,32 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         [HttpPost]
         [Route("api/post/create")]
-        public HttpResponseMessage Create(PostModel obj)
+        public HttpResponseMessage Create(PostDTO obj)
         {
-            try
+            if (obj.Title != null && obj.Content != null)
             {
-                //var data = PostServices.CreatePost();
-                var data = false;
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
-                else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                try
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var userId = AuthServices.GetUserID(token);
+                    obj.CreatedAt = DateTime.Now;
+                    obj.UpdatedAt = null;
+                    obj.UserID = userId;
+
+                    var data = PostServices.CreatePost(obj);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
             }
         }
     }

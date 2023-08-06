@@ -36,15 +36,8 @@ namespace BLL.Services
             return rtn;
         }
 
-        public static bool CreatePost(string title, string content, int userid = 1)
+        public static bool CreatePost(PostDTO postdto)
         {
-            var postdto = new PostDTO();
-            postdto.Title = title;
-            postdto.Content = content;
-            postdto.CreatedAt = DateTime.Now;
-            postdto.UpdatedAt = null;
-            postdto.UserID = userid;
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Post, PostDTO>();
