@@ -2,22 +2,23 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class TokenRepo : DataRepository, IRepo<Token, int, Token, string>
+    internal class TokenRepo : DataRepository, IRepo<Token, int, bool, string>
     {
-        public Token Create(Token obj)
+        public bool Create(Token obj)
         {
             _context.Tokens.Add(obj);
-            _context.SaveChanges();
-            return obj;
+            int chk = _context.SaveChanges();
+            return chk > 0;
         }
 
-        public Token Delete(int id)
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -37,9 +38,11 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public Token Update(Token obj)
+        public bool Update(Token obj)
         {
-            throw new NotImplementedException();
+            _context.Entry(obj).State = EntityState.Modified;
+            int chk = _context.SaveChanges();
+            return chk > 0;
         }
     }
 }

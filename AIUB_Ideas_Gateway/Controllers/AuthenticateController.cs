@@ -27,7 +27,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Username or password invalid" });
                 }
-
             }
             catch (Exception ex)
             {
@@ -73,9 +72,11 @@ namespace AIUB_Ideas_Gateway.Controllers
                         userSession.IsActive = false;
 
                         bool chk = AuthServices.ChangeSession(userSession);
-                        if (chk)
-                        {
+                        // AND with new changeToken.
+                        chk &= AuthServices.ChangeToken(userId, token);
 
+                        if (chk == true)
+                        {
                             return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Logged-Out" });
                         }
                         else
@@ -91,7 +92,6 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
     }
 }

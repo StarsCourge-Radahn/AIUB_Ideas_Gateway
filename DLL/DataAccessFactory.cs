@@ -19,7 +19,7 @@ namespace DLL
         {
             return new UserRepo();
         }
-        public static IRepo<Token, int, Token, string> TokenDataAccess()
+        public static IRepo<Token, int, bool, string> TokenDataAccess()
         {
             return new TokenRepo();
         }

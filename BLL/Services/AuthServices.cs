@@ -82,7 +82,7 @@ namespace BLL.Services
         public static SessionDTO GetUserActiveSession(int userid)
         {
             var data = DataAccessFactory.SessionDataAccess().GetByID(userid);
-            if(data != null)
+            if (data != null)
             {
                 var config = new MapperConfiguration(cfg =>
                 {
@@ -95,6 +95,22 @@ namespace BLL.Services
             return null;
         }
 
+        public static bool ChangeToken(int uid, string token)
+        {
+            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+                      where t.TokenKey.Equals(token)
+                      && t.UserId == uid
+                      && t.ExpiredAt == null
+                      select t).SingleOrDefault();
+
+            var updatetk = false;
+            if (tk != null)
+            {
+                tk.ExpiredAt = DateTime.Now;
+                updatetk = DataAccessFactory.TokenDataAccess().Update(tk);
+            }
+            return updatetk == true;
+        }
         public static bool ChangeSession(SessionDTO obj)
         {
             var data = new Session();
@@ -103,7 +119,6 @@ namespace BLL.Services
             data.IsActive = false;
 
             var rtn = DataAccessFactory.SessionDataAccess().Update(data);
-
             return rtn == true;
         }
     }
