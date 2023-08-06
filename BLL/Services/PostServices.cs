@@ -22,7 +22,6 @@ namespace BLL.Services
             });
             var mapper = new Mapper(config);
             var rtn = mapper.Map<List<PostDTO>>(posts);
-            int totalcount = posts.Count;
             return rtn;
         }
         

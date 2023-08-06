@@ -15,9 +15,6 @@ namespace DLL.EF.Models
         public DateTime? ExpiredAt { get; set; }
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public virtual User User { get; set; }
-        [ForeignKey("Admin")]
-        public int AdminID { get; set; }
-        public virtual Admin Admin { get; set; }
+        public virtual User User { get; set; }        
     }
 }

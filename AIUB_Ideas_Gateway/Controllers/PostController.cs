@@ -62,68 +62,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
             }
         }
-        //Admin post by id
-        [HttpPost]
-        [Route("api/admin/post/{id}")]
-        public HttpResponseMessage AdminPost(int id) 
-        {
-            try
-            {
-                var data = PostServices.Post(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch(Exception ex) 
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }
-        //Admin post create
-        [HttpPost]
-        [Route("api/admin/post/create")]
-        public HttpResponseMessage AdminCreate(PostModel obj) 
-        {
-            try
-            {
-                var data = false;
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
-                else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
-            }
-            catch( Exception ex) 
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }
-        //Admin post delete
-        [HttpPost]
-        [Route("api/admin/post/delete")]
-        public HttpResponseMessage AdminDelete(int id) 
-        {
-            try
-            {
-                var data = PostServices.DeletePost(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch(Exception ex) 
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }
-        //Admin see total number of posts
-        [HttpPost]
-        [Route("api/admin/post/totalpost")]
-        public HttpResponseMessage AdminGet(PostModel obj)
-        {
-            try
-            {
-                var data = PostServices.CountPosts();
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch(Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError,ex.Message.ToString());
-            }
-        }
+        
     }
 }
