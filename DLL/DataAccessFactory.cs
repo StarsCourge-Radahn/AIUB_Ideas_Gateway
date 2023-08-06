@@ -11,7 +11,7 @@ namespace DLL
 {
     public class DataAccessFactory
     {
-        public static IRepo<User,int,bool,string> UserDataAccess()
+        public static IRepo<User, int, bool, string> UserDataAccess()
         {
             return new UserRepo();
         }
@@ -19,14 +19,19 @@ namespace DLL
         {
             return new UserRepo();
         }
-        public static IRepo<Token, int, Token,string> TokenDataAccess()
+        public static IRepo<Token, int, Token, string> TokenDataAccess()
         {
             return new TokenRepo();
         }
 
-        public static IRepo<Post,int,bool,string> PostDataAccess()
+        public static IRepo<Post, int, bool, string> PostDataAccess()
         {
             return new PostRepo();
+        }
+
+        public static IRepo<Session, int, bool, string> SessionDataAccess()
+        {
+            return new SessionRepo();
         }
     }
 }

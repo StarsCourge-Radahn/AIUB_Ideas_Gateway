@@ -16,13 +16,17 @@ namespace BLL.Services
         public static List<PostDTO> AllPosts()
         {
             var posts = DataAccessFactory.PostDataAccess().GetAll();
-            var config = new MapperConfiguration(cfg =>
+            if (posts != null)
             {
-                cfg.CreateMap<Post, PostDTO>();
-            });
-            var mapper = new Mapper(config);
-            var rtn = mapper.Map<List<PostDTO>>(posts);
-            return rtn;
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Post, PostDTO>();
+                });
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<PostDTO>>(posts);
+                return rtn;
+            }
+            return null;
         }
         
         public static List<PostDTO> CountPosts()

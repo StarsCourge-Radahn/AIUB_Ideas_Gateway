@@ -66,8 +66,26 @@ namespace AIUB_Ideas_Gateway.Controllers
                 var userId = AuthServices.GetUserID(token);
                 if (userId > 0)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Logged-Out" });
+                    var userSession = AuthServices.GetUserActiveSession(userId);
+                    if (userSession != null)
+                    {
+                        userSession.LogoutTime = DateTime.Now;
+                        userSession.IsActive = false;
+
+                        bool chk = AuthServices.ChangeSession(userSession);
+                        if (chk)
+                        {
+
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Logged-Out" });
+                        }
+                        else
+                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not able to change the user session.");
+                    }
+                    else
+                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not getting the user session.");
                 }
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not getting the user.");
             }
             catch (Exception ex)
             {
