@@ -22,8 +22,17 @@ namespace BLL.Services
             });
             var mapper = new Mapper(config);
             var rtn = mapper.Map<List<PostDTO>>(posts);
+            int totalcount = posts.Count;
             return rtn;
         }
+        
+        public static List<PostDTO> CountPosts()
+        {
+            var result = AllPosts();
+            int totalCount = result.Count;
+            return result;
+        }
+       
         public static PostDTO Post(int id)
         {
             var post = DataAccessFactory.PostDataAccess().GetByID(id);

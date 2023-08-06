@@ -16,5 +16,9 @@ namespace DLL.EF.Models
         public DateTime? LogoutTime { get; set; }
         public int UserID { get; set; }
         public virtual User User { get; set; }
+
+        public int AdminID { get; set; }
+        public virtual Admin Admin { get; set; }
+
     }
 }
