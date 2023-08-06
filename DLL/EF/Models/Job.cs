@@ -25,5 +25,8 @@ namespace DLL.EF.Models
         [ForeignKey("User")]
         public int UserID { get; set; }
         public virtual User User { get; set; }
+        [ForeignKey("Admin")]
+        public int AdminID { get; set; }
+        public virtual Admin Admin { get; set; }    
     }
 }

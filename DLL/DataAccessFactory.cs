@@ -28,5 +28,9 @@ namespace DLL
         {
             return new PostRepo();
         }
+        public static IRepo<Admin, int, bool, string>AdminDataAccess()
+        {
+            return new AdminRepo();
+        }
     }
 }
