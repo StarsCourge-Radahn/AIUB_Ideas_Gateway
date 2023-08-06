@@ -1,4 +1,5 @@
-﻿using AIUB_Ideas_Gateway.Models;
+﻿using AIUB_Ideas_Gateway.AuthFilters;
+using AIUB_Ideas_Gateway.Models;
 using BLL.Services;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var res = UserServices.CreateUser(obj.UserName, obj.Name,obj.Password);
+                var res = UserServices.CreateUser(obj.UserName, obj.Name, obj.Password);
                 if (res == true)
                 {
                     return Request.CreateResponse(HttpStatusCode.Created, new { Msg = "User account created. Back to login" });
@@ -51,9 +52,28 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-            return Request.CreateResponse(HttpStatusCode.InternalServerError, new {Msg="Something went wrong!"});
+            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong!" });
         }
 
-
+        [LoggedIn]
+        [HttpPost]
+        [Route("api/logout")]
+        public HttpResponseMessage Logout()
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                if (userId > 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Logged-Out" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
     }
 }

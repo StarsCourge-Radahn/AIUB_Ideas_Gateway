@@ -75,5 +75,18 @@ namespace BLL.Services
             var rtn = DataAccessFactory.PostDataAccess().Update(post);
             return rtn;
         }
+
+        public static List<PostDTO> PostSearch(string q)
+        {
+            var data = DataAccessFactory.PostDataAccess().GetByName(q);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Post, PostDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<List<PostDTO>>(data);
+            return rtn;
+        }
+
     }
 }
