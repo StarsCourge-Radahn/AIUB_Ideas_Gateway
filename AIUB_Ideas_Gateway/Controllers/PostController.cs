@@ -1,4 +1,5 @@
-﻿using AIUB_Ideas_Gateway.Models;
+﻿using AIUB_Ideas_Gateway.AuthFilters;
+using AIUB_Ideas_Gateway.Models;
 using BLL.DTOs;
 using BLL.Services;
 using System;
@@ -12,6 +13,8 @@ namespace AIUB_Ideas_Gateway.Controllers
 {
     public class PostController : ApiController
     {
+        // Only login user can access individual post
+        [LoggedIn]
         [HttpPost]
         [Route("api/post/{id}")]
         public HttpResponseMessage Post(int id)
@@ -27,6 +30,8 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
+        // Only login user can create a post
+        [LoggedIn]
         [HttpPost]
         [Route("api/post/create")]
         public HttpResponseMessage Create(PostDTO obj)
