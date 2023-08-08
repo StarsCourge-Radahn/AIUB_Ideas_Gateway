@@ -12,11 +12,20 @@ namespace BLL.Services
 {
     public class UserServices
     {
-        public static bool CreateUser(string username, string name, string pass)
+        public static bool CreateUser(string name, string username, string email, string pass)
         {
-            var userdto = new UserDTO { Name = name, UserName = username ,Password=pass};
+            var ue = DataAccessFactory.AuthDataAccess().GetByEmail(email);
+            var uu = DataAccessFactory.AuthDataAccess().GetByUsername(username);
 
-            var config = new MapperConfiguration(cfg => {
+            if (ue != null && uu != null)
+            {
+                return false;
+            }
+
+            var userdto = new UserDTO { Name = name, UserName = username, Email = email, Password = pass };
+
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<UserDTO, User>();
             });
 
@@ -24,7 +33,7 @@ namespace BLL.Services
             var user = mapper.Map<User>(userdto);
 
             var userCreate = DataAccessFactory.UserDataAccess().Create(user);
-            if(userCreate==true)
+            if (userCreate == true)
             {
                 return true;
             }

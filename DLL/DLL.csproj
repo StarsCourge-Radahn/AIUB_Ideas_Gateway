@@ -60,17 +60,9 @@
     <Compile Include="EF\Models\User.cs" />
     <Compile Include="Interfaces\IAuth.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
-    <Compile Include="Migrations\202308022004438_DBInIt.cs" />
-    <Compile Include="Migrations\202308022004438_DBInIt.designer.cs">
-      <DependentUpon>202308022004438_DBInIt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202308022029393_UserPropertyUpdated.cs" />
-    <Compile Include="Migrations\202308022029393_UserPropertyUpdated.designer.cs">
-      <DependentUpon>202308022029393_UserPropertyUpdated.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202308031745061_TokenTableAdded.cs" />
-    <Compile Include="Migrations\202308031745061_TokenTableAdded.designer.cs">
-      <DependentUpon>202308031745061_TokenTableAdded.cs</DependentUpon>
+    <Compile Include="Migrations\202308081951427_ReconstractUserProperty.cs" />
+    <Compile Include="Migrations\202308081951427_ReconstractUserProperty.designer.cs">
+      <DependentUpon>202308081951427_ReconstractUserProperty.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,16 +76,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202308022004438_DBInIt.resx">
-      <DependentUpon>202308022004438_DBInIt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308022029393_UserPropertyUpdated.resx">
-      <DependentUpon>202308022029393_UserPropertyUpdated.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308031745061_TokenTableAdded.resx">
-      <DependentUpon>202308031745061_TokenTableAdded.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202308081951427_ReconstractUserProperty.resx">
+      <DependentUpon>202308081951427_ReconstractUserProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

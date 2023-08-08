@@ -11,11 +11,11 @@ namespace DLL
 {
     public class DataAccessFactory
     {
-        public static IRepo<User, int, bool, string> UserDataAccess()
+        public static IAuth AuthDataAccess()
         {
             return new UserRepo();
         }
-        public static IAuth AuthDataAccess()
+        public static IRepo<User, int, bool, string> UserDataAccess()
         {
             return new UserRepo();
         }

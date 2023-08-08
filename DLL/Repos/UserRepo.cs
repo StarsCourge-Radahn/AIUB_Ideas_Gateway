@@ -21,11 +21,22 @@ namespace DLL.Repos
             return data.SingleOrDefault();
         }
 
+        public User GetByEmail(string email)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(email));
+            return user;
+        }
+
+        public User GetByUsername(string username)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.UserName.Equals(username));
+            return user;
+        }
         public bool Create(User obj)
         {
             _context.Users.Add(obj);
             int chk = _context.SaveChanges();
-            if(chk>0)
+            if (chk > 0)
                 return true;
             else return false;
         }
@@ -36,7 +47,7 @@ namespace DLL.Repos
             _context.Users.Remove(userInDb);
 
             int chk = _context.SaveChanges();
-            if(chk>0) return true;
+            if (chk > 0) return true;
             else return false;
         }
 
@@ -69,7 +80,7 @@ namespace DLL.Repos
             {
                 _context.Entry(userInDb).State = EntityState.Modified;
                 int chk = _context.SaveChanges();
-                if (chk>0) return true;
+                if (chk > 0) return true;
                 else return false;
             }
             return false;

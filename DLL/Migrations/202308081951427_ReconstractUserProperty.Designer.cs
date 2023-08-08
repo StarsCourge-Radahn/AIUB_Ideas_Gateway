@@ -7,13 +7,13 @@ namespace DLL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class TokenTableAdded : IMigrationMetadata
+    public sealed partial class ReconstractUserProperty : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TokenTableAdded));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ReconstractUserProperty));
         
         string IMigrationMetadata.Id
         {
-            get { return "202308031745061_TokenTableAdded"; }
+            get { return "202308081951427_ReconstractUserProperty"; }
         }
         
         string IMigrationMetadata.Source
