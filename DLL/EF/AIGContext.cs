@@ -15,5 +15,6 @@ namespace DLL.EF
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

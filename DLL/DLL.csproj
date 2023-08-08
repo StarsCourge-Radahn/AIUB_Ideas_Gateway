@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="DataAccessFactory.cs" />
     <Compile Include="EF\AIGContext.cs" />
+    <Compile Include="EF\Models\Comment.cs" />
     <Compile Include="EF\Models\Job.cs" />
     <Compile Include="EF\Models\Post.cs" />
     <Compile Include="EF\Models\Session.cs" />
@@ -63,6 +64,10 @@
     <Compile Include="Migrations\202308081951427_ReconstractUserProperty.cs" />
     <Compile Include="Migrations\202308081951427_ReconstractUserProperty.designer.cs">
       <DependentUpon>202308081951427_ReconstractUserProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308082025410_AddComments.cs" />
+    <Compile Include="Migrations\202308082025410_AddComments.designer.cs">
+      <DependentUpon>202308082025410_AddComments.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +84,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202308081951427_ReconstractUserProperty.resx">
       <DependentUpon>202308081951427_ReconstractUserProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308082025410_AddComments.resx">
+      <DependentUpon>202308082025410_AddComments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
