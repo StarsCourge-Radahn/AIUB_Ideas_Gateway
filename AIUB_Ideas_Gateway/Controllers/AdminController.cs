@@ -77,5 +77,10 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+        //total active user
+        //Admin Can temporary ban users can be loggedin but other activities will be disabled until the ban time expires
+        // Permanent ban cannot create account with same email and username
+        //comment
+        //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
     }
 }
