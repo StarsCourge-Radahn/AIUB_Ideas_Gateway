@@ -14,5 +14,7 @@ namespace BLL.DTOs
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int UserID { get; set; }
+        public bool IsBan { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repos\CommentRepo.cs" />
     <Compile Include="Repos\DataRepository.cs" />
     <Compile Include="Repos\PostRepo.cs" />
     <Compile Include="Repos\SessionRepo.cs" />

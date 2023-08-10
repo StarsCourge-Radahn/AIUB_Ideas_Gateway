@@ -22,7 +22,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<Session> GetAll()
+        public List<Session> GetAll(bool isAdmin = false)
         {
             return _context.Sessions.ToList();
         }

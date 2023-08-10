@@ -22,6 +22,9 @@ namespace DLL.EF.Models
 
         public DateTime? UpdatedAt { get; set; }
 
+        public bool IsBan { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
+
         [ForeignKey("User")]
         public int UserID { get; set; }
         public virtual User User { get; set; }

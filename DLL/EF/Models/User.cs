@@ -25,11 +25,16 @@ namespace DLL.EF.Models
 
         [Required]
         public string Role { get; set; } = "user";
+        [Required]
+        public bool IsBan { get; set; } = false;
+        [Required]
+        public bool TemporaryBan { get; set; } = false;
+        [Required]
+        public bool IsDeleted { get; set; } = false;
+
 
         public virtual ICollection<Post> Posts { get; set; }
-        public virtual ICollection<Job> Jobs{ get; set; }
-        public virtual ICollection<Session> Sessions{ get; set; }
-
-
+        public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Session> Sessions { get; set; }
     }
 }
