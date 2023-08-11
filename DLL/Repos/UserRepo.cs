@@ -15,7 +15,9 @@ namespace DLL.Repos
         {
             var data = from u in _context.Users
                        where u.UserName.Equals(username)
-                       && u.Password.Equals(password) && u.IsBan == false && u.IsDeleted == false
+                       && u.Password.Equals(password) 
+                       && u.IsBan == false 
+                       && u.IsDeleted == false
                        select u;
 
             return data.SingleOrDefault();

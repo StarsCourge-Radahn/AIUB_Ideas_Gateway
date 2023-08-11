@@ -13,6 +13,7 @@ namespace DLL.EF.Models
         public string TokenKey { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ExpiredAt { get; set; }
+
         [ForeignKey("User")]
         public int UserId { get; set; }
         public virtual User User { get; set; }        

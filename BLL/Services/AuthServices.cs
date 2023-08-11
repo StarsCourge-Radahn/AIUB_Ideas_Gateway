@@ -33,12 +33,11 @@ namespace BLL.Services
 
                 if (checkSession == true)
                 {
-                    var config = new MapperConfiguration(cfg =>
-                    {
+                    var config = new MapperConfiguration(cfg => {
                         cfg.CreateMap<Token, TokenDTO>();
                     });
                     var mapper = new Mapper(config);
-                    var rtn = mapper.Map<TokenDTO>(tk);
+                    var rtn = mapper.Map<TokenDTO>(token);
                     return rtn;
                 }
                 return null;
