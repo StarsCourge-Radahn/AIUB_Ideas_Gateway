@@ -15,7 +15,23 @@ namespace BLL.Services
     {
         public static List<PostDTO> AllPosts()
         {
-            var posts = DataAccessFactory.PostDataAccess().GetAll();
+            var posts = DataAccessFactory.PostDataAccess().GetAll(false);
+            if (posts != null)
+            {
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Post, PostDTO>();
+                });
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<PostDTO>>(posts);
+                return rtn;
+            }
+            return null;
+        }
+
+        public static List<PostDTO> AllPostsForAdmin()
+        {
+            var posts = DataAccessFactory.PostDataAccess().GetAll(true);
             if (posts != null)
             {
                 var config = new MapperConfiguration(cfg =>
@@ -91,13 +107,17 @@ namespace BLL.Services
         public static List<PostDTO> PostSearch(string q)
         {
             var data = DataAccessFactory.PostDataAccess().GetByName(q);
-            var config = new MapperConfiguration(cfg =>
+            if (data != null)
             {
-                cfg.CreateMap<Post, PostDTO>();
-            });
-            var mapper = new Mapper(config);
-            var rtn = mapper.Map<List<PostDTO>>(data);
-            return rtn;
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Post, PostDTO>();
+                });
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<PostDTO>>(data);
+                return rtn;
+            }
+            return null;
         }
 
     }

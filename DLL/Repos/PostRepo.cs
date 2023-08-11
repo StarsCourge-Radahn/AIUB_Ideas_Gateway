@@ -14,6 +14,7 @@ namespace DLL.Repos
         {
             obj.IsBan = false;
             obj.IsDeleted = false;
+
             _context.Posts.Add(obj);
             return _context.SaveChanges() > 0;
         }
@@ -24,15 +25,16 @@ namespace DLL.Repos
             if (postInDb != null)
             {
                 postInDb.IsDeleted = true;
+
                 return _context.SaveChanges() > 0;
             }
             return false;
         }
 
-        public List<Post> GetAll(bool isAdmin = false)
+        public List<Post> GetAll(bool isAdmin)
         {
-            if (isAdmin)
-                return _context.Posts.Where(p=>p.IsDeleted ==false).ToList();
+            if (isAdmin == true)
+                return _context.Posts.Where(p => p.IsDeleted == false).ToList();
 
             return _context.Posts.Where(p => p.IsDeleted == false && p.IsBan == false).ToList();
         }
@@ -45,12 +47,10 @@ namespace DLL.Repos
 
         public Post GetByName(string name)
         {
-            var postInDb = _context.Posts.Where(p => p.Title.Contains(name) && p.IsDeleted == false).FirstOrDefault();
-            if (postInDb != null)
-            {
-                return postInDb;
-            }
-            return null;
+            var postInDb = _context.Posts.Where(p => p.Title.Contains(name)
+            && p.IsDeleted == false).FirstOrDefault();
+
+            return postInDb;
         }
 
         public bool Update(Post obj)
@@ -66,7 +66,6 @@ namespace DLL.Repos
                 postInDb.IsDeleted = obj.IsDeleted;
 
                 return _context.SaveChanges() > 0;
-
             }
             return false;
         }

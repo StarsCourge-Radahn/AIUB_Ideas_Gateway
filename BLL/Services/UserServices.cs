@@ -22,7 +22,15 @@ namespace BLL.Services
                 return false;
             }
 
-            var userdto = new UserDTO { Name = name, UserName = username, Email = email, Password = pass };
+            var userdto = new UserDTO
+            {
+                Name = name,
+                UserName = username,
+                Email = email,
+                Password = pass,
+                IsBan = false,
+                IsDeleted = false
+            };
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -32,12 +40,9 @@ namespace BLL.Services
             var mapper = new Mapper(config);
             var user = mapper.Map<User>(userdto);
 
-            var userCreate = DataAccessFactory.UserDataAccess().Create(user);
-            if (userCreate == true)
-            {
-                return true;
-            }
-            return false;
+            var userCreated = DataAccessFactory.UserDataAccess().Create(user);
+            return userCreated == true;
+
         }
     }
 }

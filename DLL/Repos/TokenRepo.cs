@@ -23,7 +23,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<Token> GetAll(bool isAdmin = false)
+        public List<Token> GetAll(bool isAdmin = true)
         {
             return _context.Tokens.ToList();
         }

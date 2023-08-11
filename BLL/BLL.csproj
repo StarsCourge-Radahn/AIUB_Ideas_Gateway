@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\CommentDTO.cs" />
-    <Compile Include="DTOs\IAuth.cs" />
     <Compile Include="DTOs\JobDTO.cs" />
     <Compile Include="DTOs\PostDTO.cs" />
     <Compile Include="DTOs\SessionDTO.cs" />

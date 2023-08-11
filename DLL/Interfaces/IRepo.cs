@@ -8,7 +8,7 @@ namespace DLL.Interfaces
 {
     public interface IRepo<MODELCLASS,NUMBER,LOGIC,OTHERS>
     {
-        List<MODELCLASS> GetAll(bool isAdmin=false);
+        List<MODELCLASS> GetAll(bool isAdmin);
         MODELCLASS GetByID(NUMBER id);
         MODELCLASS GetByName(OTHERS name);
         LOGIC Create(MODELCLASS obj); 

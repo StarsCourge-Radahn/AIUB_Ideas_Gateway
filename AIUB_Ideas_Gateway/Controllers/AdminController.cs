@@ -10,8 +10,8 @@ using System.Web.Http;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
-    //[Admin]
-    //[LoggedIn]
+    [Admin]
+    [LoggedIn]
     public class AdminController : ApiController
     {
         
@@ -29,7 +29,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-        //Admin post create
+
         [HttpPost]
         [Route("api/admin/post/create")]
         public HttpResponseMessage AdminCreate(PostDTO obj)

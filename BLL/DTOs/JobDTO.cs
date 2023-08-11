@@ -16,7 +16,6 @@ namespace BLL.DTOs
 
         public bool IsBan { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
-
         public int UserID { get; set; }
     }
 }

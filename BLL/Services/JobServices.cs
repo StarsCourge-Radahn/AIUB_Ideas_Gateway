@@ -14,8 +14,8 @@ namespace BLL.Services
     {
         public static List<JobDTO> AllJobsPost()
         {
-            var Jobs = DataAccessFactory.JobDataAccess().GetAll();
-            if (Jobs != null)
+            var jobs = DataAccessFactory.JobDataAccess().GetAll(false);
+            if (jobs != null)
             {
                 var config = new MapperConfiguration(cfg =>
                 {
@@ -23,13 +23,30 @@ namespace BLL.Services
                 });
 
                 var mapper = new Mapper(config);
-                var rtn = mapper.Map<List<JobDTO>>(Jobs);
+                var rtn = mapper.Map<List<JobDTO>>(jobs);
 
                 return rtn;
             }
             return null;
         }
 
+        public static List<JobDTO> AllJobsPostForAdmin()
+        {
+            var jobs = DataAccessFactory.JobDataAccess().GetAll(true);
+            if (jobs != null)
+            {
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Job, JobDTO>();
+                });
+
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<JobDTO>>(jobs);
+
+                return rtn;
+            }
+            return null;
+        }
         public static int CountJobPosts()
         {
             var result = AllJobsPost();
@@ -39,6 +56,7 @@ namespace BLL.Services
         public static JobDTO JobPost(int id)
         {
             var job = DataAccessFactory.JobDataAccess().GetByID(id);
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Job,JobDTO>();
@@ -90,6 +108,7 @@ namespace BLL.Services
             var job = mapper.Map<Job>(jobdto);
 
             var rtn = DataAccessFactory.JobDataAccess().Update(job);
+
             return rtn;
         }
 

@@ -47,7 +47,7 @@ namespace BLL.Services
 
         public static bool IsTokenValid(string token)
         {
-            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll(true)
                       where t.TokenKey.Equals(token)
                       && t.ExpiredAt == null
                       select t).SingleOrDefault();
@@ -61,7 +61,7 @@ namespace BLL.Services
 
         public static bool IsAdmin(string token)
         {
-            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll(true)
                       where t.TokenKey.Equals(token)
                       && t.ExpiredAt == null
                       && t.User.Role.Equals("admin")
@@ -71,7 +71,7 @@ namespace BLL.Services
 
         public static int GetUserID(string token)
         {
-            var id = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+            var id = (from t in DataAccessFactory.TokenDataAccess().GetAll(true)
                       where t.TokenKey.Equals(token)
                       && t.ExpiredAt == null
                       select t.UserId).SingleOrDefault();
@@ -96,7 +96,7 @@ namespace BLL.Services
 
         public static bool ChangeToken(int uid, string token)
         {
-            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll()
+            var tk = (from t in DataAccessFactory.TokenDataAccess().GetAll(true)
                       where t.TokenKey.Equals(token)
                       && t.UserId == uid
                       && t.ExpiredAt == null

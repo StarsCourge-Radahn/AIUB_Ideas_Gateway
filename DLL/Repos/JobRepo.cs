@@ -34,7 +34,7 @@ namespace DLL.Repos
             return false;
         }
 
-        public List<Job> GetAll(bool isAdmin = false)
+        public List<Job> GetAll(bool isAdmin)
         {
             if (isAdmin == true)
             {
@@ -56,11 +56,8 @@ namespace DLL.Repos
             var jobInDb = _context.Jobs
                 .Where(j => j.Title.Contains(name) && j.IsDeleted == false)
                 .FirstOrDefault();
-            if (jobInDb != null)
-            {
-                return jobInDb;
-            }
-            return null;
+
+            return jobInDb;
         }
 
         public bool Update(Job obj)

@@ -14,7 +14,7 @@ namespace BLL.Services
     {
         public static List<CommentDTO> AllComments()
         {
-            var comments = DataAccessFactory.CommentDataAccess().GetAll();
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
 
             if (comments != null)
             {
@@ -27,16 +27,14 @@ namespace BLL.Services
 
                 return success;
             }
-
             return null;
-
         }
         public static bool CreateComment(CommentDTO commentDTO)
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CommentDTO, Comment>();
-                cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
+                //cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
             });
             var mapper = new Mapper(config);
 

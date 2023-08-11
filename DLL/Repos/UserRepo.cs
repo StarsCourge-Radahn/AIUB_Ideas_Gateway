@@ -15,8 +15,8 @@ namespace DLL.Repos
         {
             var data = from u in _context.Users
                        where u.UserName.Equals(username)
-                       && u.Password.Equals(password) 
-                       && u.IsBan == false 
+                       && u.Password.Equals(password)
+                       && u.IsBan == false
                        && u.IsDeleted == false
                        select u;
 
@@ -49,10 +49,13 @@ namespace DLL.Repos
 
             return _context.SaveChanges() > 0;
         }
-
-        public List<User> GetAll(bool isAdmin = true)
+        public List<User> GetAll(bool isAdmin)
         {
-            return _context.Users.Where(u => u.IsDeleted == false).ToList();
+            if (isAdmin)
+            {
+                return _context.Users.Where(u => u.IsDeleted == false).ToList();
+            }
+            return _context.Users.Where(u => u.IsDeleted == false && u.IsBan == false).ToList();
         }
 
         public User GetByID(int id)

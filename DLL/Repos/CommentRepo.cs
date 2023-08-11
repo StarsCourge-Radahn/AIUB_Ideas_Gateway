@@ -29,14 +29,18 @@ namespace DLL.Repos
             return false;
         }
 
-        public List<Comment> GetAll(bool isAdmin = false)
+        public List<Comment> GetAll(bool isAdmin)
         {
-            return _context.Comments.Where(u => u.IsDeleted == false).ToList();
+            if (isAdmin == true)
+                return _context.Comments.Where(u => u.IsDeleted == false).ToList();
+            return _context.Comments.Where(c => c.IsDeleted == false && c.IsBan == false).ToList();
         }
 
         public Comment GetByID(int id)
         {
-            var commentbd = _context.Comments.Where(p => p.IsDeleted == false).SingleOrDefault(p => p.CommentID == id);
+            var commentbd = _context.Comments
+                .Where(p => p.IsDeleted == false)
+                .SingleOrDefault(p => p.CommentID == id);
             return commentbd;
         }
 
