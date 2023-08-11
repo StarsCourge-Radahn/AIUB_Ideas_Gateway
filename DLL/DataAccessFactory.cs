@@ -33,5 +33,13 @@ namespace DLL
         {
             return new SessionRepo();
         }
+        public static IRepo<Comment, int, bool, string> CommentDataAccess()
+        {
+            return new CommentRepo();
+        }
+        public static IRepo<Job, int, bool, string> JobDataAccess()
+        {
+            return new JobRepo();
+        }
     }
 }

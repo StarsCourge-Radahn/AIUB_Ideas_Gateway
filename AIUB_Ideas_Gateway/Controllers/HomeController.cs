@@ -44,5 +44,25 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"Invalid search petameter");
         }
+
+
+        [HttpGet]
+        [Route("api/home/searchjobpost/{query}")]
+        public HttpResponseMessage SearchjobPost(string query)
+        {
+            if (query != null)
+            {
+                var data = JobServices.JobPostSearch(query);
+                if (data != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Nothing found related to the query :( !" });
+                }
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid search petameter");
+        }
     }
 }

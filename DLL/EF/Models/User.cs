@@ -36,5 +36,7 @@ namespace DLL.EF.Models
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }= new List<Comment>();
     }
 }

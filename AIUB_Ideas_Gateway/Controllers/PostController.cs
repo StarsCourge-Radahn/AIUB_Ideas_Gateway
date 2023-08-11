@@ -41,24 +41,16 @@ namespace AIUB_Ideas_Gateway.Controllers
                 try
                 {
                     var token = Request.Headers.Authorization.ToString();
-
                     var userId = AuthServices.GetUserID(token);
-
                     obj.CreatedAt = DateTime.Now;
                     obj.UpdatedAt = null;
                     obj.UserID = userId;
-                    obj.IsBan = false;
-                    obj.IsDeleted = false;
 
                     var data = PostServices.CreatePost(obj);
                     if (data == true)
-                    {
                         return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
-                    }
                     else
-                    {
                         return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -68,6 +60,57 @@ namespace AIUB_Ideas_Gateway.Controllers
             else
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
+            }
+        }
+
+
+        // Only login user can access individual job post
+        [LoggedIn]
+        [HttpPost]
+        [Route("api/jobpost/{id}")]
+        public HttpResponseMessage Job(int id)
+        {
+            try
+            {
+                var data = JobServices.JobPost(id);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        // Only login user can create a jobpost
+        [LoggedIn]
+        [HttpPost]
+        [Route("api/Jobpost/create")]
+        public HttpResponseMessage Create(JobDTO obj)
+        {
+            if (obj.Title != null && obj.Description != null)
+            {
+                try
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var userId = AuthServices.GetUserID(token);
+                    obj.CreatedAt = DateTime.Now;
+                    obj.UpdatedAt = null;
+                    obj.UserID = userId;
+
+                    var data = JobServices.CreateJobPost(obj);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Post Created!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Job post" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Job Post object" });
             }
         }
 
