@@ -36,6 +36,11 @@ namespace DLL.Repos
             return _context.Jobs.ToList();
         }
 
+        public List<Job> GetAll(bool isAdmin = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public Job GetByID(int id)
         {
             var jobInDb = _context.Jobs.SingleOrDefault(p => p.JobID == id);
