@@ -21,18 +21,19 @@ namespace BLL.Services
                 {
                     cfg.CreateMap<Job, JobDTO>();
                 });
+
                 var mapper = new Mapper(config);
                 var rtn = mapper.Map<List<JobDTO>>(Jobs);
+
                 return rtn;
             }
             return null;
         }
 
-        public static List<JobDTO> CountJobPosts()
+        public static int CountJobPosts()
         {
             var result = AllJobsPost();
-            int totalCount = result.Count;
-            return result;
+            return result.Count;
         }
 
         public static JobDTO JobPost(int id)
@@ -44,6 +45,7 @@ namespace BLL.Services
             });
             var mapper = new Mapper(config);
             var rtn = mapper.Map<JobDTO>(job);
+
             return rtn;
         }
 
@@ -51,11 +53,12 @@ namespace BLL.Services
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Job, JobDTO>();
+                cfg.CreateMap<JobDTO, Job>();
             });
             var mapper = new Mapper(config);
 
             var jb = mapper.Map<Job>(jobdto);
+
             var rtn = DataAccessFactory.JobDataAccess().Create(jb);
             return rtn;
         }
@@ -69,15 +72,18 @@ namespace BLL.Services
         public static bool UpdateJobPost(JobDTO obj)
         {
             var jobdto = new JobDTO();
+
             jobdto.Title = obj.Title;
             jobdto.Description = obj.Description;
 
+            jobdto.CreatedAt = obj.CreatedAt;
             jobdto.UpdatedAt = DateTime.Now;
             jobdto.UserID = obj.UserID;
-
+            jobdto.IsBan = obj.IsBan;
+            
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Job, JobDTO>();
+                cfg.CreateMap<JobDTO, Job>();
             });
             var mapper = new Mapper(config);
 
