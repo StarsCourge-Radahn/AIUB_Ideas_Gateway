@@ -69,6 +69,10 @@
     <Compile Include="Migrations\202308082025410_AddComments.designer.cs">
       <DependentUpon>202308082025410_AddComments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.cs" />
+    <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.designer.cs">
+      <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repos\CommentRepo.cs" />
@@ -88,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308082025410_AddComments.resx">
       <DependentUpon>202308082025410_AddComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.resx">
+      <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
