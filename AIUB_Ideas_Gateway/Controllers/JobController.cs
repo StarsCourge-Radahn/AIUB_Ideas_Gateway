@@ -14,6 +14,16 @@ namespace AIUB_Ideas_Gateway.Controllers
 
     public class JobController : ApiController
     {
+        [HttpGet]
+        [Route("/api/jobs")]
+        public HttpResponseMessage Jobs()
+        {
+
+
+            return new HttpResponseMessage();
+        }
+
+
         // Only login user can access individual job post
         [HttpPost]
         [Route("api/job/{id}")]

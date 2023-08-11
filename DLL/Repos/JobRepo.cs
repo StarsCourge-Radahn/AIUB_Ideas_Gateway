@@ -10,8 +10,11 @@ namespace DLL.Repos
 {
     internal class JobRepo : DataRepository, IRepo<Job, int, bool, string>
     {
-         public bool Create(Job obj)
+        public bool Create(Job obj)
         {
+            obj.IsBan = false;
+            obj.IsDeleted = false;
+
             _context.Jobs.Add(obj);
             int chk = _context.SaveChanges();
             return chk > 0;
@@ -19,37 +22,40 @@ namespace DLL.Repos
 
         public bool Delete(int id)
         {
-            var postInDb = _context.Jobs.SingleOrDefault(p => p.JobID == id);
-            if (postInDb != null)
+            var jobInDb = _context.Jobs.Where(j => j.IsDeleted == false).SingleOrDefault(p => p.JobID == id);
+            if (jobInDb != null)
             {
-                _context.Jobs.Remove(postInDb);
+                //_context.Jobs.Remove(postInDb);
+                jobInDb.IsDeleted = true;
+
                 int chk = _context.SaveChanges();
-                if (chk > 0)
-                    return true;
-                else return false;
+                return chk > 0;
             }
             return false;
         }
 
-        public List<Job> GetAll()
-        {
-            return _context.Jobs.ToList();
-        }
-
         public List<Job> GetAll(bool isAdmin = false)
         {
-            throw new NotImplementedException();
+            if (isAdmin == true)
+            {
+                return _context.Jobs.Where(j => j.IsDeleted == false).ToList();
+            }
+            return _context.Jobs.Where(j => j.IsDeleted == false && j.IsBan == false).ToList();
         }
 
         public Job GetByID(int id)
         {
-            var jobInDb = _context.Jobs.SingleOrDefault(p => p.JobID == id);
+            var jobInDb = _context.Jobs
+                .Where(j => j.IsDeleted == false)
+                .SingleOrDefault(j => j.JobID == id);
             return jobInDb;
         }
 
         public Job GetByName(string name)
         {
-            var jobInDb = _context.Jobs.Where(p => p.Title.Contains(name)).FirstOrDefault();
+            var jobInDb = _context.Jobs
+                .Where(j => j.Title.Contains(name) && j.IsDeleted == false)
+                .FirstOrDefault();
             if (jobInDb != null)
             {
                 return jobInDb;
@@ -66,10 +72,11 @@ namespace DLL.Repos
                 jobInDb.Description = obj.Description;
                 jobInDb.UpdatedAt = DateTime.Now;
 
+                jobInDb.IsDeleted = obj.IsDeleted;
+                jobInDb.IsBan = obj.IsBan;
+
                 int chk = _context.SaveChanges();
-                if (chk > 0)
-                    return true;
-                else return false;
+                return chk > 0;
             }
             return false;
         }
