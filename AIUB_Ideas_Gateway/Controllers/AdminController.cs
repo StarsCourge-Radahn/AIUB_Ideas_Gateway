@@ -10,8 +10,8 @@ using System.Web.Http;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
-    [Admin]
-    [LoggedIn]
+    //[Admin]
+    //[LoggedIn]
     public class AdminController : ApiController
     {
         
@@ -82,5 +82,70 @@ namespace AIUB_Ideas_Gateway.Controllers
         // Permanent ban cannot create account with same email and username
         //comment
         //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
+         //Admin see job posts
+        [HttpPost]
+        [Route("api/admin/jobpost/{id}")]
+        public HttpResponseMessage AdminjobPost(int id)
+        {
+            try
+            {
+                var data = JobServices.JobPost(id);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+        //Admin  create job posts
+        [HttpPost]
+        [Route("api/admin/jobpost/create")]
+        public HttpResponseMessage AdminjobpostCreate(JobDTO obj)
+        {
+            try
+            {
+                var data = false;
+                if (data == true)
+                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Post Created!" });
+                else
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Jobpost" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+        //Admin delete job posts
+
+        [HttpPost]
+        [Route("api/admin/jobpost/delete/{id}")]
+        public HttpResponseMessage AdminjobDelete(int id)
+        {
+            try
+            {
+                var data = JobServices.DeleteJobPost(id);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+        //Admin see total number of jobposts
+        [HttpGet]
+        [Route("api/admin/post/totaljobpost")]
+        public HttpResponseMessage TotaljobPosts()
+        {
+            try
+            {
+                var data = JobServices.CountJobPosts();
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
     }
 }
