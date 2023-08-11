@@ -28,14 +28,14 @@ namespace BLL.Services
             }
             return null;
         }
-        
+
         public static List<PostDTO> CountPosts()
         {
             var result = AllPosts();
             int totalCount = result.Count;
             return result;
         }
-       
+
         public static PostDTO Post(int id)
         {
             var post = DataAccessFactory.PostDataAccess().GetByID(id);
@@ -52,7 +52,7 @@ namespace BLL.Services
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Post, PostDTO>();
+                cfg.CreateMap<PostDTO, Post>();
             });
             var mapper = new Mapper(config);
 
@@ -78,7 +78,7 @@ namespace BLL.Services
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Post, PostDTO>();
+                cfg.CreateMap<PostDTO, Post>();
             });
             var mapper = new Mapper(config);
 

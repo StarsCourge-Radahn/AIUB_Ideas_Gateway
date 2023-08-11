@@ -41,16 +41,24 @@ namespace AIUB_Ideas_Gateway.Controllers
                 try
                 {
                     var token = Request.Headers.Authorization.ToString();
+
                     var userId = AuthServices.GetUserID(token);
+
                     obj.CreatedAt = DateTime.Now;
                     obj.UpdatedAt = null;
                     obj.UserID = userId;
+                    obj.IsBan = false;
+                    obj.IsDeleted = false;
 
                     var data = PostServices.CreatePost(obj);
                     if (data == true)
+                    {
                         return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
+                    }
                     else
+                    {
                         return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -62,6 +70,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
             }
         }
-        
+
     }
 }
