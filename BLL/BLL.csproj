@@ -53,6 +53,7 @@
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthServices.cs" />
+    <Compile Include="Services\CommentServices.cs" />
     <Compile Include="Services\JobServices.cs" />
     <Compile Include="Services\PostServices.cs" />
     <Compile Include="Services\UserServices.cs" />
