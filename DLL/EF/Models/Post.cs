@@ -19,6 +19,9 @@ namespace DLL.EF.Models
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        public bool IsBan { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
+
         public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("User")]

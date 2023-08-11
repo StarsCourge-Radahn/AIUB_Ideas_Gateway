@@ -12,9 +12,10 @@ namespace DLL.Repos
     {
         public bool Create(Post obj)
         {
+            obj.IsBan = false;
+            obj.IsDeleted = false;
             _context.Posts.Add(obj);
-            int chk = _context.SaveChanges();
-            return chk > 0;
+            return _context.SaveChanges() > 0;
         }
 
         public bool Delete(int id)
@@ -22,29 +23,29 @@ namespace DLL.Repos
             var postInDb = _context.Posts.SingleOrDefault(p => p.PostID == id);
             if (postInDb != null)
             {
-                _context.Posts.Remove(postInDb);
-                int chk = _context.SaveChanges();
-                if (chk > 0)
-                    return true; 
-                else return false;
+                postInDb.IsDeleted = true;
+                return _context.SaveChanges() > 0;
             }
             return false;
         }
 
-        public List<Post> GetAll()
+        public List<Post> GetAll(bool isAdmin = false)
         {
-            return _context.Posts.ToList();
+            if (isAdmin)
+                return _context.Posts.Where(p=>p.IsDeleted ==false).ToList();
+
+            return _context.Posts.Where(p => p.IsDeleted == false && p.IsBan == false).ToList();
         }
 
         public Post GetByID(int id)
         {
-            var postInDb = _context.Posts.SingleOrDefault(p => p.PostID == id);
+            var postInDb = _context.Posts.Where(p => p.IsDeleted == false).SingleOrDefault(p => p.PostID == id);
             return postInDb;
         }
 
         public Post GetByName(string name)
         {
-            var postInDb = _context.Posts.Where(p => p.Title.Contains(name)).FirstOrDefault();
+            var postInDb = _context.Posts.Where(p => p.Title.Contains(name) && p.IsDeleted == false).FirstOrDefault();
             if (postInDb != null)
             {
                 return postInDb;
@@ -61,10 +62,11 @@ namespace DLL.Repos
                 postInDb.Content = obj.Content;
                 postInDb.UpdatedAt = DateTime.Now;
 
-                int chk = _context.SaveChanges();
-                if (chk > 0)
-                    return true;
-                else return false;
+                postInDb.IsBan = obj.IsBan;
+                postInDb.IsDeleted = obj.IsDeleted;
+
+                return _context.SaveChanges() > 0;
+
             }
             return false;
         }

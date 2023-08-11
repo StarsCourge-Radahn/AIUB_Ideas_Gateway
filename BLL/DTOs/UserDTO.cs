@@ -14,5 +14,9 @@ namespace BLL.DTOs
         public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; } = "user";
+
+        public bool IsBan { get; set; } = false;
+        public bool TemporaryBan { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

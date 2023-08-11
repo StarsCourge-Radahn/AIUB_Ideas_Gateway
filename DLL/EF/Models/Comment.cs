@@ -17,7 +17,8 @@ namespace DLL.EF.Models
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
+        public bool IsBan { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
         public int? UserID { get; set; }
         public virtual User User { get; set; }
 
