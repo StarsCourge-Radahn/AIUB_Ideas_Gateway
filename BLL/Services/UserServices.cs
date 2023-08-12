@@ -64,7 +64,7 @@ namespace BLL.Services
         public static UserDTO GetUser(int id)
         {
             var user = DataAccessFactory.UserDataAccess().GetByID(id);
-            var config = new MapperConfiguration(cfg => { cfg.CreateMap<User, UserDTO>(); });  
+            var config = new MapperConfiguration(cfg => { cfg.CreateMap<User, UserDTO>(); });
             var mapper = new Mapper(config);
             var rtn = mapper.Map<UserDTO>(user);
             return rtn;
@@ -76,7 +76,8 @@ namespace BLL.Services
             return false;
         }
 
-        public static bool DeleteUser(int id) {
+        public static bool DeleteUser(int id)
+        {
             var rtn = DataAccessFactory.UserDataAccess().Delete(id);
             return rtn;
         }
@@ -86,11 +87,10 @@ namespace BLL.Services
             return cnt.Count();
         }
 
-        public static int AllBanUses() {
+        public static int AllBanUses()
+        {
             var banUsers = DataAccessFactory.UserStaticalDataAccess().AllBan();
             return banUsers.Count();
         }
-
-
     }
 }

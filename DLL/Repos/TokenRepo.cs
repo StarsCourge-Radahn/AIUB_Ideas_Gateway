@@ -33,7 +33,7 @@ namespace DLL.Repos
             return _context.Tokens.Find(id);
         }
 
-        public Token GetByName(string name)
+        public List<Token> GetByName(string name)
         {
             throw new NotImplementedException();
         }

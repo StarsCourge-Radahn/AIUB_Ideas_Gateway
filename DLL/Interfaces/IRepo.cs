@@ -10,7 +10,7 @@ namespace DLL.Interfaces
     {
         List<MODELCLASS> GetAll(bool isAdmin);
         MODELCLASS GetByID(NUMBER id);
-        MODELCLASS GetByName(OTHERS name);
+        List<MODELCLASS> GetByName(OTHERS name);
         LOGIC Create(MODELCLASS obj); 
         LOGIC Delete(NUMBER id);
         LOGIC Update(MODELCLASS obj);

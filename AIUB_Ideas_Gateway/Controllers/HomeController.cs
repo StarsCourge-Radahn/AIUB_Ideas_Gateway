@@ -12,8 +12,7 @@ namespace AIUB_Ideas_Gateway.Controllers
     {
         [HttpGet]
         [Route("api/home")]
-        [Route("api/aig")]
-        public HttpResponseMessage AllPosts()
+        public HttpResponseMessage  AllPosts()
         {
             try
             {

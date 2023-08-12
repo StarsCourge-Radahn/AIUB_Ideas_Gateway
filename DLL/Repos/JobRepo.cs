@@ -51,11 +51,11 @@ namespace DLL.Repos
             return jobInDb;
         }
 
-        public Job GetByName(string name)
+        public List<Job> GetByName(string name)
         {
             var jobInDb = _context.Jobs
                 .Where(j => j.Title.Contains(name) && j.IsDeleted == false)
-                .FirstOrDefault();
+                .ToList();
 
             return jobInDb;
         }

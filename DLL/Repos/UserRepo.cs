@@ -64,11 +64,11 @@ namespace DLL.Repos
             return userInDb;
         }
 
-        public User GetByName(string name)
+        public List<User> GetByName(string name)
         {
             var userInDb = _context.Users
                 .Where(u => u.Name.Contains(name) && u.IsDeleted == false)
-                .FirstOrDefault();
+                .ToList();
             if (userInDb != null)
             {
                 return userInDb;

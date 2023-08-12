@@ -45,10 +45,10 @@ namespace DLL.Repos
             return postInDb;
         }
 
-        public Post GetByName(string name)
+        public List<Post> GetByName(string name)
         {
             var postInDb = _context.Posts.Where(p => p.Title.Contains(name)
-            && p.IsDeleted == false).FirstOrDefault();
+            && p.IsDeleted == false).ToList();
 
             return postInDb;
         }

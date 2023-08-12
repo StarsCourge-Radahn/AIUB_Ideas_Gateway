@@ -49,7 +49,7 @@ namespace DLL.Repos
                 .SingleOrDefault();
         }
 
-        public Session GetByName(string name)
+        public List<Session> GetByName(string name)
         {
             throw new NotImplementedException();
         }
