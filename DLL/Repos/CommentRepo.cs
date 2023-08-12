@@ -22,7 +22,7 @@ namespace DLL.Repos
                 int fnd = _context.SaveChanges();
                 return fnd > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -120,7 +120,7 @@ namespace DLL.Repos
 
                 return affectedRows > 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

@@ -12,7 +12,6 @@ using System.Web.Http;
 namespace AIUB_Ideas_Gateway.Controllers
 {
     [LoggedIn]
-
     public class PostController : ApiController
     {
         // Only login user can access individual post
@@ -69,29 +68,33 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         public HttpResponseMessage Update(PostDTO obj)
         {
-            try
+            if (obj.UserID >0 && obj.PostID > 0)
             {
-                // getting the current user token
-                var token = Request.Headers.Authorization.ToString();
-                var userId = AuthServices.GetUserID(token);
-                if (obj.UserID == userId)
+                try
                 {
-                    var res = PostServices.UpdatePost(obj);
-                    if (res == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post updated" });
+                    // getting the current user token
+                    var token = Request.Headers.Authorization.ToString();
+                    var userId = AuthServices.GetUserID(token);
+                    if (obj.UserID == userId)
+                    {
+                        var res = PostServices.UpdatePost(obj);
+                        if (res == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post updated" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something wen wrong in post update" });
+                    }
                     else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something wen wrong in post update" });
+                    {
+                        return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this post!" });
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this post!" });
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-
+            else
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post object" });
         }
 
         // delete post
@@ -99,24 +102,28 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/post/delete")]
         public HttpResponseMessage Delete(PostDTO obj)
         {
-            try
+            if (obj.PostID > 0 && obj.UserID > 0)
             {
-                var token = Request.Headers.Authorization.ToString();
-                var userId = AuthServices.GetUserID(token);
-                if (obj.UserID == userId)
+                try
                 {
-                    var res = PostServices.DeletePost(obj.PostID);
-                    if (res == true) return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Delete" });
-                    else return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post delete" });
+                    var token = Request.Headers.Authorization.ToString();
+                    var userId = AuthServices.GetUserID(token);
+                    if (obj.UserID == userId)
+                    {
+                        var res = PostServices.DeletePost(obj.PostID);
+                        if (res == true) return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Delete" });
+                        else return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post delete" });
+                    }
+                    else return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this post!" });
 
                 }
-                else return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this post!" });
-
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
             }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
+            else
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post information" });
         }
     }
 }

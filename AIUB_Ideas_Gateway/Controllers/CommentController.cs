@@ -10,9 +10,10 @@ using System.Web.Http;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
+    [LoggedIn]
     public class CommentController : ApiController
     {
-        [LoggedIn]
+
         [HttpGet]
         [Route("api/comment/all")]
         public HttpResponseMessage All()
@@ -31,7 +32,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/create")]
         public HttpResponseMessage Create(CommentDTO obj)
@@ -61,7 +62,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Comment object" });
             }
         }
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/{id}")]
         public HttpResponseMessage CommentById(int id)
@@ -79,7 +80,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/comment/delete/{id}")]
         public HttpResponseMessage Delete(int id)
@@ -101,7 +101,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/comment/post/{id}")]
         public HttpResponseMessage PostId(int id)
@@ -117,7 +116,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/job/{id}")]
         public HttpResponseMessage JobId(int id)
@@ -134,7 +133,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/user/{id}")]
         public HttpResponseMessage UserId(int id)
@@ -152,7 +151,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/postcount/{id}")]
         public HttpResponseMessage CountByPost(int id)
@@ -168,7 +167,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/jobcount/{id}")]
         public HttpResponseMessage CountByJob(int id)
@@ -184,7 +183,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/update/{id}")]
         public HttpResponseMessage UpdateComment(int id, CommentDTO updatedComment)

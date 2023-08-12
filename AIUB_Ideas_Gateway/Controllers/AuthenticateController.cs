@@ -76,6 +76,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                         userSession.IsActive = false;
 
                         bool chk = AuthServices.ChangeSession(userSession);
+
                         // AND with new changeToken.
                         chk &= AuthServices.ChangeToken(userId, token);
 

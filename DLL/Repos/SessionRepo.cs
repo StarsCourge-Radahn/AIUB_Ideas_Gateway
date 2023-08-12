@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace DLL.Repos
 {
-    internal class SessionRepo : DataRepository, IRepo<Session, int, bool, string>, IStatistical<Session, int,bool, Session,string>
+    internal class SessionRepo : DataRepository, IRepo<Session, int, bool, string>, IStatistical<Session, int, bool, Session, string>
     {
         public List<Session> ActiveAll()
         {
-            return _context.Sessions.Where(s=>s.IsActive == true).ToList();
+            return _context.Sessions.Where(s => s.IsActive == true).ToList();
         }
 
         public List<Session> AllBan()
@@ -27,9 +28,15 @@ namespace DLL.Repos
 
         public bool Create(Session obj)
         {
-            _context.Sessions.Add(obj);
-            int chk = _context.SaveChanges();
-            return chk > 0;
+            try
+            {
+                _context.Sessions.Add(obj);
+                return _context.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Delete(int id)
@@ -44,9 +51,17 @@ namespace DLL.Repos
 
         public Session GetByID(int id)
         {
-            return _context.Sessions
-                .Where(s => s.UserID == id && s.IsActive == true)
-                .SingleOrDefault();
+            try
+            {
+                var session = _context.Sessions.
+                    Where(s=>s.UserID == id && s.IsActive == true && s.LogoutTime==null)
+                    .FirstOrDefault();
+                return session;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public List<Session> GetByName(string name)
@@ -56,12 +71,21 @@ namespace DLL.Repos
 
         public bool Update(Session obj)
         {
-            var InDb = _context.Sessions.Find(obj.SessionID);
-            InDb.LogoutTime = obj.LogoutTime;
-            InDb.IsActive = obj.IsActive;
-
-            int chk = _context.SaveChanges();
-            return chk > 0;
+            try
+            {
+                var sessionInDb = _context.Sessions.FirstOrDefault(s=>s.SessionID == obj.SessionID);
+                if (sessionInDb != null)
+                {
+                    sessionInDb.LogoutTime = obj.LogoutTime;
+                    sessionInDb.IsActive = obj.IsActive;
+                    return _context.SaveChanges() > 0;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

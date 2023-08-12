@@ -40,9 +40,20 @@ namespace DLL.Repos
 
         public bool Update(Token obj)
         {
-            _context.Entry(obj).State = EntityState.Modified;
-            int chk = _context.SaveChanges();
-            return chk > 0;
+            try
+            {
+                var tokenInDb = _context.Tokens.FirstOrDefault(t => t.Id == obj.Id);
+                if (tokenInDb != null)
+                {
+                    tokenInDb.ExpiredAt = obj.ExpiredAt;
+                    return _context.SaveChanges() > 0;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

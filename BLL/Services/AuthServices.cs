@@ -33,7 +33,8 @@ namespace BLL.Services
 
                 if (checkSession == true)
                 {
-                    var config = new MapperConfiguration(cfg => {
+                    var config = new MapperConfiguration(cfg =>
+                    {
                         cfg.CreateMap<Token, TokenDTO>();
                     });
                     var mapper = new Mapper(config);
@@ -112,10 +113,15 @@ namespace BLL.Services
         }
         public static bool ChangeSession(SessionDTO obj)
         {
-            var data = new Session();
-            data.UserID = obj.UserID;
-            data.LogoutTime = obj.LogoutTime;
-            data.IsActive = false;
+            // Creating a new session obj
+            var data = new Session
+            {
+                SessionID = obj.SessionID,
+                IsActive = false,
+                UserID = obj.UserID,
+                LogoutTime = obj.LogoutTime,
+                LoginTime = obj.LoginTime
+            };
 
             var rtn = DataAccessFactory.SessionDataAccess().Update(data);
             return rtn == true;
