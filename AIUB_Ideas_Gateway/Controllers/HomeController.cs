@@ -27,7 +27,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
         [HttpGet]
-        [Route("api/home/search/{query}")]
+        [Route("api/home/search/post/{query}")]
         public HttpResponseMessage SearchPost(string query)
         {
             if (query != null)
@@ -39,16 +39,16 @@ namespace AIUB_Ideas_Gateway.Controllers
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Nothing found related to the query :( !" });
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Nothing found related to this" + query + ":( !" });
                 }
             }
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest,"Invalid search petameter");
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid search petameter");
         }
 
 
         [HttpGet]
-        [Route("api/home/searchjobpost/{query}")]
-        public HttpResponseMessage SearchjobPost(string query)
+        [Route("api/home/search/job/{query}")]
+        public HttpResponseMessage SearchJobPost(string query)
         {
             if (query != null)
             {
@@ -59,7 +59,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Nothing found related to the query :( !" });
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Nothing found related to this" + query + ":( !" });
                 }
             }
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid search petameter");

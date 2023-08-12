@@ -8,8 +8,23 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class SessionRepo : DataRepository, IRepo<Session, int, bool, string>
+    internal class SessionRepo : DataRepository, IRepo<Session, int, bool, string>, IStatistical<Session, int,bool, Session,string>
     {
+        public List<Session> ActiveAll()
+        {
+            return _context.Sessions.Where(s=>s.IsActive == true).ToList();
+        }
+
+        public List<Session> AllBan()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Session> AllTempBan()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Create(Session obj)
         {
             _context.Sessions.Add(obj);

@@ -10,16 +10,16 @@ using System.Web.Http;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
+    [LoggedIn]
     public class CommentController : ApiController
     {
-       // [LoggedIn]
         [HttpGet]
         [Route("api/comment/all")]
         public HttpResponseMessage All()
         {
             try
             {
-               // var token = Request.Headers.Authorization.ToString();
+                // var token = Request.Headers.Authorization.ToString();
                 var commments = CommentServices.AllComments();
                 return Request.CreateResponse(HttpStatusCode.OK, commments);
             }
@@ -31,7 +31,6 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
 
-       // [LoggedIn]
         [HttpPost]
         [Route("api/comment/create")]
         public HttpResponseMessage Create(CommentDTO obj)
@@ -61,7 +60,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Comment object" });
             }
         }
-       // [LoggedIn]
+
         [HttpPost]
         [Route("api/comment/{id}")]
         public HttpResponseMessage CommentById(int id)
@@ -79,7 +78,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        // [LoggedIn]
         [HttpPost]
         [Route("api/comment/delete/{id}")]
         public HttpResponseMessage Delete(int id)

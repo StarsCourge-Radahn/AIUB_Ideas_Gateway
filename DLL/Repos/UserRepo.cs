@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth
+    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, IStatistical<User, int, bool, User, string>
     {
         public User Authenticate(string username, string password)
         {
@@ -95,6 +95,21 @@ namespace DLL.Repos
 
             }
             return false;
+        }
+
+        public List<User> ActiveAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<User> AllBan()
+        {
+            return _context.Users.Where(u => u.IsBan == true).ToList();
+        }
+
+        public List<User> AllTempBan()
+        {
+            return _context.Users.Where(u => u.TemporaryBan == true).ToList();
         }
     }
 }

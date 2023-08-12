@@ -41,5 +41,14 @@ namespace DLL
         {
             return new JobRepo();
         }
+
+        public static IStatistical<User,int,bool, User,string> UserStaticalDataAccess()
+        {
+            return new UserRepo();
+        }
+        public static IStatistical<User, int, bool, User, string> ActiveUsersDataAccess()
+        {
+            return new UserRepo();
+        }
     }
 }

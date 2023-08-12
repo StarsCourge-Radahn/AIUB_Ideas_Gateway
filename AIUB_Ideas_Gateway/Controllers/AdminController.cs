@@ -14,7 +14,7 @@ namespace AIUB_Ideas_Gateway.Controllers
     [LoggedIn]
     public class AdminController : ApiController
     {
-        
+
         [HttpPost]
         [Route("api/admin/post/{id}")]
         public HttpResponseMessage AdminPost(int id)
@@ -77,12 +77,113 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+
+        //Admin see total number of jobposts
+        [HttpGet]
+        [Route("api/admin/post/totaljobpost")]
+        public HttpResponseMessage TotaljobPosts()
+        {
+            try
+            {
+                var data = JobServices.CountJobPosts();
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
         //total active user
+
+        [HttpGet]
+        [Route("api/admin/active")]
+        public HttpResponseMessage ActiveUsers()
+        {
+            try
+            {
+                var res = UserServices.CurrentlyActiveUsers();
+                return Request.CreateResponse(HttpStatusCode.OK, res);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
         //Admin Can temporary ban users can be loggedin but other activities will be disabled until the ban time expires
+
+        [HttpGet]
+        [Route("api/admin/ban/users/")]
+        public HttpResponseMessage BanUsers()
+        {
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+
+        [HttpPost]
+        [Route("api/admin/ban/user/{userid}")]
+        public HttpResponseMessage BanUser(int userid)
+        {
+            try
+            {
+                var user = user
+            }
+            catch (Exception ex)
+            {
+
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
         // Permanent ban cannot create account with same email and username
+
+        [HttpPost]
+        [Route("api/admin/tempban/user/{userid}")]
+        public HttpResponseMessage TmeporayBanUser(int userid)
+        {
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+
+        [HttpPost]
+        [Route("api/admin/ban/post/{postid}")]
+        public HttpResponseMessage BanPost(int postid)
+        {
+
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+        // Permanent ban cannot create account with same email and username
+
+        [HttpPost]
+        [Route("api/admin/tempban/post/{postid}")]
+        public HttpResponseMessage TmeporayBanPost(int postid)
+        {
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+
+
+        [HttpPost]
+        [Route("api/admin/ban/job/{jobid}")]
+        public HttpResponseMessage BanJob(int jobid)
+        {
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+        // Permanent ban cannot create account with same email and username
+
+        [HttpPost]
+        [Route("api/admin/tempban/job/{jobid}")]
+        public HttpResponseMessage TmeporayBanJob(int postid)
+        {
+            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        }
+
         //comment
         //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
-         //Admin see job posts
+        // for implementing this we have different search login at user / post/
+
+
+
+
+        //Admin see job posts
         [HttpPost]
         [Route("api/admin/jobpost/{id}")]
         public HttpResponseMessage AdminjobPost(int id)
@@ -131,21 +232,5 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-        //Admin see total number of jobposts
-        [HttpGet]
-        [Route("api/admin/post/totaljobpost")]
-        public HttpResponseMessage TotaljobPosts()
-        {
-            try
-            {
-                var data = JobServices.CountJobPosts();
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }
-
     }
 }
