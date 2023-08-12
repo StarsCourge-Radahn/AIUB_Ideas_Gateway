@@ -16,7 +16,7 @@ namespace AIUB_Ideas_Gateway.AuthFilters
             var header = actionContext.Request.Headers.Authorization;
             if (header == null)
             {
-                actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized, new { Msg = "No token supplied! Please login and try again." });
+                actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized, new { Msg = "No token supplied! Please login or check you token." });
             }
             else
             {

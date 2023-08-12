@@ -18,9 +18,19 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("/api/jobs")]
         public HttpResponseMessage Jobs()
         {
-
-
-            return new HttpResponseMessage();
+            try
+            {
+                var jobs = JobServices.AllJobsPost();
+                if (jobs.Count == 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Currently No Jobs are available!" });
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, jobs);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
         }
 
 
@@ -54,6 +64,8 @@ namespace AIUB_Ideas_Gateway.Controllers
                     obj.CreatedAt = DateTime.Now;
                     obj.UpdatedAt = null;
                     obj.UserID = userId;
+                    obj.IsBan = false;
+                    obj.IsDeleted = false;
 
                     var data = JobServices.CreateJobPost(obj);
                     if (data == true)
@@ -66,9 +78,62 @@ namespace AIUB_Ideas_Gateway.Controllers
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
                 }
             }
-            else
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Job Post object" });
+        }
+
+        [HttpPost]
+        [Route("api/job/update")]
+        public HttpResponseMessage Update(JobDTO obj)
+        {
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Job Post object" });
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                if (obj.UserID == userId)
+                {
+                    var res = JobServices.UpdateJobPost(obj);
+
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job updated!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job update!" });
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the rights to update this job." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        [HttpPost]
+        [Route("api/job/delete")]
+        public HttpResponseMessage Delete(JobDTO obj)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                if (obj.UserID == userId)
+                {
+                    var res = JobServices.DeleteJobPost(obj.JobID);
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job deleted!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job delete!" });
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the rights to delete this job!" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
     }
