@@ -21,6 +21,8 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
+                var token = Request.Headers.Authorization.ToString();
+                var adminID = AuthServices.IsAdmin(token);
                 var data = PostServices.Post(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
@@ -34,28 +36,79 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/admin/post/create")]
         public HttpResponseMessage AdminCreate(PostDTO obj)
         {
+            if (obj.Title != null && obj.Content != null)
+            {
+                try
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var adminID = AuthServices.GetUserID(token);
+                    obj.CreatedAt = DateTime.Now;
+                    obj.UpdatedAt = null;
+                    obj.UserID = adminID;
+
+                    var data = PostServices.CreatePost(obj);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
+            }
+        }
+        // Admin post update
+        [HttpPost]
+        [Route("api/admin/post/update")]
+        public HttpResponseMessage AdminUpdate(PostDTO obj)
+        {
             try
             {
-                var data = false;
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
+                var token = Request.Headers.Authorization.ToString();
+                var adminID = AuthServices.GetUserID(token);
+                if (obj.UserID == adminID)
+                {
+                    var res = PostServices.UpdatePost(obj);
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post update" });
+                }
                 else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                {
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this post!" });
+                }
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
+
         }
         //Admin post delete
         [HttpPost]
         [Route("api/admin/post/delete/{id}")]
-        public HttpResponseMessage AdminDelete(int id)
+        public HttpResponseMessage AdminDelete(PostDTO obj)
         {
             try
             {
-                var data = PostServices.DeletePost(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                var token = Request.Headers.Authorization.ToString();
+                var adminID = AuthServices.GetUserID(token);
+                if (obj.UserID==adminID)
+                {
+                    var res = PostServices.DeletePost(obj.PostID);
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post deleted" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post delete" });
+                }
+                else
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this post!" });
             }
             catch (Exception ex)
             {
@@ -203,29 +256,80 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/admin/jobpost/create")]
         public HttpResponseMessage AdminjobpostCreate(JobDTO obj)
         {
+            if (obj.Title != null && obj.Description != null)
+            {
+                try
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var adminID = AuthServices.GetUserID(token);
+                    obj.CreatedAt = DateTime.Now;
+                    obj.UpdatedAt = null;
+                    obj.UserID = adminID;
+
+                    var data = JobServices.CreateJobPost(obj);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Created!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of job" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job object" });
+            }
+        }
+        //Admin update jobn post
+        [HttpPost]
+        [Route("api/admin/post/update")]
+        public HttpResponseMessage AdminJobUpdate(JobDTO obj)
+        {
             try
             {
-                var data = false;
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Post Created!" });
+                var token = Request.Headers.Authorization.ToString();
+                var adminID = AuthServices.GetUserID(token);
+                if (obj.UserID == adminID)
+                {
+                    var res = JobServices.UpdateJobPost(obj);
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Updated" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job update" });
+                }
                 else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Jobpost" });
+                {
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this job!" });
+                }
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
+
         }
         //Admin delete job posts
 
         [HttpPost]
         [Route("api/admin/jobpost/delete/{id}")]
-        public HttpResponseMessage AdminjobDelete(int id)
+        public HttpResponseMessage AdminJobDelete(JobDTO obj)
         {
             try
             {
-                var data = JobServices.DeleteJobPost(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                var token = Request.Headers.Authorization.ToString();
+                var adminID = AuthServices.GetUserID(token);
+                if (obj.UserID == adminID)
+                {
+                    var res = JobServices.DeleteJobPost(obj.JobID);
+                    if (res == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Deleted" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Job delete" });
+                }
+                else
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this job!" });
             }
             catch (Exception ex)
             {
