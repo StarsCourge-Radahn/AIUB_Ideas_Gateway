@@ -34,7 +34,7 @@ namespace BLL.Services
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CommentDTO, Comment>();
-                //cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
+                cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
             });
             var mapper = new Mapper(config);
 
@@ -46,7 +46,7 @@ namespace BLL.Services
 
         public static CommentDTO CommentById(int id)
         {
-            var comment = DataAccessFactory.CommentDataAccess().GetByID(id);
+            var comment = DataAccessFactory.CommentDataAccess().GetByCommentID(id);
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Comment, CommentDTO>();
@@ -61,5 +61,68 @@ namespace BLL.Services
             var result = DataAccessFactory.CommentDataAccess().Delete(id);
             return result;
         }
+
+        public static List<CommentDTO> PostId(int id)
+        {
+            var comment = DataAccessFactory.CommentDataAccess().GetByPostID(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comment, CommentDTO>();
+            });
+            var mapper = new Mapper(config);
+            var result = mapper.Map<List<CommentDTO>>(comment);
+            return result;
+        }
+
+        public static List<CommentDTO> JobId(int id)
+        {
+            var comment = DataAccessFactory.CommentDataAccess().GetByJobID(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comment, CommentDTO>();
+            });
+            var mapper = new Mapper(config);
+            var result = mapper.Map<List<CommentDTO>>(comment);
+            return result;
+        }
+        public static List<CommentDTO> UserId(int id)
+        {
+            var comment = DataAccessFactory.CommentDataAccess().GetByUserID(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comment, CommentDTO>();
+            });
+            var mapper = new Mapper(config);
+            var result = mapper.Map<List<CommentDTO>>(comment);
+            return result;
+        }
+        public static int CountByPost(int postId)
+        {
+            var count = DataAccessFactory.CommentDataAccess().CountByPost(postId);
+            return count;
+        }
+        public static int CountByJob(int jobId)
+        {
+            var count = DataAccessFactory.CommentDataAccess().CountByJob(jobId);
+            return count;
+        }
+
+        public static bool UpdateComment(CommentDTO comment)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<CommentDTO, Comment>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedComment = mapper.Map<Comment>(comment);
+
+            bool success = DataAccessFactory.CommentDataAccess().Update(updatedComment);
+            return success;
+        }
+
+
     }
+
+
 }
