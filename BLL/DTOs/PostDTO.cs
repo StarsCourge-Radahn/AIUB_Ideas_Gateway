@@ -20,5 +20,10 @@ namespace BLL.DTOs
         public DateTime? UpdatedAt { get; set; }
 
         public int UserID { get; set; }
+
+        public static bool CreatePost(PostDTO obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
