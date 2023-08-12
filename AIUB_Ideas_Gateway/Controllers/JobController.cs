@@ -15,7 +15,7 @@ namespace AIUB_Ideas_Gateway.Controllers
     public class JobController : ApiController
     {
         [HttpGet]
-        [Route("/api/jobs")]
+        [Route("api/jobs")]
         public HttpResponseMessage Jobs()
         {
             try

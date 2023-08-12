@@ -60,6 +60,7 @@
     <Compile Include="EF\Models\Token.cs" />
     <Compile Include="EF\Models\User.cs" />
     <Compile Include="Interfaces\IAuth.cs" />
+    <Compile Include="Interfaces\IComment.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Interfaces\IStatistical.cs" />
     <Compile Include="Migrations\202308081951427_ReconstractUserProperty.cs" />

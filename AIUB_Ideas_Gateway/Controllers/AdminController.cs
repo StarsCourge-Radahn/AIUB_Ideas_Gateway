@@ -121,20 +121,20 @@ namespace AIUB_Ideas_Gateway.Controllers
             return Request.CreateResponse(HttpStatusCode.InternalServerError);
         }
 
-        [HttpPost]
+       /* [HttpPost]
         [Route("api/admin/ban/user/{userid}")]
         public HttpResponseMessage BanUser(int userid)
         {
             try
             {
-                var user = user
+                //var user = user;
             }
             catch (Exception ex)
             {
 
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-        }
+        }*/
         // Permanent ban cannot create account with same email and username
 
         [HttpPost]
