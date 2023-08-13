@@ -10,13 +10,12 @@ using System.Web.Http;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
-    [LoggedIn]
     public class CommentController : ApiController
     {
-
+        [LoggedIn]
         [HttpGet]
         [Route("api/comment/all")]
-        public HttpResponseMessage All()
+        public HttpResponseMessage All() // all comment(post and job)
         {
             try
             {
@@ -32,9 +31,9 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
 
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/create")]
+        [Route("api/comment/create")]  // Create Comment
         public HttpResponseMessage Create(CommentDTO obj)
         {
             if (obj.Text != null)
@@ -62,9 +61,9 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Comment object" });
             }
         }
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/{id}")]
+        [Route("api/comment/{id}")]  // Find comment by comment id
         public HttpResponseMessage CommentById(int id)
         {
             try
@@ -80,8 +79,9 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/delete/{id}")]
+        [Route("api/comment/delete/{id}")] // Delete comment by comment id
         public HttpResponseMessage Delete(int id)
         {
             try
@@ -101,8 +101,9 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/post/{id}")]
+        [Route("api/comment/post/{id}")]   // Find all comments for a post by post id
         public HttpResponseMessage PostId(int id)
         {
             try
@@ -116,9 +117,9 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/job/{id}")]
+        [Route("api/comment/job/{id}")] // Find all comments for a Job by job id
         public HttpResponseMessage JobId(int id)
         {
             try
@@ -133,9 +134,28 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/user/{id}")]
+        [Route("api/comment/user")]  // Find all comments create by session User 
+        public HttpResponseMessage User()
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                var data = CommentServices.UserId(userId);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+
+        }
+
+        [LoggedIn]
+        [HttpPost]
+        [Route("api/comment/user/{id}")]  // Find all comments create by User (User id)
         public HttpResponseMessage UserId(int id)
         {
             try
@@ -151,9 +171,55 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/userpost/{postId}")]
+        public HttpResponseMessage GetUserPostComments(int postId)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
 
+                CommentServices commentServices = new CommentServices(); // Create an instance
+                var comments = commentServices.GetUserPostComments(userId, postId);
+
+                return Request.CreateResponse(HttpStatusCode.OK, comments);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/userjob/{jobId}")]
+        public HttpResponseMessage GetUserJobComments(int jobId)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+
+                CommentServices commentServices = new CommentServices();
+                var comments = commentServices.GetUserJobComments(userId, jobId);
+
+                return Request.CreateResponse(HttpStatusCode.OK, comments);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
+
+
+
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/postcount/{id}")]
+        [Route("api/comment/postcount/{id}")]  // Count numbers of comment for a post by PostID
         public HttpResponseMessage CountByPost(int id)
         {
             try
@@ -167,9 +233,9 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/jobcount/{id}")]
+        [Route("api/comment/jobcount/{id}")] // Count numbers of comment for a Jod post by JobID
         public HttpResponseMessage CountByJob(int id)
         {
             try
@@ -183,9 +249,9 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-
+        [LoggedIn]
         [HttpPost]
-        [Route("api/comment/update/{id}")]
+        [Route("api/comment/update/{id}")] // Update only the comment Text
         public HttpResponseMessage UpdateComment(int id, CommentDTO updatedComment)
         {
             try

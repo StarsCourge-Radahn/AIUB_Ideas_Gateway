@@ -22,7 +22,7 @@ namespace DLL.Repos
                 int fnd = _context.SaveChanges();
                 return fnd > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -120,11 +120,32 @@ namespace DLL.Repos
 
                 return affectedRows > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
         }
+
+        public List<Comment> GetUserPostComments(int userId, int postId)
+        {
+            var comments = _context.Comments
+                .Where(c => c.UserID == userId && c.PostID == postId)
+                .ToList();
+
+            return comments;
+        }
+
+        public List<Comment> GetUserJobComments(int userId, int postId)
+        {
+            var comments = _context.Comments
+                .Where(c => c.UserID == userId && c.JobID == postId)
+                .ToList();
+
+            return comments;
+        }
+
+
+
 
 
     }

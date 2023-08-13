@@ -96,6 +96,32 @@ namespace BLL.Services
             var result = mapper.Map<List<CommentDTO>>(comment);
             return result;
         }
+
+        public List<CommentDTO> GetUserPostComments(int userId, int postId)
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetUserPostComments(userId, postId);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comment, CommentDTO>();
+            });
+            var mapper = new Mapper(config);
+            var result = mapper.Map<List<CommentDTO>>(comments);
+            return result;
+        }
+
+        public List<CommentDTO> GetUserJobComments(int userId, int postId)
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetUserJobComments(userId, postId);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Comment, CommentDTO>();
+            });
+            var mapper = new Mapper(config);
+            var result = mapper.Map<List<CommentDTO>>(comments);
+            return result;
+        }
+
+
         public static int CountByPost(int postId)
         {
             var count = DataAccessFactory.CommentDataAccess().CountByPost(postId);
