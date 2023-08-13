@@ -13,6 +13,8 @@ namespace DLL.Interfaces
         List<MODELCLASS> GetByPostID(NUMBER id);
         List<MODELCLASS> GetByJobID(NUMBER id);
         List<MODELCLASS> GetByUserID(NUMBER id);
+        List<MODELCLASS> GetUserPostComments(NUMBER id, NUMBER id2);
+        List<MODELCLASS> GetUserJobComments(NUMBER id, NUMBER id2);
         NUMBER CountByPost(NUMBER id);
         NUMBER CountByJob(NUMBER id);
         MODELCLASS GetByName(OTHERS name);
@@ -21,3 +23,4 @@ namespace DLL.Interfaces
         LOGIC Update(MODELCLASS obj);
     }
 }
+
