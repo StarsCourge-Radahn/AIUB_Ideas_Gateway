@@ -13,7 +13,7 @@ namespace AIUB_Ideas_Gateway.Controllers
     public class AuthenticateController : ApiController
     {
         [HttpPost]
-        [Route("api/login/")]
+        [Route("api/login")]
         public HttpResponseMessage Login(LoginModel login)
         {
             try

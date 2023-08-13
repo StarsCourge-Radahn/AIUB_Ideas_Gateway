@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -72,7 +73,19 @@ namespace BLL.Services
 
         public static bool UpdateUser(UserDTO obj)
         {
-            // have to updat users. like banning user, changin user info.
+            var user = DataAccessFactory.UserDataAccess().GetByID(obj.UserID);
+            if (user != null)
+            {
+                user.Name = obj.Name;
+                user.Password = obj.Password;
+                user.Email = obj.Email;
+                user.IsDeleted = obj.IsDeleted;
+                user.IsBan = obj.IsBan;
+                user.TemporaryBan = obj.TemporaryBan;
+
+                var rtn = DataAccessFactory.UserDataAccess().Update(user);
+                return rtn == true;
+            }
             return false;
         }
 
