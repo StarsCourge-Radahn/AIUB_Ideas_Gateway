@@ -137,7 +137,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         [LoggedIn]
         [HttpPost]
         [Route("api/comment/user")]  // Find all comments create by session User 
-        public HttpResponseMessage User()
+        public HttpResponseMessage UserComments()
         {
             try
             {
