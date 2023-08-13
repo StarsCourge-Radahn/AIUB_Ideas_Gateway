@@ -240,7 +240,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-
+             
                 int count = CommentServices.CountByJob(id);
                 return Request.CreateResponse(HttpStatusCode.OK, new { Count = count });
             }

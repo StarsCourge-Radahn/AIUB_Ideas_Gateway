@@ -15,6 +15,13 @@ namespace AIUB_Ideas_Gateway.Controllers
     public class AdminController : ApiController
     {
 
+
+        // job seeker can orient cv --> user profile
+        // same formate to download cv all the applicants
+
+        // upvote and reporting
+        // apply for job from job post 
+
         [HttpPost]
         [Route("api/admin/post/{id}")]
         public HttpResponseMessage AdminPost(int id)
