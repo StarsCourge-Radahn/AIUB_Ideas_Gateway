@@ -52,7 +52,7 @@ namespace BLL.Services
             return result;
         }
 
-        public static PostDTO Post(int id)
+        public static PostDTO GetPost(int id)
         {
             var post = DataAccessFactory.PostDataAccess().GetByID(id);
             var config = new MapperConfiguration(cfg =>

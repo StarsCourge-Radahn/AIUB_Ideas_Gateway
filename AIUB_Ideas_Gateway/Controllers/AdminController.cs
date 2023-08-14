@@ -30,7 +30,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 var token = Request.Headers.Authorization.ToString();
                 var adminID = AuthServices.IsAdmin(token);
-                var data = PostServices.Post(id);
+                var data = PostServices.GetPost(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception ex)
@@ -106,7 +106,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 var token = Request.Headers.Authorization.ToString();
                 var adminID = AuthServices.GetUserID(token);
-                if (obj.UserID==adminID)
+                if (obj.UserID == adminID)
                 {
                     var res = PostServices.DeletePost(obj.PostID);
                     if (res == true)
@@ -140,8 +140,8 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         //Admin see total number of jobposts
         [HttpGet]
-        [Route("api/admin/post/totaljobpost")]
-        public HttpResponseMessage TotaljobPosts()
+        [Route("api/admin/post/totaljob")]
+        public HttpResponseMessage TotalJobPosts()
         {
             try
             {
@@ -173,68 +173,290 @@ namespace AIUB_Ideas_Gateway.Controllers
 
 
         //Admin Can temporary ban users can be loggedin but other activities will be disabled until the ban time expires
-
-        [HttpGet]
-        [Route("api/admin/ban/users/")]
-        public HttpResponseMessage BanUsers()
+        [HttpPost]
+        [Route("api/admin/ban/user/{uid}")]
+        public HttpResponseMessage BanUser(int uid)
         {
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            if (uid > 0)
+            {
+                try
+                {
+                    var user = UserServices.GetUser(uid);
+                    if (user != null)
+                    {
+                        user.IsBan = true;
+                        bool rtn = UserServices.UpdateUser(user);
+                        if (rtn == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & user is ban now!" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Somthing went wrong in user ban!" });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-       /* [HttpPost]
-        [Route("api/admin/ban/user/{userid}")]
-        public HttpResponseMessage BanUser(int userid)
-        {
-            try
-            {
-                //var user = user;
-            }
-            catch (Exception ex)
-            {
-
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }*/
         // Permanent ban cannot create account with same email and username
 
         [HttpPost]
-        [Route("api/admin/tempban/user/{userid}")]
-        public HttpResponseMessage TmeporayBanUser(int userid)
+        [Route("api/admin/tempban/user/{uid}")]
+        public HttpResponseMessage TemporaryBanUser(int uid)
         {
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            if (uid > 0)
+            {
+                try
+                {
+                    var user = UserServices.GetUser(uid);
+                    if (user != null)
+                    {
+                        user.TemporaryBan = true;
+                        bool rtn = UserServices.UpdateUser(user);
+                        if (rtn == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & user is temporary ban now!" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in user temporary ban!" });
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User doesn't exists. Please check the user id!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        [HttpPost]
+        [Route("api/admin/unban/user/uid")]
+        public HttpResponseMessage UnbanUser(int uid)
+        {
+            if (uid > 0)
+            {
+                try
+                {
+                    var user = UserServices.GetUser(uid); if (user != null)
+                        if (user != null)
+                        {
+                            user.IsBan = false;
+                            bool rtn = UserServices.UpdateUser(user);
+                            if (rtn == true)
+                            {
+                                return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & user is unbanned now!" });
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in user un ban!" });
+                            }
+                        }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        [HttpPost]
+        [Route("api/admin/tempunban/user/{uid}")]
+        public HttpResponseMessage TemporaryUnBanUser(int uid)
+        {
+            if (uid > 0)
+            {
+                try
+                {
+                    var user = UserServices.GetUser(uid);
+                    if (user != null)
+                    {
+                        user.TemporaryBan = false;
+                        bool rtn = UserServices.UpdateUser(user);
+                        if (rtn == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & removed temporary ban now!" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in temporary unban!" });
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User doesn't exists. Please check the user id!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
         [HttpPost]
         [Route("api/admin/ban/post/{postid}")]
         public HttpResponseMessage BanPost(int postid)
         {
-
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            if (postid > 0)
+            {
+                try
+                {
+                    var post = PostServices.GetPost(postid);
+                    if (post != null)
+                    {
+                        post.IsBan = true;
+                        bool rtn = PostServices.UpdatePost(post);
+                        if (rtn == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post info updated and post is ban now!" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post ban" });
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
-        // Permanent ban cannot create account with same email and username
+
+        //[HttpPost]
+        //[Route("api/admin/tempban/post/{postid}")]
+        //public HttpResponseMessage TmeporayBanPost(int postid)
+        //{
+        //    if (postid > 0)
+        //    {
+        //        try
+        //        {
+        //            var post = PostServices.GetPost(postid);
+        //            if(post != null)
+        //            {
+        //                post.
+        //            }
+        //            return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found" });
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+        //        }
+        //    }
+        //    return Request.CreateResponse(HttpStatusCode.BadRequest);
+        //}
 
         [HttpPost]
-        [Route("api/admin/tempban/post/{postid}")]
-        public HttpResponseMessage TmeporayBanPost(int postid)
+        [Route("api/admin/unban/post/postid")]
+        public HttpResponseMessage UnbanPost(int postid)
         {
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
-        }
+            if (postid > 0)
+            {
+                try
+                {
+                    var post = PostServices.GetPost(postid);
+                    if (post != null)
+                    {
+                        post.IsBan = false;
+                        bool rtn = PostServices.UpdatePost(post);
+                        if (rtn == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post is unbanned!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Something went wrong in unban post!" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
 
+        }
 
         [HttpPost]
         [Route("api/admin/ban/job/{jobid}")]
         public HttpResponseMessage BanJob(int jobid)
         {
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            if (jobid > 0)
+            {
+                try
+                {
+                    var job = JobServices.JobPost(jobid);
+                    if (job != null)
+                    {
+                        job.IsBan = true;
+                        bool rtn = JobServices.UpdateJobPost(job);
+                        if (rtn == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job is banned now!" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Something went wrong in job ban!" });
+                        }
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Job not found" });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
         // Permanent ban cannot create account with same email and username
 
+        //[HttpPost]
+        //[Route("api/admin/tempban/job/{jobid}")]
+        //public HttpResponseMessage TmeporayBanJob(int postid)
+        //{
+        //    return Request.CreateResponse(HttpStatusCode.InternalServerError);
+        //}
+
         [HttpPost]
-        [Route("api/admin/tempban/job/{jobid}")]
-        public HttpResponseMessage TmeporayBanJob(int postid)
+        [Route("api/admin/unban/job/{jobid}")]
+        public HttpResponseMessage UnbanJob(int jobid)
         {
-            return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            if (jobid > 0)
+            {
+                try
+                {
+                    var job = JobServices.JobPost(jobid);
+                    if (job != null)
+                    {
+                        job.IsBan = false;
+                        bool rtn = JobServices.UpdateJobPost(job);
+                        if (rtn == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job is unbanned now!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job unban!" }); ;
+
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Job not found!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
+
 
         //comment
         //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
@@ -258,6 +480,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+
         //Admin  create job posts
         [HttpPost]
         [Route("api/admin/jobpost/create")]
@@ -289,7 +512,8 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job object" });
             }
         }
-        //Admin update jobn post
+
+        //Admin update job post
         [HttpPost]
         [Route("api/admin/post/update")]
         public HttpResponseMessage AdminJobUpdate(JobDTO obj)
@@ -317,8 +541,9 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-        //Admin delete job posts
 
+
+        //Admin delete job posts
         [HttpPost]
         [Route("api/admin/jobpost/delete/{id}")]
         public HttpResponseMessage AdminJobDelete(JobDTO obj)

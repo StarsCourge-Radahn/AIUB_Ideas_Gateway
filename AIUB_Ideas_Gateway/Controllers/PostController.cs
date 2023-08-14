@@ -21,7 +21,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var data = PostServices.Post(id);
+                var data = PostServices.GetPost(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception ex)
