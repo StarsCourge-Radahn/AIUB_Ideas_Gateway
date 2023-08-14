@@ -123,6 +123,23 @@ namespace BLL.Services
             var rtn = mapper.Map<List<JobDTO>>(data);
             return rtn;
         }
-
+        public static List<JobDTO> GetPostsInRange(DateTime today, DateTime upto)
+        {
+            try
+            {
+                var jobs = DataAccessFactory.JobStatisticalDataAccess().WithInRange(today, upto);
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Job, JobDTO>();
+                });
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<JobDTO>>(jobs);
+                return rtn;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

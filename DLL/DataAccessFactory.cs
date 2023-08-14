@@ -42,13 +42,21 @@ namespace DLL
             return new CommentRepo();
         }
 
-        public static IStatistical<User,int,bool, User,string> UserStaticalDataAccess()
+        public static IStatistical<User, int, bool, User, string> UserStaticalDataAccess()
         {
             return new UserRepo();
         }
         public static IStatistical<User, int, bool, User, string> ActiveUsersDataAccess()
         {
             return new UserRepo();
+        }
+        public static IStatistical<Post, int, bool, Post, string> PostStatisticalDataAccess()
+        {
+            return new PostRepo();
+        }
+        public static IStatistical<Job,int,bool,Job,string> JobStatisticalDataAccess()
+        {
+            return new JobRepo();
         }
     }
 }

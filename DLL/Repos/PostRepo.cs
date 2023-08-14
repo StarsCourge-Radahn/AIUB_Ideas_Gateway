@@ -8,8 +8,23 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class PostRepo : DataRepository, IRepo<Post, int, bool, string>
+    internal class PostRepo : DataRepository, IRepo<Post, int, bool, string>, IStatistical<Post, int, bool,Post, string>
     {
+        public List<Post> ActiveAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Post> AllBan()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Post> AllTempBan()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Create(Post obj)
         {
             obj.IsBan = false;
@@ -68,6 +83,13 @@ namespace DLL.Repos
                 return _context.SaveChanges() > 0;
             }
             return false;
+        }
+
+        public List<Post> WithInRange(DateTime today, DateTime uptoDay)
+        {
+            return _context.Posts
+                .Where(p => p.CreatedAt >= today && p.CreatedAt <= uptoDay && p.IsDeleted == false)
+                .ToList();
         }
     }
 }

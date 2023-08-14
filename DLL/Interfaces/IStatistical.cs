@@ -11,5 +11,6 @@ namespace DLL.Interfaces
         List<MODELCLASS> ActiveAll();
         List<MODELCLASS> AllBan();
         List<MODELCLASS> AllTempBan();
+        List<MODELCLASS> WithInRange(DateTime today, DateTime uptoDay);
     }
 }

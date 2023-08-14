@@ -462,6 +462,25 @@ namespace AIUB_Ideas_Gateway.Controllers
         //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
         // for implementing this we have different search login at user / post/
 
+        //Getting posts with in a date range
+        [HttpGet]
+        [Route("api/admin/posts/within}")]
+        // GET api/post/within?today=2023-08-10&uptoDay=2023-08-14
+        public HttpResponseMessage GetPostsWithinRange(DateTime today, DateTime uptoDay)
+        {
+            try
+            {
+                var posts = PostServices.GetPostsInRange(today, uptoDay);
+                if (posts != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, posts);
+                else
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No post found!" });
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError,ex.Message.ToString());    
+            }
+        }
 
 
 
@@ -480,6 +499,8 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+            
+        
 
         //Admin  create job posts
         [HttpPost]

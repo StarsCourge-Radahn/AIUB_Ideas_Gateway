@@ -120,5 +120,23 @@ namespace BLL.Services
             return null;
         }
 
+        public static List<PostDTO> GetPostsInRange(DateTime today, DateTime upto)
+        {
+            try
+            {
+                var data = DataAccessFactory.PostStatisticalDataAccess().WithInRange(today, upto);
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<Post, PostDTO>();
+                });
+                var mapper = new Mapper(config);
+                var rtn = mapper.Map<List<PostDTO>>(data);
+                return rtn;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

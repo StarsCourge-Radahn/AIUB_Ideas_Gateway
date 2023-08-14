@@ -111,5 +111,11 @@ namespace DLL.Repos
         {
             return _context.Users.Where(u => u.TemporaryBan == true).ToList();
         }
+
+        public List<User> WithInRange(DateTime today, DateTime uptoDay)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

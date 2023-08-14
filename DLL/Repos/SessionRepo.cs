@@ -26,6 +26,11 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
+        public List<Session> WithInRange(DateTime today, DateTime uptoDay)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Create(Session obj)
         {
             try

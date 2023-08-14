@@ -8,8 +8,23 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class JobRepo : DataRepository, IRepo<Job, int, bool, string>
+    internal class JobRepo : DataRepository, IRepo<Job, int, bool, string>, IStatistical<Job, int,bool,Job,string>
     {
+        public List<Job> ActiveAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Job> AllBan()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Job> AllTempBan()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Create(Job obj)
         {
             obj.IsBan = false;
@@ -76,6 +91,13 @@ namespace DLL.Repos
                 return chk > 0;
             }
             return false;
+        }
+
+        public List<Job> WithInRange(DateTime today, DateTime uptoDay)
+        {
+            return _context.Jobs
+                .Where(j=>j.CreatedAt >= today && j.CreatedAt <= uptoDay && j.IsDeleted==false)
+                .ToList ();
         }
     }
 }
