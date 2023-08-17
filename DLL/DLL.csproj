@@ -68,6 +68,7 @@
     <Compile Include="EF\Models\User.cs" />
     <Compile Include="Interfaces\IAuth.cs" />
     <Compile Include="Interfaces\IComment.cs" />
+    <Compile Include="Interfaces\ICV.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Interfaces\IStatistical.cs" />
     <Compile Include="Migrations\202308081951427_ReconstractUserProperty.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repos\CommentRepo.cs" />
+    <Compile Include="Repos\CVRepo.cs" />
     <Compile Include="Repos\DataRepository.cs" />
     <Compile Include="Repos\JobRepo.cs" />
     <Compile Include="Repos\PostRepo.cs" />
