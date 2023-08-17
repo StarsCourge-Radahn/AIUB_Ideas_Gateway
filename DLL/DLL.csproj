@@ -53,10 +53,17 @@
   <ItemGroup>
     <Compile Include="DataAccessFactory.cs" />
     <Compile Include="EF\AIGContext.cs" />
+    <Compile Include="EF\Models\AcademicQualification.cs" />
+    <Compile Include="EF\Models\Award.cs" />
     <Compile Include="EF\Models\Comment.cs" />
+    <Compile Include="EF\Models\CV.cs" />
+    <Compile Include="EF\Models\Experience.cs" />
     <Compile Include="EF\Models\Job.cs" />
+    <Compile Include="EF\Models\JobApplication.cs" />
     <Compile Include="EF\Models\Post.cs" />
     <Compile Include="EF\Models\Session.cs" />
+    <Compile Include="EF\Models\Skill.cs" />
+    <Compile Include="EF\Models\ThesisPaper.cs" />
     <Compile Include="EF\Models\Token.cs" />
     <Compile Include="EF\Models\User.cs" />
     <Compile Include="Interfaces\IAuth.cs" />
@@ -74,6 +81,10 @@
     <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.cs" />
     <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.designer.cs">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308171730285_CVCreationTablesAdded.cs" />
+    <Compile Include="Migrations\202308171730285_CVCreationTablesAdded.designer.cs">
+      <DependentUpon>202308171730285_CVCreationTablesAdded.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.resx">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308171730285_CVCreationTablesAdded.resx">
+      <DependentUpon>202308171730285_CVCreationTablesAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

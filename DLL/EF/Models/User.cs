@@ -32,11 +32,16 @@ namespace DLL.EF.Models
         [Required]
         public bool IsDeleted { get; set; } = false;
 
+        public int CvId { get; set; }
+        public virtual CV CV { get; set; }
 
-        public virtual ICollection<Post> Posts { get; set; }
-        public virtual ICollection<Job> Jobs { get; set; }
-        public virtual ICollection<Session> Sessions { get; set; }
+        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+        public virtual ICollection<Job> Jobs { get; set; } = new List<Job>();
+        public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 
         public virtual ICollection<Comment> Comments { get; set; }= new List<Comment>();
+
+        public virtual ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
+
     }
 }
