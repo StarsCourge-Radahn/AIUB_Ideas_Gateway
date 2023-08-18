@@ -464,22 +464,26 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         //Getting posts with in a date range
         [HttpGet]
-        [Route("api/admin/posts/within}")]
+        [Route("api/admin/posts/within/{today}/{uptoDay}")]
         // GET api/post/within?today=2023-08-10&uptoDay=2023-08-14
         public HttpResponseMessage GetPostsWithinRange(DateTime today, DateTime uptoDay)
         {
-            try
+            if (today != null && uptoDay != null)
             {
-                var posts = PostServices.GetPostsInRange(today, uptoDay);
-                if (posts != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, posts);
-                else
-                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No post found!" });
+                try
+                {
+                    var posts = PostServices.GetPostsInRange(today, uptoDay);
+                    if (posts != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, posts);
+                    else
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No post found!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
             }
-            catch(Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError,ex.Message.ToString());    
-            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid data value" });
         }
 
 
