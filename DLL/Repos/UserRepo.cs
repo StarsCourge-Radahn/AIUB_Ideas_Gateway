@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, IStatistical<User, int, bool, User, string>
+    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, ICV, IStatistical<User, int, bool, User, string>
     {
         public User Authenticate(string username, string password)
         {
@@ -117,5 +118,47 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
+        public bool CreateCV(CV obj)
+        {
+            try
+            {
+                if(obj != null && obj.UserId>0)
+                {
+                    _context.CVs.Add(obj);
+                    return _context.SaveChanges()>0;
+                }
+                return false;
+            }
+            catch(Exception) {
+                return false;
+            }
+        }
+
+        public CV GetCv(int id)
+        {
+            try
+            {
+                var cv = _context.CVs
+                            .Include(c => c.AcademicQualifications)
+                            .Include(c => c.Experiences)
+                            .Include(c => c.Skills)
+                            .Include(c => c.ThesisPapers)
+                            .Include(c => c.Awards)
+                            .FirstOrDefault(c => c.CVId == id);
+                return cv;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public bool UpdateCV(CV obj)
+        {
+            // updating cv will the the updating 
+            // each of the CVs property like skill, experience and others,
+                
+            throw null;
+        }
     }
 }

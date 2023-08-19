@@ -10,7 +10,9 @@ namespace DLL.Interfaces
     public interface ICV
     {
         bool CreateCV(CV obj);
-        List<CV>GetAllCV();
+        CV GetCv(int id);
+
+        bool UpdateCV(CV obj);
 
     }
 }
