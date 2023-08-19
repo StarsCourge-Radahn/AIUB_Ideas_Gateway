@@ -83,9 +83,9 @@
     <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.designer.cs">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202308190503410_UserCVCreation.cs" />
-    <Compile Include="Migrations\202308190503410_UserCVCreation.designer.cs">
-      <DependentUpon>202308190503410_UserCVCreation.cs</DependentUpon>
+    <Compile Include="Migrations\202308191033537_CvUserRelationRevised.cs" />
+    <Compile Include="Migrations\202308191033537_CvUserRelationRevised.designer.cs">
+      <DependentUpon>202308191033537_CvUserRelationRevised.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,8 +116,8 @@
     <EmbeddedResource Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.resx">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308190503410_UserCVCreation.resx">
-      <DependentUpon>202308190503410_UserCVCreation.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202308191033537_CvUserRelationRevised.resx">
+      <DependentUpon>202308191033537_CvUserRelationRevised.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,13 +7,13 @@ namespace DLL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class UserCVCreation : IMigrationMetadata
+    public sealed partial class CvUserRelationRevised : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UserCVCreation));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CvUserRelationRevised));
         
         string IMigrationMetadata.Id
         {
-            get { return "202308190503410_UserCVCreation"; }
+            get { return "202308191033537_CvUserRelationRevised"; }
         }
         
         string IMigrationMetadata.Source

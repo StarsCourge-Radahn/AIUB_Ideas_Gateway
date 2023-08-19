@@ -122,7 +122,7 @@ namespace DLL.Repos
         {
             try
             {
-                if(obj != null && obj.UserId>0)
+                if(obj != null)
                 {
                     _context.CVs.Add(obj);
                     return _context.SaveChanges()>0;

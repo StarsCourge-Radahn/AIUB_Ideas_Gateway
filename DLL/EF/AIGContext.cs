@@ -27,20 +27,39 @@ namespace DLL.EF
 
         public DbSet<JobApplication> JobApplications { get; set; }
 
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        // Define one-to-zero/one relationship between User and CV
+        //modelBuilder.Entity<User>()
+        //    .HasOptional(u => u.CV) // User may or may not have a CV
+        //    .WithRequired(cv => cv.User); // CV has a mandatory User
+
+        //modelBuilder.Entity<JobApplication>()
+        //       .HasRequired(ja => ja.User)
+        //       .WithMany(u => u.JobApplications)
+        //       .HasForeignKey(ja => ja.UserId)
+        //       .WillCascadeOnDelete(false);
+
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // Define one-to-zero/one relationship between User and CV
-            modelBuilder.Entity<User>()
-                .HasOptional(u => u.CV) // User may or may not have a CV
-                .WithRequired(cv => cv.User); // CV has a mandatory User
-
+            // Prevent cascade delete for Job -> JobApplications relationship
             modelBuilder.Entity<JobApplication>()
-                .HasRequired(ja => ja.User)
-                .WithMany(u => u.JobApplications)
-                .HasForeignKey(ja => ja.UserId)
-                .WillCascadeOnDelete(false); // Prevent cascade delete
+                        .HasRequired(ja => ja.Job)
+                        .WithMany(j => j.JobApplications)
+                        .HasForeignKey(ja => ja.JobId)
+                        .WillCascadeOnDelete(false); // This line prevents cascade delete
 
-            base.OnModelCreating(modelBuilder);
+            // Do the same for other relationships that might cause multiple cascade paths
+            // For example, if User -> Job also has a cascade delete, you'd do:
+            modelBuilder.Entity<Job>()
+                        .HasRequired(j => j.User)
+                        .WithMany(u => u.Jobs)
+                        .HasForeignKey(j => j.UserID)
+                        .WillCascadeOnDelete(false); // Prevent cascade delete
         }
+
     }
 }

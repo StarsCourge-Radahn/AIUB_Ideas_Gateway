@@ -33,9 +33,9 @@ namespace DLL.EF.Models
         [Required]
         public bool IsDeleted { get; set; } = false;
 
-        [ForeignKey("CV")]
-        public int? CvId { get; set; }
-        public virtual CV CV { get; set; }
+        //[ForeignKey("CV")]
+        //public int? CvId { get; set; }
+        //public CV CV { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
         public virtual ICollection<Job> Jobs { get; set; } = new List<Job>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +14,12 @@ namespace DLL.EF.Models
         public int JobApplicationId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public virtual User User { get; set; }
 
-        [Required]
+        [ForeignKey("Job")]
         public int JobId { get; set; }
         public virtual Job Job { get; set; }
-
         public DateTime AppliedOn { get; set; } = DateTime.Now; // To know when the user applied
 
         public int ApplicationStatus { get; set; } = 0;
