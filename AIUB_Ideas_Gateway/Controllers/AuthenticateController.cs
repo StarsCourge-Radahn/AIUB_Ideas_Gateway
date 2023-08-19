@@ -39,8 +39,6 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/register")]
         public HttpResponseMessage Register(RegisterModel obj)
         {
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     var res = UserServices.CreateUser(obj.Name, obj.UserName, obj.Email, obj.Password);
@@ -54,8 +52,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
                 }
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong!" });
-            }
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.ToString());
+          
         }
 
         [LoggedIn]
