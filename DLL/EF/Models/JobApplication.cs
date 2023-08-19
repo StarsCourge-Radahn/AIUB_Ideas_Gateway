@@ -24,7 +24,7 @@ namespace DLL.EF.Models
 
         public int ApplicationStatus { get; set; } = 0;
         // 0 -> initial status
-        // 1 -> recived
+        // 1 -> received
         // 2 -> shortlisted
         // 3 -> rejected
         // 4 -> accepted

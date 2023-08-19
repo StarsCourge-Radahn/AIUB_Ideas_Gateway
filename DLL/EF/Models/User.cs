@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,8 @@ namespace DLL.EF.Models
         [Required]
         public bool IsDeleted { get; set; } = false;
 
-        public int CvId { get; set; }
+        [ForeignKey("CV")]
+        public int? CvId { get; set; }
         public virtual CV CV { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();

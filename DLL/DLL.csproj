@@ -83,9 +83,9 @@
     <Compile Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.designer.cs">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202308171730285_CVCreationTablesAdded.cs" />
-    <Compile Include="Migrations\202308171730285_CVCreationTablesAdded.designer.cs">
-      <DependentUpon>202308171730285_CVCreationTablesAdded.cs</DependentUpon>
+    <Compile Include="Migrations\202308190449332_UserCVNullallowed.cs" />
+    <Compile Include="Migrations\202308190449332_UserCVNullallowed.designer.cs">
+      <DependentUpon>202308190449332_UserCVNullallowed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,8 +112,8 @@
     <EmbeddedResource Include="Migrations\202308110824577_SoftDeleteFuntioanlityAdded.resx">
       <DependentUpon>202308110824577_SoftDeleteFuntioanlityAdded.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202308171730285_CVCreationTablesAdded.resx">
-      <DependentUpon>202308171730285_CVCreationTablesAdded.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202308190449332_UserCVNullallowed.resx">
+      <DependentUpon>202308190449332_UserCVNullallowed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
