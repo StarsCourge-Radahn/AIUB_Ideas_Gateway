@@ -58,5 +58,9 @@ namespace DLL
         {
             return new JobRepo();
         }
+        public static ICV<CV, bool, int, string> CvDataAccess()
+        {
+            return new UserRepo();
+        }
     }
 }

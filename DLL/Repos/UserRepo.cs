@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, ICV, IStatistical<User, int, bool, User, string>
+    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, ICV<CV, bool, int, string>, IStatistical<User, int, bool, User, string>
     {
         public User Authenticate(string username, string password)
         {
@@ -118,20 +118,26 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
+      
+
+      
         public bool CreateCV(CV obj)
         {
             try
             {
-                if(obj != null)
-                {
-                    _context.CVs.Add(obj);
-                    return _context.SaveChanges()>0;
-                }
+                _context.CVs.Add(obj);
+                int fnd = _context.SaveChanges();
+                return fnd > 0;
+            }
+            catch (Exception)
+            {
                 return false;
             }
-            catch(Exception) {
-                return false;
-            }
+        }
+
+        public List<CV> GetAllCV()
+        {
+            throw new NotImplementedException();
         }
 
         public CV GetCv(int id)
@@ -155,10 +161,7 @@ namespace DLL.Repos
 
         public bool UpdateCV(CV obj)
         {
-            // updating cv will the the updating 
-            // each of the CVs property like skill, experience and others,
-                
-            throw null;
+            throw new NotImplementedException();
         }
     }
 }

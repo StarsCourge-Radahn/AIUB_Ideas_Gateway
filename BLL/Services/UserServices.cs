@@ -43,10 +43,30 @@ namespace BLL.Services
             var user = mapper.Map<User>(userdto);
 
             var userCreated = DataAccessFactory.UserDataAccess().Create(user);
-            return userCreated == true;
+
+            var createdUser = GetUserName(username);
+            if (createdUser != null)
+            {
+                int userId = createdUser.UserID;
+
+                var createCv = CvServices.CreateCV(userId);
+                if (createCv)
+                {
+                    return userCreated == true;
+                }
+
+            }
+            return false;
         }
 
-
+        public static UserDTO GetUserName(string userName)
+        {
+            var user = DataAccessFactory.AuthDataAccess().GetByUsername(userName);
+            var config = new MapperConfiguration(cfg => { cfg.CreateMap<User, UserDTO>(); });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<UserDTO>(user);
+            return rtn;
+        }
         public static List<UserDTO> GetUsers()
         {
             var users = DataAccessFactory.UserDataAccess().GetAll(true);
