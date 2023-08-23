@@ -2,15 +2,16 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class CVRepo : DataRepository, ICV<CV, bool, int, string>
+    internal class CVRepo : DataRepository, ICV<CV, int, bool, string>
     {
-        public bool CreateCV(CV obj)
+        public bool Create(CV obj)
         {
             try
             {
@@ -24,19 +25,56 @@ namespace DLL.Repos
             }
         }
 
-        public List<CV> GetAllCV()
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public CV GetCv(int id)
+        public List<CV> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public bool UpdateCV(CV obj)
+        public List<CV> GetByID(int id)
+        {
+            try
+            {
+                // var cv = _context.CVs
+                //    .Include(c => c.AcademicQualifications)
+                //    .Include(c => c.Experiences)
+                //   .Include(c => c.Skills)
+                //   .Include(c => c.ThesisPapers)
+                //   .Include(c => c.Awards)
+                //   .FirstOrDefault(c => c.CVId ==id);
+                // return cv;
+                throw new NotImplementedException();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public CV GetCvById(int id)
+        {
+            try
+            {
+                var commentbd = _context.CVs.SingleOrDefault(c => c.UserId == id);
+                return commentbd;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public bool Update(CV obj)
         {
             throw new NotImplementedException();
         }
+       
+       
+
+      
     }
 }

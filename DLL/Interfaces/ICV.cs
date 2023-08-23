@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace DLL.Interfaces
 {
-    public interface ICV<MODELCLASS, NUMBER, LOGIC, OTHERS>
+    public interface ICV< MODELCLASS, NUMBER, LOGIC, OTHERS>
     {
-        bool CreateCV(CV obj);
-        CV GetCv(int id);
-        List<CV> GetAllCV();
-        bool UpdateCV(CV obj);
+        bool Create(MODELCLASS obj);
+        List<MODELCLASS> GetAll();
+        MODELCLASS GetCvById(int id);
+        List<MODELCLASS> GetByID(int id);
+        LOGIC Delete(NUMBER id);
+        bool Update(MODELCLASS obj);
+
 
     }
 }

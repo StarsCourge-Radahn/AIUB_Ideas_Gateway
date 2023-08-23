@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, ICV<CV, bool, int, string>, IStatistical<User, int, bool, User, string>
+    internal class UserRepo : DataRepository, IRepo<User, int, bool, string>, IAuth, IStatistical<User, int, bool, User, string>
     {
         public User Authenticate(string username, string password)
         {

@@ -8,46 +8,58 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class SkillRepo : DataRepository, IRepo<Skill, int, bool, int>
+    internal class SkillRepo : DataRepository, ICV<Skill, int, bool, String>
     {
         public bool Create(Skill obj)
         {
-            _context.Skills.Add(obj);
-            return _context.SaveChanges() > 0;
+
+            try
+            {
+                _context.Skills.Add(obj);
+                int fnd = _context.SaveChanges();
+                return fnd > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var skill = _context.Skills.SingleOrDefault(s => s.SkillId == id);
+
+            if (skill != null)
+            {
+                _context.Skills.Remove(skill);
+                int affectedRows = _context.SaveChanges();
+                return affectedRows > 0;
+            }
+
+            return false;
         }
 
-        public List<Skill> GetAll(bool isAdmin)
+        public List<Skill> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Skill GetByID(int id)
+        public List<Skill> GetByID(int id)
         {
-            throw new NotImplementedException();
+            var skill = _context.Skills.Where(aq => aq.CVId == id)
+          .ToList();
+
+            return skill;
         }
 
-        public List<Skill> GetByName(int cvid)
+        public Skill GetCvById(int id)
         {
-            var skills = _context.Skills.Where(s=>s.CVId == cvid).ToList();
-            return skills;
+            throw new NotImplementedException();
         }
 
         public bool Update(Skill obj)
         {
-            var ex = _context.Skills.FirstOrDefault(s => s.SkillId == obj.SkillId);
-            if (ex != null)
-            {
-                ex.SkillName = obj.SkillName;
-                ex.Proficiency = obj.Proficiency;
-
-                return _context.SaveChanges() > 0;
-            }
-            return false;
+            throw new NotImplementedException();
         }
     }
 }

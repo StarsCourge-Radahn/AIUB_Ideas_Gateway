@@ -44,11 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\AcademicQualificationDTO.cs" />
+    <Compile Include="DTOs\AwardDTO.cs" />
     <Compile Include="DTOs\CommentDTO.cs" />
     <Compile Include="DTOs\CvDTO.cs" />
+    <Compile Include="DTOs\CVInfoDTO.cs" />
+    <Compile Include="DTOs\ExperienceDTO.cs" />
     <Compile Include="DTOs\JobDTO.cs" />
     <Compile Include="DTOs\PostDTO.cs" />
     <Compile Include="DTOs\SessionDTO.cs" />
+    <Compile Include="DTOs\SkillDTO.cs" />
+    <Compile Include="DTOs\ThesisPaperDTO.cs" />
     <Compile Include="DTOs\TokenDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
