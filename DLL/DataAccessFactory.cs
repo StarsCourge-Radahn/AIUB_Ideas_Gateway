@@ -54,13 +54,34 @@ namespace DLL
         {
             return new PostRepo();
         }
-        public static IStatistical<Job,int,bool,Job,string> JobStatisticalDataAccess()
+        public static IStatistical<Job, int, bool, Job, string> JobStatisticalDataAccess()
         {
             return new JobRepo();
         }
-        public static ICV<CV, bool, int, string> CvDataAccess()
+        public static ICV<CV, int, bool, string> CvDataAccess()
         {
-            return new UserRepo();
+            return new CVRepo();
+        }
+
+        public static ICV<AcademicQualification, int, bool, string> AcademicDataAccess()
+        {
+            return new AcademicRepo();
+        }
+        public static ICV<Award, int, bool, string> AwardDataAccess()
+        {
+            return new AwardRepo();
+        }
+        public static ICV<Experience, int, bool, string> ExperienceDataAccess()
+        {
+            return new ExperienceRepo();
+        }
+        public static ICV<Skill, int, bool, string> SkillDataAccess()
+        {
+            return new SkillRepo();
+        }
+        public static ICV<ThesisPaper, int, bool, string> ThesisDataAccess()
+        {
+            return new ThesisRepo();
         }
     }
 }

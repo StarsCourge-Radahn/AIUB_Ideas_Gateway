@@ -8,29 +8,51 @@ using System.Threading.Tasks;
 
 namespace DLL.Repos
 {
-    internal class AwardRepo : DataRepository, IRepo<Award, int, bool, int>
+    internal class AwardRepo : DataRepository, ICV<Award, int, bool, String>
     {
         public bool Create(Award obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Awards.Add(obj);
+                int fnd = _context.SaveChanges();
+                return fnd > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            var award = _context.Awards.SingleOrDefault(a => a.AwardId == id);
+
+            if (award != null)
+            {
+                _context.Awards.Remove(award);
+                int affectedRows = _context.SaveChanges();
+                return affectedRows > 0;
+            }
+
+            return false;
         }
 
-        public List<Award> GetAll(bool isAdmin)
+        public List<Award> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Award GetByID(int id)
+        public List<Award> GetByID(int id)
         {
-            throw new NotImplementedException();
+            var award = _context.Awards
+           .Where(aq => aq.CVId == id)
+           .ToList();
+
+            return award;
         }
 
-        public List<Award> GetByName(int name)
+        public Award GetCvById(int id)
         {
             throw new NotImplementedException();
         }
