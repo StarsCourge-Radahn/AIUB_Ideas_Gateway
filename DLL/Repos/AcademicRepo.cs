@@ -32,9 +32,9 @@ namespace DLL.Repos
             var academic = _context.AcademicQualifications.SingleOrDefault(p => p.QualificationId == id);
             if (academic != null)
             {
-                _context.AcademicQualifications.Remove(academic); 
-                int affectedRows = _context.SaveChanges(); 
-                return affectedRows > 0; 
+                _context.AcademicQualifications.Remove(academic);
+                int affectedRows = _context.SaveChanges();
+                return affectedRows > 0;
             }
             return false;
         }
@@ -44,7 +44,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<AcademicQualification> GetByID(int id)
+        public List<AcademicQualification> GetByCVID(int id)
         {
             var academicQualifications = _context.AcademicQualifications
             .Where(aq => aq.CVId == id)
@@ -78,9 +78,7 @@ namespace DLL.Repos
                 existingAcademicQualification.StartDate = updatedAcademic.StartDate;
                 existingAcademicQualification.EndDate = updatedAcademic.EndDate; // If nullable, you can update it this way.
 
-                // Set the state of the entity to modified so that it will be updated in the database.
-                _context.Entry(existingAcademicQualification).State = EntityState.Modified;
-
+                // saving the infromations
                 int affectedRows = _context.SaveChanges();
 
                 return affectedRows > 0; // Returns true if at least one row was affected.

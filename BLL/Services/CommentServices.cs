@@ -18,11 +18,7 @@ namespace BLL.Services
 
             if (comments != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Comment, CommentDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Comment, CommentDTO>.GetMapper();
                 var success = mapper.Map<List<CommentDTO>>(comments);
 
                 return success;
@@ -31,12 +27,7 @@ namespace BLL.Services
         }
         public static bool CreateComment(CommentDTO commentDTO)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CommentDTO, Comment>();
-                cfg.CreateMap<Comment, CommentDTO>().ReverseMap();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<CommentDTO,Comment>.GetMapper();
 
             var comment = mapper.Map<Comment>(commentDTO);
             var success = DataAccessFactory.CommentDataAccess().Create(comment);
@@ -47,11 +38,8 @@ namespace BLL.Services
         public static CommentDTO CommentById(int id)
         {
             var comment = DataAccessFactory.CommentDataAccess().GetByCommentID(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var rtn = mapper.Map<CommentDTO>(comment);
             return rtn;
         }
@@ -65,11 +53,8 @@ namespace BLL.Services
         public static List<CommentDTO> PostId(int id)
         {
             var comment = DataAccessFactory.CommentDataAccess().GetByPostID(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var result = mapper.Map<List<CommentDTO>>(comment);
             return result;
         }
@@ -77,22 +62,15 @@ namespace BLL.Services
         public static List<CommentDTO> JobId(int id)
         {
             var comment = DataAccessFactory.CommentDataAccess().GetByJobID(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var result = mapper.Map<List<CommentDTO>>(comment);
             return result;
         }
         public static List<CommentDTO> UserId(int id)
         {
             var comment = DataAccessFactory.CommentDataAccess().GetByUserID(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var result = mapper.Map<List<CommentDTO>>(comment);
             return result;
         }
@@ -100,11 +78,8 @@ namespace BLL.Services
         public List<CommentDTO> GetUserPostComments(int userId, int postId)
         {
             var comments = DataAccessFactory.CommentDataAccess().GetUserPostComments(userId, postId);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var result = mapper.Map<List<CommentDTO>>(comments);
             return result;
         }
@@ -112,11 +87,8 @@ namespace BLL.Services
         public List<CommentDTO> GetUserJobComments(int userId, int postId)
         {
             var comments = DataAccessFactory.CommentDataAccess().GetUserJobComments(userId, postId);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Comment, CommentDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
             var result = mapper.Map<List<CommentDTO>>(comments);
             return result;
         }
@@ -135,20 +107,15 @@ namespace BLL.Services
 
         public static bool UpdateComment(CommentDTO comment)
         {
-            var config = new MapperConfiguration(cfg =>
+            try
             {
-                cfg.CreateMap<CommentDTO, Comment>();
-            });
-            var mapper = new Mapper(config);
+                var mapper = MappingService<CommentDTO, Comment>.GetMapper();
+                var updatedComment = mapper.Map<Comment>(comment);
 
-            var updatedComment = mapper.Map<Comment>(comment);
-
-            bool success = DataAccessFactory.CommentDataAccess().Update(updatedComment);
-            return success;
+                bool success = DataAccessFactory.CommentDataAccess().Update(updatedComment);
+                return success;
+            }
+            catch(Exception) { return false; }
         }
-
-
     }
-
-
 }

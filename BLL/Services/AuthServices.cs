@@ -33,11 +33,7 @@ namespace BLL.Services
 
                 if (checkSession == true)
                 {
-                    var config = new MapperConfiguration(cfg =>
-                    {
-                        cfg.CreateMap<Token, TokenDTO>();
-                    });
-                    var mapper = new Mapper(config);
+                    var mapper = MappingService<Token, TokenDTO>.GetMapper();
                     var rtn = mapper.Map<TokenDTO>(token);
                     return rtn;
                 }
@@ -84,11 +80,7 @@ namespace BLL.Services
             var data = DataAccessFactory.SessionDataAccess().GetByID(userid);
             if (data != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Session, SessionDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Session, SessionDTO>.GetMapper();
                 var rtn = mapper.Map<SessionDTO>(data);
                 return rtn;
             }

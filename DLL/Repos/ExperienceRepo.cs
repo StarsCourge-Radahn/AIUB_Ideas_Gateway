@@ -13,7 +13,6 @@ namespace DLL.Repos
     {
         public bool Create(Experience obj)
         {
-
             try
             {
                 _context.Experiences.Add(obj);
@@ -45,7 +44,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<Experience> GetByID(int id)
+        public List<Experience> GetByCVID(int id)
         {
             var experience = _context.Experiences.Where(aq => aq.CVId == id)
            .ToList();
@@ -64,24 +63,20 @@ namespace DLL.Repos
         {
             try
             {
-                var existingExperience = _context.Experiences.FirstOrDefault(e => e.ExperienceId == updatedExperience.ExperienceId);
+                var existingExperience = _context.Experiences
+                    .FirstOrDefault(e => e.ExperienceId == updatedExperience.ExperienceId);
 
                 if (existingExperience == null)
                 {
                     return false; 
                 }
 
-                
                 existingExperience.Position = updatedExperience.Position;
                 existingExperience.CompanyName = updatedExperience.CompanyName;
                 existingExperience.StartDate = updatedExperience.StartDate;
                 existingExperience.EndDate = updatedExperience.EndDate; 
 
-                
-                _context.Entry(existingExperience).State = EntityState.Modified;
-
                 int affectedRows = _context.SaveChanges();
-
                 return affectedRows > 0; 
             }
             catch (Exception)

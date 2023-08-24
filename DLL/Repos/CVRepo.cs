@@ -35,24 +35,24 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<CV> GetByID(int id)
+        public List<CV> GetByCVID(int id)
         {
-            try
-            {
-                // var cv = _context.CVs
-                //    .Include(c => c.AcademicQualifications)
-                //    .Include(c => c.Experiences)
-                //   .Include(c => c.Skills)
-                //   .Include(c => c.ThesisPapers)
-                //   .Include(c => c.Awards)
-                //   .FirstOrDefault(c => c.CVId ==id);
-                // return cv;
-                throw new NotImplementedException();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //try
+            //{
+            //    var cv = _context.CVs
+            //        .Include(c => c.AcademicQualifications)
+            //        .Include(c => c.Experiences)
+            //        .Include(c => c.Skills)
+            //        .Include(c => c.ThesisPapers)
+            //        .Include(c => c.Awards)
+            //        .FirstOrDefault(c => c.CVId == id);
+            //    return cv;
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
+            throw new NotImplementedException();
         }
 
         public CV GetById(int id)

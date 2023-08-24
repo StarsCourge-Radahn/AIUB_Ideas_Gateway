@@ -12,10 +12,8 @@ namespace DLL.Interfaces
         bool Create(MODELCLASS obj);
         List<MODELCLASS> GetAll();
         MODELCLASS GetById(int id);
-        List<MODELCLASS> GetByID(int id);
+        List<MODELCLASS> GetByCVID(int id);
         LOGIC Delete(NUMBER id);
         bool Update(MODELCLASS obj);
-
-
     }
 }

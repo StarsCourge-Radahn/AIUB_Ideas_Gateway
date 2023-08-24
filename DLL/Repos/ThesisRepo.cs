@@ -13,7 +13,6 @@ namespace DLL.Repos
     {
         public bool Create(ThesisPaper obj)
         {
-
             try
             {
                 _context.ThesisPapers.Add(obj);
@@ -36,7 +35,6 @@ namespace DLL.Repos
                 int affectedRows = _context.SaveChanges();
                 return affectedRows > 0;
             }
-
             return false;
         }
 
@@ -45,10 +43,9 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<ThesisPaper> GetByID(int id)
+        public List<ThesisPaper> GetByCVID(int id)
         {
-            var thesis = _context.ThesisPapers.Where(aq => aq.CVId == id)
-           .ToList();
+            var thesis = _context.ThesisPapers.Where(aq => aq.CVId == id).ToList();
 
             return thesis;
         }
@@ -75,16 +72,13 @@ namespace DLL.Repos
                 existingThesis.PublicationDate = updatedThesis.PublicationDate;
                 existingThesis.CoAuthors = updatedThesis.CoAuthors;
 
-                // Set the state of the entity to modified so that it will be updated in the database.
-                _context.Entry(existingThesis).State = EntityState.Modified;
-
+                // saving the updated infromations
                 int affectedRows = _context.SaveChanges();
 
                 return affectedRows > 0; // Returns true if at least one row was affected.
             }
             catch (Exception)
             {
-
                 return false; // An error occurred during the update.
             }
         }
