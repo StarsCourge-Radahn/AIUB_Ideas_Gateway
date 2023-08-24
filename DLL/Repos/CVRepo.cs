@@ -55,7 +55,7 @@ namespace DLL.Repos
             }
         }
 
-        public CV GetCvById(int id)
+        public CV GetById(int id)
         {
             try
             {

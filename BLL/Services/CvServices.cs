@@ -33,7 +33,7 @@ namespace BLL.Services
 
         public static CvDTO CVGetbyId(int id)
         {
-            var cv = DataAccessFactory.CvDataAccess().GetCvById(id);
+            var cv = DataAccessFactory.CvDataAccess().GetById(id);
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<CV, CvDTO>();
@@ -100,7 +100,7 @@ namespace BLL.Services
 
 
 
-        public static List<AcademicQualificationDTO> AcademicById(int cvId)
+        public static List<AcademicQualificationDTO> AcademicByCvId(int cvId)
         {
             var acd = DataAccessFactory.AcademicDataAccess().GetByID(cvId);
 
@@ -137,7 +137,7 @@ namespace BLL.Services
             return success;
         }
 
-        public static List<AwardDTO> AwardById(int cvId)
+        public static List<AwardDTO> AwardByCvId(int cvId)
         {
             var acd = DataAccessFactory.AwardDataAccess().GetByID(cvId);
 
@@ -151,6 +151,11 @@ namespace BLL.Services
             return result;
         }
 
+        public static bool DeleteAward(int id)
+        {
+            var result = DataAccessFactory.AwardDataAccess().Delete(id);
+            return result;
+        }
 
         //Experience......
         public static bool CreateExperience(ExperienceDTO experienceDTO)
@@ -169,7 +174,7 @@ namespace BLL.Services
 
             return success;
         }
-        public static List<ExperienceDTO> ExperienceById(int cvId)
+        public static List<ExperienceDTO> ExperienceByCvId(int cvId)
         {
             var acd = DataAccessFactory.ExperienceDataAccess().GetByID(cvId);
 
@@ -180,6 +185,11 @@ namespace BLL.Services
 
             var mapper = new Mapper(config);
             var result = mapper.Map<List<ExperienceDTO>>(acd);
+            return result;
+        }
+        public static bool DeleteExperience(int id)
+        {
+            var result = DataAccessFactory.ExperienceDataAccess().Delete(id);
             return result;
         }
 
@@ -200,7 +210,7 @@ namespace BLL.Services
 
             return success;
         }
-        public static List<SkillDTO> SkillById(int cvId)
+        public static List<SkillDTO> SkillByCvId(int cvId)
         {
             var acd = DataAccessFactory.SkillDataAccess().GetByID(cvId);
 
@@ -213,7 +223,11 @@ namespace BLL.Services
             var result = mapper.Map<List<SkillDTO>>(acd);
             return result;
         }
-
+        public static bool DeleteSkill(int id)
+        {
+            var result = DataAccessFactory.SkillDataAccess().Delete(id);
+            return result;
+        }
         //ThesisPaper
         public static bool CreateThesis(ThesisPaperDTO thesisPaperDTO)
         {
@@ -232,18 +246,155 @@ namespace BLL.Services
             return success;
         }
 
-        public static List<ThesisPaperDTO> ThesisById(int cvId)
+        public static List<ThesisPaperDTO> ThesisByCvId(int cvId)
         {
             var acd = DataAccessFactory.ThesisDataAccess().GetByID(cvId);
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ThesisPaper,ThesisPaperDTO>();
+                cfg.CreateMap<ThesisPaper, ThesisPaperDTO>();
             });
 
             var mapper = new Mapper(config);
             var result = mapper.Map<List<ThesisPaperDTO>>(acd);
             return result;
+        }
+        public static bool DeleteThesis(int id)
+        {
+            var result = DataAccessFactory.ThesisDataAccess().Delete(id);
+            return result;
+        }
+
+        // Find by id
+
+        public static AcademicQualificationDTO AcademicQualificationById(int id)
+        {
+            var academicQualification = DataAccessFactory.AcademicDataAccess().GetById(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AcademicQualification, AcademicQualificationDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<AcademicQualificationDTO>(academicQualification);
+            return rtn;
+        }
+        public static AwardDTO AwardById(int id)
+        {
+            var award = DataAccessFactory.AwardDataAccess().GetById(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Award, AwardDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<AwardDTO>(award);
+            return rtn;
+        }
+
+        public static ExperienceDTO ExperienceById(int id)
+        {
+            var experience = DataAccessFactory.ExperienceDataAccess().GetById(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Experience, ExperienceDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<ExperienceDTO>(experience);
+            return rtn;
+        }
+        public static SkillDTO SkillById(int id)
+        {
+            var skill = DataAccessFactory.SkillDataAccess().GetById(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Skill, SkillDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<SkillDTO>(skill);
+            return rtn;
+        }
+
+        public static ThesisPaperDTO ThesisPaperById(int id)
+        {
+            var thesis = DataAccessFactory.ThesisDataAccess().GetById(id);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ThesisPaper, ThesisPaperDTO>();
+            });
+            var mapper = new Mapper(config);
+            var rtn = mapper.Map<ThesisPaperDTO>(thesis);
+            return rtn;
+        }
+
+
+
+        // Update
+
+        public static bool UpdateAcademicQualification(AcademicQualificationDTO academicQualification)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AcademicQualificationDTO, AcademicQualification>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedAcademicQualification = mapper.Map<AcademicQualification>(academicQualification);
+
+            bool success = DataAccessFactory.AcademicDataAccess().Update(updatedAcademicQualification);
+            return success;
+        }
+
+        public static bool UpdateAward(AwardDTO award)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AwardDTO, Award>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedAward = mapper.Map<Award>(award);
+
+            bool success = DataAccessFactory.AwardDataAccess().Update(updatedAward);
+            return success;
+        }
+
+        public static bool UpdateExperience(ExperienceDTO experience)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ExperienceDTO, Experience>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedExperience = mapper.Map<Experience>(experience);
+
+            bool success = DataAccessFactory.ExperienceDataAccess().Update(updatedExperience);
+            return success;
+        }
+        public static bool UpdateSkill(SkillDTO skill)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<SkillDTO, Skill>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedSkill = mapper.Map<Skill>(skill);
+
+            bool success = DataAccessFactory.SkillDataAccess().Update(updatedSkill);
+            return success;
+        }
+        public static bool UpdateThesis(ThesisPaperDTO thesis)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ThesisPaperDTO, ThesisPaper>();
+            });
+            var mapper = new Mapper(config);
+
+            var updatedThesis = mapper.Map<ThesisPaper>(thesis);
+
+            bool success = DataAccessFactory.ThesisDataAccess().Update(updatedThesis);
+            return success;
         }
 
     }

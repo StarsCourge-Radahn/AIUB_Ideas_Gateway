@@ -2,6 +2,7 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
@@ -52,14 +53,43 @@ namespace DLL.Repos
             return academicQualifications;
         }
 
-        public AcademicQualification GetCvById(int id)
+        public AcademicQualification GetById(int id)
         {
-            throw new NotImplementedException();
+            var academicQualification = _context.AcademicQualifications
+                .SingleOrDefault(aq => aq.QualificationId == id);
+            return academicQualification;
         }
 
-        public bool Update(AcademicQualification obj)
+
+        public bool Update(AcademicQualification updatedAcademic)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingAcademicQualification = _context.AcademicQualifications.FirstOrDefault(aq => aq.QualificationId == updatedAcademic.QualificationId);
+
+                if (existingAcademicQualification == null)
+                {
+                    return false; // Academic qualification not found.
+                }
+
+                // Update the properties of the existing AcademicQualification with the updated values
+                existingAcademicQualification.Degree = updatedAcademic.Degree;
+                existingAcademicQualification.Institution = updatedAcademic.Institution;
+                existingAcademicQualification.StartDate = updatedAcademic.StartDate;
+                existingAcademicQualification.EndDate = updatedAcademic.EndDate; // If nullable, you can update it this way.
+
+                // Set the state of the entity to modified so that it will be updated in the database.
+                _context.Entry(existingAcademicQualification).State = EntityState.Modified;
+
+                int affectedRows = _context.SaveChanges();
+
+                return affectedRows > 0; // Returns true if at least one row was affected.
+            }
+            catch (Exception)
+            {
+                return false; // An error occurred during the update.
+            }
         }
+
     }
 }

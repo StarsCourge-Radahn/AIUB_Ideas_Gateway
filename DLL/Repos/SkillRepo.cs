@@ -2,6 +2,7 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,14 +53,40 @@ namespace DLL.Repos
             return skill;
         }
 
-        public Skill GetCvById(int id)
+        public Skill GetById(int id)
         {
-            throw new NotImplementedException();
+            var skill = _context.Skills
+                .SingleOrDefault(s => s.SkillId == id);
+            return skill;
         }
 
-        public bool Update(Skill obj)
+        public bool Update(Skill updatedSkill)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingSkill = _context.Skills.FirstOrDefault(s => s.SkillId == updatedSkill.SkillId);
+
+                if (existingSkill == null)
+                {
+                    return false; // Skill not found.
+                }
+
+                // Update the properties of the existing Skill with the updated values
+                existingSkill.SkillName = updatedSkill.SkillName;
+                existingSkill.Proficiency = updatedSkill.Proficiency;
+
+                // Set the state of the entity to modified so that it will be updated in the database.
+                _context.Entry(existingSkill).State = EntityState.Modified;
+
+                int affectedRows = _context.SaveChanges();
+
+                return affectedRows > 0; // Returns true if at least one row was affected.
+            }
+            catch (Exception)
+            {
+                return false; // An error occurred during the update.
+            }
         }
+
     }
 }
