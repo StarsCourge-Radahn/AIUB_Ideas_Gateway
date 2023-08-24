@@ -26,8 +26,6 @@ namespace DLL.Repos
             {
                 return false;
             }
-
-
         }
 
         public bool Delete(int id)
@@ -114,8 +112,6 @@ namespace DLL.Repos
                 }
                 existingComment.Text = obj.Text;
 
-
-                _context.Entry(existingComment).State = EntityState.Modified;
                 int affectedRows = _context.SaveChanges();
 
                 return affectedRows > 0;
@@ -143,10 +139,5 @@ namespace DLL.Repos
 
             return comments;
         }
-
-
-
-
-
     }
 }

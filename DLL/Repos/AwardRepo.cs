@@ -44,7 +44,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<Award> GetByID(int id)
+        public List<Award> GetByCVID(int id)
         {
             var award = _context.Awards
            .Where(aq => aq.CVId == id)
@@ -76,9 +76,7 @@ namespace DLL.Repos
                 existingAward.AwardingInstitution = updatedAward.AwardingInstitution;
                 existingAward.DateReceived = updatedAward.DateReceived;
 
-                // Set the state of the entity to modified so that it will be updated in the database.
-                _context.Entry(existingAward).State = EntityState.Modified;
-
+                // saving the infromations
                 int affectedRows = _context.SaveChanges();
 
                 return affectedRows > 0; // Returns true if at least one row was affected.

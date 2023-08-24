@@ -13,7 +13,6 @@ namespace DLL.Repos
     {
         public bool Create(Skill obj)
         {
-
             try
             {
                 _context.Skills.Add(obj);
@@ -45,7 +44,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<Skill> GetByID(int id)
+        public List<Skill> GetByCVID(int id)
         {
             var skill = _context.Skills.Where(aq => aq.CVId == id)
           .ToList();
@@ -76,10 +75,9 @@ namespace DLL.Repos
                 existingSkill.Proficiency = updatedSkill.Proficiency;
 
                 // Set the state of the entity to modified so that it will be updated in the database.
-                _context.Entry(existingSkill).State = EntityState.Modified;
+                //_context.Entry(existingSkill).State = EntityState.Modified;
 
                 int affectedRows = _context.SaveChanges();
-
                 return affectedRows > 0; // Returns true if at least one row was affected.
             }
             catch (Exception)

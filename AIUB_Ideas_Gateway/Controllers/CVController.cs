@@ -17,7 +17,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         [LoggedIn]
         [HttpPost]
-        [Route("api/cv/{id}")]  // 
+        [Route("api/cv/{id}")]  
         public HttpResponseMessage CVById(int id)
         {
             try

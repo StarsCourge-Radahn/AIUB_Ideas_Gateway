@@ -19,14 +19,10 @@ namespace BLL.Services
             {
                 userId = userId
             };
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CvDTO, CV>();
-            });
-            var mapper = new Mapper(config);
-
+            
+            var mapper = MappingService<CvDTO, CV>.GetMapper();
             var cv = mapper.Map<CV>(cvdto);
+
             var rtn = DataAccessFactory.CvDataAccess().Create(cv);
             return rtn;
         }
@@ -34,11 +30,8 @@ namespace BLL.Services
         public static CvDTO CVGetbyId(int id)
         {
             var cv = DataAccessFactory.CvDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<CV, CvDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<CV, CvDTO>.GetMapper();
             var rtn = mapper.Map<CvDTO>(cv);
             return rtn;
         }
@@ -57,11 +50,11 @@ namespace BLL.Services
 
             var mapper = new Mapper(config);
 
-            var acd = DataAccessFactory.AcademicDataAccess().GetByID(id);
-            var award = DataAccessFactory.AwardDataAccess().GetByID(id);
-            var exp = DataAccessFactory.ExperienceDataAccess().GetByID(id);
-            var skill = DataAccessFactory.SkillDataAccess().GetByID(id);
-            var thesis = DataAccessFactory.ThesisDataAccess().GetByID(id);
+            var acd = DataAccessFactory.AcademicDataAccess().GetByCVID(id);
+            var award = DataAccessFactory.AwardDataAccess().GetByCVID(id);
+            var exp = DataAccessFactory.ExperienceDataAccess().GetByCVID(id);
+            var skill = DataAccessFactory.SkillDataAccess().GetByCVID(id);
+            var thesis = DataAccessFactory.ThesisDataAccess().GetByCVID(id);
 
             // Create a new CVInfoDTO object and populate its properties
             var cvInfo = new CVInfoDTO
@@ -80,17 +73,10 @@ namespace BLL.Services
         }
 
         // AcademicQualification
-
         public static bool CreateAcademic(AcademicQualificationDTO academicQualificationDTO)
         {
 
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AcademicQualificationDTO, AcademicQualification>();
-
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<AcademicQualificationDTO, AcademicQualification>.GetMapper();
 
             var academic = mapper.Map<AcademicQualification>(academicQualificationDTO);
             var success = DataAccessFactory.AcademicDataAccess().Create(academic);
@@ -98,18 +84,11 @@ namespace BLL.Services
             return success;
         }
 
-
-
         public static List<AcademicQualificationDTO> AcademicByCvId(int cvId)
         {
-            var acd = DataAccessFactory.AcademicDataAccess().GetByID(cvId);
+            var acd = DataAccessFactory.AcademicDataAccess().GetByCVID(cvId);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AcademicQualification, AcademicQualificationDTO>();
-            });
-
-            var mapper = new Mapper(config);
+            var mapper = MappingService<AcademicQualification, AcademicQualificationDTO>.GetMapper();
             var result = mapper.Map<List<AcademicQualificationDTO>>(acd);
             return result;
         }
@@ -122,14 +101,7 @@ namespace BLL.Services
         // CreateAward
         public static bool CreateAward(AwardDTO awardDTO)
         {
-
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AwardDTO, Award>();
-
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<AwardDTO, Award>.GetMapper();
 
             var award = mapper.Map<Award>(awardDTO);
             var success = DataAccessFactory.AwardDataAccess().Create(award);
@@ -139,14 +111,9 @@ namespace BLL.Services
 
         public static List<AwardDTO> AwardByCvId(int cvId)
         {
-            var acd = DataAccessFactory.AwardDataAccess().GetByID(cvId);
+            var acd = DataAccessFactory.AwardDataAccess().GetByCVID(cvId);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Award, AwardDTO>();
-            });
-
-            var mapper = new Mapper(config);
+            var mapper = MappingService<Award, AwardDTO>.GetMapper();
             var result = mapper.Map<List<AwardDTO>>(acd);
             return result;
         }
@@ -160,14 +127,7 @@ namespace BLL.Services
         //Experience......
         public static bool CreateExperience(ExperienceDTO experienceDTO)
         {
-
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ExperienceDTO, Experience>();
-
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<ExperienceDTO, Experience>.GetMapper();
 
             var experiences = mapper.Map<Experience>(experienceDTO);
             var success = DataAccessFactory.ExperienceDataAccess().Create(experiences);
@@ -176,14 +136,8 @@ namespace BLL.Services
         }
         public static List<ExperienceDTO> ExperienceByCvId(int cvId)
         {
-            var acd = DataAccessFactory.ExperienceDataAccess().GetByID(cvId);
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Experience, ExperienceDTO>();
-            });
-
-            var mapper = new Mapper(config);
+            var acd = DataAccessFactory.ExperienceDataAccess().GetByCVID(cvId);
+            var mapper = MappingService<Experience, ExperienceDTO>.GetMapper();
             var result = mapper.Map<List<ExperienceDTO>>(acd);
             return result;
         }
@@ -196,14 +150,7 @@ namespace BLL.Services
         // Skil...................
         public static bool CreateSkill(SkillDTO skillDTO)
         {
-
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<SkillDTO, Skill>();
-
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<SkillDTO, Skill>.GetMapper();
 
             var skill = mapper.Map<Skill>(skillDTO);
             var success = DataAccessFactory.SkillDataAccess().Create(skill);
@@ -212,14 +159,9 @@ namespace BLL.Services
         }
         public static List<SkillDTO> SkillByCvId(int cvId)
         {
-            var acd = DataAccessFactory.SkillDataAccess().GetByID(cvId);
+            var acd = DataAccessFactory.SkillDataAccess().GetByCVID(cvId);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Skill, SkillDTO>();
-            });
-
-            var mapper = new Mapper(config);
+            var mapper = MappingService<Skill, SkillDTO>.GetMapper();
             var result = mapper.Map<List<SkillDTO>>(acd);
             return result;
         }
@@ -231,14 +173,7 @@ namespace BLL.Services
         //ThesisPaper
         public static bool CreateThesis(ThesisPaperDTO thesisPaperDTO)
         {
-
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ThesisPaperDTO, ThesisPaper>();
-
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<ThesisPaperDTO, ThesisPaper>.GetMapper();
 
             var thesis = mapper.Map<ThesisPaper>(thesisPaperDTO);
             var success = DataAccessFactory.ThesisDataAccess().Create(thesis);
@@ -248,14 +183,8 @@ namespace BLL.Services
 
         public static List<ThesisPaperDTO> ThesisByCvId(int cvId)
         {
-            var acd = DataAccessFactory.ThesisDataAccess().GetByID(cvId);
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ThesisPaper, ThesisPaperDTO>();
-            });
-
-            var mapper = new Mapper(config);
+            var acd = DataAccessFactory.ThesisDataAccess().GetByCVID(cvId);
+            var mapper = MappingService<ThesisPaper, ThesisPaperDTO>.GetMapper();
             var result = mapper.Map<List<ThesisPaperDTO>>(acd);
             return result;
         }
@@ -270,22 +199,16 @@ namespace BLL.Services
         public static AcademicQualificationDTO AcademicQualificationById(int id)
         {
             var academicQualification = DataAccessFactory.AcademicDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AcademicQualification, AcademicQualificationDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<AcademicQualification, AcademicQualificationDTO>.GetMapper();
             var rtn = mapper.Map<AcademicQualificationDTO>(academicQualification);
             return rtn;
         }
         public static AwardDTO AwardById(int id)
         {
             var award = DataAccessFactory.AwardDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Award, AwardDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Award, AwardDTO>.GetMapper();
             var rtn = mapper.Map<AwardDTO>(award);
             return rtn;
         }
@@ -293,22 +216,16 @@ namespace BLL.Services
         public static ExperienceDTO ExperienceById(int id)
         {
             var experience = DataAccessFactory.ExperienceDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Experience, ExperienceDTO>();
-            });
-            var mapper = new Mapper(config);
+            
+            var mapper = MappingService<Experience, ExperienceDTO>.GetMapper();
             var rtn = mapper.Map<ExperienceDTO>(experience);
             return rtn;
         }
         public static SkillDTO SkillById(int id)
         {
             var skill = DataAccessFactory.SkillDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Skill, SkillDTO>();
-            });
-            var mapper = new Mapper(config);
+            
+            var mapper = MappingService<Skill, SkillDTO>.GetMapper();
             var rtn = mapper.Map<SkillDTO>(skill);
             return rtn;
         }
@@ -316,11 +233,8 @@ namespace BLL.Services
         public static ThesisPaperDTO ThesisPaperById(int id)
         {
             var thesis = DataAccessFactory.ThesisDataAccess().GetById(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ThesisPaper, ThesisPaperDTO>();
-            });
-            var mapper = new Mapper(config);
+            
+            var mapper = MappingService<ThesisPaper, ThesisPaperDTO>.GetMapper();
             var rtn = mapper.Map<ThesisPaperDTO>(thesis);
             return rtn;
         }
@@ -331,11 +245,7 @@ namespace BLL.Services
 
         public static bool UpdateAcademicQualification(AcademicQualificationDTO academicQualification)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AcademicQualificationDTO, AcademicQualification>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<AcademicQualificationDTO, AcademicQualification>.GetMapper();
 
             var updatedAcademicQualification = mapper.Map<AcademicQualification>(academicQualification);
 
@@ -345,11 +255,7 @@ namespace BLL.Services
 
         public static bool UpdateAward(AwardDTO award)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AwardDTO, Award>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<AwardDTO, Award>.GetMapper();
 
             var updatedAward = mapper.Map<Award>(award);
 
@@ -359,11 +265,7 @@ namespace BLL.Services
 
         public static bool UpdateExperience(ExperienceDTO experience)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ExperienceDTO, Experience>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<ExperienceDTO, Experience>.GetMapper();
 
             var updatedExperience = mapper.Map<Experience>(experience);
 
@@ -372,11 +274,7 @@ namespace BLL.Services
         }
         public static bool UpdateSkill(SkillDTO skill)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<SkillDTO, Skill>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<SkillDTO, Skill>.GetMapper();
 
             var updatedSkill = mapper.Map<Skill>(skill);
 
@@ -385,17 +283,12 @@ namespace BLL.Services
         }
         public static bool UpdateThesis(ThesisPaperDTO thesis)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ThesisPaperDTO, ThesisPaper>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<ThesisPaperDTO, ThesisPaper>.GetMapper();
 
             var updatedThesis = mapper.Map<ThesisPaper>(thesis);
 
             bool success = DataAccessFactory.ThesisDataAccess().Update(updatedThesis);
             return success;
         }
-
     }
 }

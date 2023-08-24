@@ -62,6 +62,7 @@
     <Compile Include="Services\CommentServices.cs" />
     <Compile Include="Services\CvServices.cs" />
     <Compile Include="Services\JobServices.cs" />
+    <Compile Include="Services\MappingService.cs" />
     <Compile Include="Services\PostServices.cs" />
     <Compile Include="Services\UserServices.cs" />
   </ItemGroup>

@@ -18,11 +18,7 @@ namespace BLL.Services
             var posts = DataAccessFactory.PostDataAccess().GetAll(false);
             if (posts != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Post, PostDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Post, PostDTO>.GetMapper();
                 var rtn = mapper.Map<List<PostDTO>>(posts);
                 return rtn;
             }
@@ -34,45 +30,33 @@ namespace BLL.Services
             var posts = DataAccessFactory.PostDataAccess().GetAll(true);
             if (posts != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Post, PostDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Post, PostDTO>.GetMapper();
                 var rtn = mapper.Map<List<PostDTO>>(posts);
                 return rtn;
             }
             return null;
         }
 
-        public static List<PostDTO> CountPosts()
+        public static int CountPosts()
         {
             var result = AllPosts();
-            int totalCount = result.Count;
-            return result;
+            return result.Count;
         }
 
         public static PostDTO GetPost(int id)
         {
             var post = DataAccessFactory.PostDataAccess().GetByID(id);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Post, PostDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Post, PostDTO>.GetMapper();
             var rtn = mapper.Map<PostDTO>(post);
             return rtn;
         }
 
-        public static bool CreatePost(PostDTO postdto)
+        public static bool CreatePost(PostDTO obj)
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<PostDTO, Post>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<Post, PostDTO>.GetMapper();
 
-            var pst = mapper.Map<Post>(postdto);
+            var pst = mapper.Map<Post>(obj);
             var rtn = DataAccessFactory.PostDataAccess().Create(pst);
 
             return rtn;
@@ -86,18 +70,14 @@ namespace BLL.Services
         public static bool UpdatePost(PostDTO obj)
         {
             var postdto = new PostDTO();
+
             postdto.Title = obj.Title;
             postdto.Content = obj.Content;
 
             postdto.UpdatedAt = DateTime.Now;
             postdto.UserID = obj.UserID;
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<PostDTO, Post>();
-            });
-            var mapper = new Mapper(config);
-
+            var mapper = MappingService<PostDTO, Post>.GetMapper();
             var post = mapper.Map<Post>(postdto);
 
             var rtn = DataAccessFactory.PostDataAccess().Update(post);
@@ -109,11 +89,7 @@ namespace BLL.Services
             var data = DataAccessFactory.PostDataAccess().GetByName(q);
             if (data != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Post, PostDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<PostDTO, Post>.GetMapper();
                 var rtn = mapper.Map<List<PostDTO>>(data);
                 return rtn;
             }
@@ -125,11 +101,8 @@ namespace BLL.Services
             try
             {
                 var data = DataAccessFactory.PostStatisticalDataAccess().WithInRange(today, upto);
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Post, PostDTO>();
-                });
-                var mapper = new Mapper(config);
+
+                var mapper = MappingService<Post, PostDTO>.GetMapper();
                 var rtn = mapper.Map<List<PostDTO>>(data);
                 return rtn;
             }

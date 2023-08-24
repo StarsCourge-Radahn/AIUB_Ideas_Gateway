@@ -17,12 +17,7 @@ namespace BLL.Services
             var jobs = DataAccessFactory.JobDataAccess().GetAll(false);
             if (jobs != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Job, JobDTO>();
-                });
-
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Job, JobDTO>.GetMapper();
                 var rtn = mapper.Map<List<JobDTO>>(jobs);
 
                 return rtn;
@@ -35,12 +30,7 @@ namespace BLL.Services
             var jobs = DataAccessFactory.JobDataAccess().GetAll(true);
             if (jobs != null)
             {
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Job, JobDTO>();
-                });
-
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Job, JobDTO>.GetMapper();
                 var rtn = mapper.Map<List<JobDTO>>(jobs);
 
                 return rtn;
@@ -57,69 +47,59 @@ namespace BLL.Services
         {
             var job = DataAccessFactory.JobDataAccess().GetByID(id);
 
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Job,JobDTO>();
-            });
-            var mapper = new Mapper(config);
+            var mapper = MappingService<Job, JobDTO>.GetMapper();
             var rtn = mapper.Map<JobDTO>(job);
-
             return rtn;
         }
 
-        public static bool CreateJobPost(JobDTO jobdto)
+        public static bool CreateJobPost(JobDTO obj)
         {
-            var config = new MapperConfiguration(cfg =>
+            try
             {
-                cfg.CreateMap<JobDTO, Job>();
-            });
-            var mapper = new Mapper(config);
+                var mapper = MappingService<JobDTO, Job>.GetMapper();
+                var jb = mapper.Map<Job>(obj);
 
-            var jb = mapper.Map<Job>(jobdto);
-
-            var rtn = DataAccessFactory.JobDataAccess().Create(jb);
-            return rtn;
+                var rtn = DataAccessFactory.JobDataAccess().Create(jb);
+                return rtn;
+            }
+            catch (Exception) { return false; }
         }
 
         public static bool DeleteJobPost(int id)
         {
-            var rtn = DataAccessFactory.JobDataAccess().Delete(id);
-            return rtn;
+            try
+            {
+                var rtn = DataAccessFactory.JobDataAccess().Delete(id);
+                return rtn;
+            }
+            catch (Exception) { return false; }
         }
 
         public static bool UpdateJobPost(JobDTO obj)
         {
-            var jobdto = new JobDTO();
-
-            jobdto.Title = obj.Title;
-            jobdto.Description = obj.Description;
-
-            jobdto.CreatedAt = obj.CreatedAt;
-            jobdto.UpdatedAt = DateTime.Now;
-            jobdto.UserID = obj.UserID;
-            jobdto.IsBan = obj.IsBan;
-            
-            var config = new MapperConfiguration(cfg =>
+            try
             {
-                cfg.CreateMap<JobDTO, Job>();
-            });
-            var mapper = new Mapper(config);
+                var job = new Job();
 
-            var job = mapper.Map<Job>(jobdto);
+                job.Title = obj.Title;
+                job.Description = obj.Description;
 
-            var rtn = DataAccessFactory.JobDataAccess().Update(job);
+                job.CreatedAt = obj.CreatedAt;
+                job.UpdatedAt = DateTime.Now;
+                job.UserID = obj.UserID;
+                job.IsBan = obj.IsBan;
 
-            return rtn;
+                var rtn = DataAccessFactory.JobDataAccess().Update(job);
+                return rtn;
+            }
+            catch (Exception){ return false; }
         }
 
         public static List<JobDTO> JobPostSearch(string q)
         {
             var data = DataAccessFactory.JobDataAccess().GetByName(q);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Job, JobDTO>();
-            });
-            var mapper = new Mapper(config);
+
+            var mapper = MappingService<Job, JobDTO>.GetMapper();
             var rtn = mapper.Map<List<JobDTO>>(data);
             return rtn;
         }
@@ -128,18 +108,11 @@ namespace BLL.Services
             try
             {
                 var jobs = DataAccessFactory.JobStatisticalDataAccess().WithInRange(today, upto);
-                var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Job, JobDTO>();
-                });
-                var mapper = new Mapper(config);
+                var mapper = MappingService<Job, JobDTO>.GetMapper();
                 var rtn = mapper.Map<List<JobDTO>>(jobs);
                 return rtn;
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            catch (Exception){ return null; }
         }
     }
 }
