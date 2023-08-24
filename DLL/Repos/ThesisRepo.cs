@@ -2,6 +2,7 @@
 using DLL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,15 +52,44 @@ namespace DLL.Repos
 
             return thesis;
         }
-
-        public ThesisPaper GetCvById(int id)
+        public ThesisPaper GetById(int id)
         {
-            throw new NotImplementedException();
+            var thesis = _context.ThesisPapers
+                .SingleOrDefault(t => t.ThesisId == id);
+            return thesis;
         }
 
-        public bool Update(ThesisPaper obj)
+        public bool Update(ThesisPaper updatedThesis)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingThesis = _context.ThesisPapers.FirstOrDefault(t => t.ThesisId == updatedThesis.ThesisId);
+
+                if (existingThesis == null)
+                {
+                    return false; // Thesis not found.
+                }
+
+                // Update the properties of the existing Thesis with the updated values
+                existingThesis.Title = updatedThesis.Title;
+                existingThesis.PublicationDate = updatedThesis.PublicationDate;
+                existingThesis.CoAuthors = updatedThesis.CoAuthors;
+
+                // Set the state of the entity to modified so that it will be updated in the database.
+                _context.Entry(existingThesis).State = EntityState.Modified;
+
+                int affectedRows = _context.SaveChanges();
+
+                return affectedRows > 0; // Returns true if at least one row was affected.
+            }
+            catch (Exception)
+            {
+
+                return false; // An error occurred during the update.
+            }
         }
+
+
+
     }
 }
