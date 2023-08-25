@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 
 namespace BLL.Services
 {
@@ -25,26 +27,105 @@ namespace BLL.Services
             }
             return null;
         }
+
+        public static List<CommentCountDTO> AllComment_Count_Post()
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
+
+            // Group comments by Post ID and count the number of comments for each group
+            var commentCounts = comments
+                .Where(c => c.JobID == null) // Filter comments where JobID is NULL
+                .GroupBy(c => c.PostID)
+                .Select(group => new CommentCountDTO
+                {
+                    PostId = (int)group.Key,                   // Post ID
+                    PostContent = group.First().Post.Content, // Get the post content correctly
+                    CommentCount = group.Count()          // Number of comments for the post
+                })
+                .ToList();
+
+            return commentCounts;
+        }
+        public static double AverageCommentCountPost()
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
+
+
+            var commentCounts = comments
+                .Where(c => c.JobID == null)
+                .GroupBy(c => c.PostID)
+                .Select(group => group.Count())
+                .ToList();
+
+            // Calculate the average comment count
+            double averageCommentCount = commentCounts.Count > 0
+                ? commentCounts.Average()
+                : 0;
+
+            return averageCommentCount;
+        }
+
+        public static double AverageCommentCountJob()
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
+
+
+            var commentCounts = comments
+                .Where(c => c.PostID == null)
+                .GroupBy(c => c.JobID)
+                .Select(group => group.Count())
+                .ToList();
+
+            // Calculate the average comment count
+            double averageCommentCount = commentCounts.Count > 0
+                ? commentCounts.Average()
+                : 0;
+
+            return averageCommentCount;
+        }
+
+
+        public static List<CommentCountJobDTO> AllComment_Count_JobPost()
+        {
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
+
+            // Group comments by Post ID and count the number of comments for each group
+            var commentCounts = comments
+                .Where(c => c.PostID == null) // Filter comments where JobID is not NULL (i.e., job posts)
+                .GroupBy(c => c.JobID)       // Group by JobId for job posts
+                .Select(group => new CommentCountJobDTO
+                {
+                    JobId =(int) group.Key,                      // Job ID
+                    JobContent = group.First().Job.Title, // Get the job content correctly
+                    CommentCount = group.Count()              // Number of comments for the job post
+                })
+            .ToList();
+            return commentCounts;
+        }
+      
+
+
+
+
+
+
+
+
         public static bool CreateComment(CommentDTO commentDTO)
-        {
-            var mapper = MappingService<CommentDTO,Comment>.GetMapper();
-
-            var comment = mapper.Map<Comment>(commentDTO);
-            var success = DataAccessFactory.CommentDataAccess().Create(comment);
-
-            return success;
-        }
-
-        public static CommentDTO CommentById(int id)
-        {
-            var comment = DataAccessFactory.CommentDataAccess().GetByCommentID(id);
-
-            var mapper = MappingService<Comment, CommentDTO>.GetMapper();
-            var rtn = mapper.Map<CommentDTO>(comment);
-            return rtn;
-        }
-
-        public static bool DeleteComment(int id)
+    {
+        var mapper = MappingService<CommentDTO,Comment>.GetMapper();
+        var comment = mapper.Map<Comment>(commentDTO);
+        var success = DataAccessFactory.CommentDataAccess().Create(comment);
+        return success;
+    }
+    public static CommentDTO CommentById(int id)
+    {
+        var comment = DataAccessFactory.CommentDataAccess().GetByCommentID(id);
+        var mapper = MappingService<Comment, CommentDTO>.GetMapper();
+        var rtn = mapper.Map<CommentDTO>(comment);
+        return rtn;
+    }
+    public static bool DeleteComment(int id)
         {
             var result = DataAccessFactory.CommentDataAccess().Delete(id);
             return result;

@@ -30,6 +30,100 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/postcomment_count")]
+        public HttpResponseMessage AllPostCount() // all comment(post and job)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var commentCounts = CommentServices.AllComment_Count_Post();
+
+                if (commentCounts != null && commentCounts.Any())
+                {
+                    
+                    return Request.CreateResponse(HttpStatusCode.OK, commentCounts);
+                }
+                else
+                {
+                    var responseMessage = new
+                    {
+                        Message = "No data available"
+                    };
+                    return Request.CreateResponse(HttpStatusCode.NotFound, responseMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/job_postcomment_count")]
+        public HttpResponseMessage AllJobPostCount() 
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var commentCounts = CommentServices.AllComment_Count_JobPost();
+
+                if (commentCounts != null && commentCounts.Any())
+                {        
+                    return Request.CreateResponse(HttpStatusCode.OK, commentCounts);
+                }
+                else
+                {
+                    var responseMessage = new
+                    {
+                        Message = "No data available"
+                    };
+                    return Request.CreateResponse(HttpStatusCode.NotFound, responseMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/averagecountpost")]
+        public HttpResponseMessage AverageCountPost()
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var averageCommentCount = CommentServices.AverageCommentCountPost();
+                return Request.CreateResponse(HttpStatusCode.OK, new { Average = averageCommentCount });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
+
+        }
+
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/comment/averagecountjobpost")]
+        public HttpResponseMessage AverageCountJob()
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var averageCommentCount = CommentServices.AverageCommentCountJob();
+                return Request.CreateResponse(HttpStatusCode.OK, new { Average = averageCommentCount });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
+
+        }
+
 
         [LoggedIn]
         [HttpPost]
@@ -92,7 +186,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
                 else
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete of Comment" });
-
             }
             catch (Exception ex)
             {
@@ -124,7 +217,6 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-
                 var data = CommentServices.JobId(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
@@ -173,7 +265,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         [LoggedIn]
         [HttpGet]
-        [Route("api/comment/userpost/{postId}")]
+        [Route("api/comment/userpost/{postId}")]   // Session user can see his/her comment in  specfic post by post id 
         public HttpResponseMessage GetUserPostComments(int postId)
         {
             try
@@ -194,7 +286,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         [LoggedIn]
         [HttpGet]
-        [Route("api/comment/userjob/{jobId}")]
+        [Route("api/comment/userjob/{jobId}")]  // Session user can see his/her comment in  specfic Job_post by Job_post id 
         public HttpResponseMessage GetUserJobComments(int jobId)
         {
             try

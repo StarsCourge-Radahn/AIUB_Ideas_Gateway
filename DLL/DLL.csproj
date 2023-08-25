@@ -60,6 +60,7 @@
     <Compile Include="EF\Models\Experience.cs" />
     <Compile Include="EF\Models\Job.cs" />
     <Compile Include="EF\Models\JobApplication.cs" />
+    <Compile Include="EF\Models\OTP.cs" />
     <Compile Include="EF\Models\Post.cs" />
     <Compile Include="EF\Models\Session.cs" />
     <Compile Include="EF\Models\Skill.cs" />
@@ -69,11 +70,16 @@
     <Compile Include="Interfaces\IAuth.cs" />
     <Compile Include="Interfaces\IComment.cs" />
     <Compile Include="Interfaces\ICV.cs" />
+    <Compile Include="Interfaces\IOTP.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Interfaces\IStatistical.cs" />
     <Compile Include="Migrations\202308191605073_udpate1.cs" />
     <Compile Include="Migrations\202308191605073_udpate1.designer.cs">
       <DependentUpon>202308191605073_udpate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308241842225_addOTP.cs" />
+    <Compile Include="Migrations\202308241842225_addOTP.designer.cs">
+      <DependentUpon>202308241842225_addOTP.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +90,7 @@
     <Compile Include="Repos\DataRepository.cs" />
     <Compile Include="Repos\ExperienceRepo.cs" />
     <Compile Include="Repos\JobRepo.cs" />
+    <Compile Include="Repos\OtpRepo.cs" />
     <Compile Include="Repos\PostRepo.cs" />
     <Compile Include="Repos\SessionRepo.cs" />
     <Compile Include="Repos\SkillRepo.cs" />
@@ -98,6 +105,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202308191605073_udpate1.resx">
       <DependentUpon>202308191605073_udpate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308241842225_addOTP.resx">
+      <DependentUpon>202308241842225_addOTP.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

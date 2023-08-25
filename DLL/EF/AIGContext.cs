@@ -26,6 +26,7 @@ namespace DLL.EF
         public DbSet<Award> Awards { get; set; }
 
         public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<OTP> OTPs { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

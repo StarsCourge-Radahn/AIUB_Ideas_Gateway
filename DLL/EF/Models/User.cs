@@ -45,5 +45,6 @@ namespace DLL.EF.Models
 
         public virtual ICollection<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
 
+        public virtual ICollection<OTP> OTPs { get; set; } = new List<OTP>();
     }
 }
