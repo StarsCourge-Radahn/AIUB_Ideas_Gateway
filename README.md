@@ -93,13 +93,13 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 - The AIUB community for inspiring the creation of this platform.
-- All contributors and developers who made this project possible.
+- All my gorup mates who made this project possible.
 
 ---
-
-<a href="https://github.com/sadhiin/AIUB_Ideas_Gateway/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=sadhiin/AIUB_Ideas_Gateway" />
-</a>
+- [`Shanjidul Islam Sadhin`](https://github.com/sadhiin)
+- [`Partha Roy`](https://github.com/roypartha)
+- [`Istiak Ahmed`](https://github.com/StarsCourge-Radahn)
+- [`Saurav Sarkar`](https://github.com/sauraavsarkar)
 
 Made with [🫀](https://github.com/sadhiin/AIUB_Ideas_Gateway).
 
