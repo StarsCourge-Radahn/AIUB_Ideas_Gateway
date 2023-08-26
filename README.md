@@ -97,8 +97,10 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ---
 
-<a href="https://github.com/remarkablemark/html-react-parser/graphs/contributors">
-  <img src="https://opencollective.com/html-react-parser/contributors.svg?width=890&button=false">
+<a href="https://github.com/sadhiin/AIUB_Ideas_Gateway/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sadhiin/AIUB_Ideas_Gateway" />
 </a>
+
+Made with [🫀](https://github.com/sadhiin/AIUB_Ideas_Gateway).
 
 We hope the **AIUB Ideas Gateway** serves as an effective platform for the AIUB community to connect, share, and grow.
