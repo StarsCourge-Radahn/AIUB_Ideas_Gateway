@@ -12,10 +12,9 @@ using BLL.DTOs;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
+    [LoggedIn]
     public class CVController : ApiController
     {
-
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/{id}")]  
         public HttpResponseMessage CVById(int id)
@@ -34,9 +33,8 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
         //AcademicQualification
-        [LoggedIn]
         [HttpPost]
-        [Route("api/cv/createacademic")]  // Create AcademicQualification
+        [Route("api/cv/createacademic")]  // Create Academic Qualification
         public HttpResponseMessage CreateAcademic(AcademicQualificationDTO obj)
         {
             if (obj.Degree != null && obj.Institution != null)
@@ -71,7 +69,6 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/academic/{id}")] // by cv id 
         public HttpResponseMessage AcademicByCvId(int id)
@@ -112,7 +109,6 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
         //Award
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/createaward")]  // Create Award
         public HttpResponseMessage CreateAward(AwardDTO obj)
@@ -149,7 +145,6 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/award/{id}")] // by cv id 
         public HttpResponseMessage AwardByCvId(int id)
@@ -193,10 +188,9 @@ namespace AIUB_Ideas_Gateway.Controllers
 
 
         // Experience
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/createexperience")]  // Create 
-        public HttpResponseMessage CreateEperience(ExperienceDTO obj)
+        public HttpResponseMessage CreateExperience(ExperienceDTO obj)
         {
             if (obj.CompanyName != null && obj.Position != null)// && obj.DateReceived != null)
             {
@@ -230,7 +224,6 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/experience/{id}")] // by cv id 
         public HttpResponseMessage ExperienceByCvId(int id)
@@ -247,7 +240,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/experience/delete/{id}")] // DeleteExperience by id
         public HttpResponseMessage DeleteExperience(int id)
@@ -260,7 +253,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
                 else
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete." });
-
             }
             catch (Exception ex)
             {
@@ -273,7 +265,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         // Skill 
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/createskill")]  // Create 
         public HttpResponseMessage CreateSkill(SkillDTO obj)
@@ -296,7 +287,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                             return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in adding Skill" });
                     }
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in adding Skill" });
-
                 }
                 catch (Exception ex)
                 {
@@ -309,7 +299,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/skill/{id}")] // by cv id 
         public HttpResponseMessage SkillByCvId(int id)
@@ -327,7 +317,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/skill/delete/{id}")] // DeleteSkill by id
         public HttpResponseMessage DeleteSkill(int id)
@@ -350,7 +340,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         // Thesispaper............
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/createthesis")]  // Create 
         public HttpResponseMessage CreateThesis(ThesisPaperDTO obj)
@@ -387,7 +377,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/thesis/{id}")] // by cv id 
         public HttpResponseMessage ThesisByCvId(int id)
@@ -405,7 +395,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
         
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/cv/thesis/delete/{id}")] // DeleteThesis by id
         public HttpResponseMessage DeleteThesis(int id)
@@ -444,7 +434,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/award/{id}")]  // Find Award by ID
         public HttpResponseMessage AwardById(int id)
@@ -461,7 +451,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/experience/{id}")]  // Find Experience by ID
         public HttpResponseMessage ExperienceById(int id)
@@ -478,7 +468,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/skill/{id}")]  // Find Skill by ID
         public HttpResponseMessage SkillById(int id)
@@ -495,7 +485,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/thesis/{id}")]  // Find Thesis by ID
         public HttpResponseMessage ThesisById(int id)
@@ -517,7 +507,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         // Update All...............
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/academic/update/{id}")] // Update AcademicQualification by ID
         public HttpResponseMessage UpdateAcademicQualification(int id, AcademicQualificationDTO updatedAcademic)
@@ -554,7 +544,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/award/update/{id}")] // Update Award by ID
         public HttpResponseMessage UpdateAward(int id, AwardDTO updatedAward)
@@ -590,7 +580,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/experience/update/{id}")] // Update Experience by ID
         public HttpResponseMessage UpdateExperience(int id, ExperienceDTO updatedExperience)
@@ -624,7 +614,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/skill/update/{id}")] // Update Skill by ID
         public HttpResponseMessage UpdateSkill(int id, SkillDTO updatedSkill)
@@ -660,7 +650,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+
         [HttpPost]
         [Route("api/thesis/update/{id}")] // Update Thesis by ID
         public HttpResponseMessage UpdateThesis(int id, ThesisPaperDTO updatedThesis)

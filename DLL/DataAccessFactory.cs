@@ -37,6 +37,11 @@ namespace DLL
         {
             return new JobRepo();
         }
+
+        public static IJobApply<JobApplication,int,bool> JobApplyDataAccess()
+        {
+            return new JobApplicationRepo();
+        }
         public static IComment<Comment, int, bool, string> CommentDataAccess()
         {
             return new CommentRepo();
