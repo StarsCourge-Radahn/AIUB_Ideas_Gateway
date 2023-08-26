@@ -2,6 +2,7 @@
 
 Welcome to the **AIUB Ideas Gateway** - for sharing blog posts, showcasing projects, and posting job opportunities for the AIUB community. This API application is built using ASP.NET, adhering to SOLID principles, ensuring scalability, maintainability, and performance.
 
+Note: For Api-Endpoints please refer to the [`API-Doc`](https://github.com/sadhiin/AIUB_Ideas_Gateway/blob/master/API-doc.md)
 ## Features
 
 ### General:
@@ -95,5 +96,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - All contributors and developers who made this project possible.
 
 ---
+
+<a href="https://github.com/remarkablemark/html-react-parser/graphs/contributors">
+  <img src="https://opencollective.com/html-react-parser/contributors.svg?width=890&button=false">
+</a>
 
 We hope the **AIUB Ideas Gateway** serves as an effective platform for the AIUB community to connect, share, and grow.
