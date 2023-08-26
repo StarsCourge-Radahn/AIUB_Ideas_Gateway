@@ -83,5 +83,9 @@ namespace DLL
         {
             return new ThesisRepo();
         }
+        public static IOTP<OTP,int, bool, User> OtpDataAccess()
+        {
+            return new OtpRepo();
+        }
     }
 }

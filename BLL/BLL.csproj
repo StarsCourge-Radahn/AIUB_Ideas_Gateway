@@ -46,11 +46,15 @@
   <ItemGroup>
     <Compile Include="DTOs\AcademicQualificationDTO.cs" />
     <Compile Include="DTOs\AwardDTO.cs" />
+    <Compile Include="DTOs\ChangePasswordDTO.cs" />
+    <Compile Include="DTOs\CommentCountDTO.cs" />
+    <Compile Include="DTOs\CommentCountJobDTO.cs" />
     <Compile Include="DTOs\CommentDTO.cs" />
     <Compile Include="DTOs\CvDTO.cs" />
     <Compile Include="DTOs\CVInfoDTO.cs" />
     <Compile Include="DTOs\ExperienceDTO.cs" />
     <Compile Include="DTOs\JobDTO.cs" />
+    <Compile Include="DTOs\OTPDTO.cs" />
     <Compile Include="DTOs\PostDTO.cs" />
     <Compile Include="DTOs\SessionDTO.cs" />
     <Compile Include="DTOs\SkillDTO.cs" />

@@ -1,5 +1,6 @@
 ﻿using AIUB_Ideas_Gateway.AuthFilters;
 using AIUB_Ideas_Gateway.Models;
+using BLL.DTOs;
 using BLL.Services;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,38 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
+        }
+
+
+        [LoggedIn]
+        [HttpPost]
+        [Route("api/changepassword")]   // change password
+        public HttpResponseMessage ChangePassword(ChangePassword changePassword)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                if (userId > 0)
+                {
+                    
+                    var changePasswordDTO = new ChangePasswordDTO
+                    {
+                        UserId = userId,
+                        OldPassword = changePassword.OldPassword,
+                        NewPassword = changePassword.NewPassword,
+                        ConfirmPassword = changePassword.ConfirmPassword
+                    };
+
+                    var data = UserServices.ChangePassword(changePasswordDTO);
+                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Password Changed " });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Some thing is wrong.");
         }
 
 
