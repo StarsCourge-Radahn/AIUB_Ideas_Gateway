@@ -136,5 +136,123 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+
+        [HttpPost]
+        [Route("api/job/apply/{jobid}")]
+        public HttpResponseMessage ApplyAJob(int jobid)
+        {
+            try
+            {
+                var token = Request.Headers.Authorization.ToString();
+                var userId = AuthServices.GetUserID(token);
+                var rtn = JobApplicationServices.JobApply(jobid, userId);
+                if (rtn == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job applied Successfully!" });
+                }
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Somthing went wrong in job apply!" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
+        [HttpGet]
+        [Route("api/job/applicants/{jobid}")]
+        public HttpResponseMessage AppliedUsers(int jobid)
+        {
+            try
+            {
+                var job = JobServices.JobPost(jobid);
+                var token = Request.Headers.Authorization.ToString();
+                var userid = AuthServices.GetUserID(token);
+                if (userid == job.UserID)
+                {
+                    var rtn = JobApplicationServices.AppliedUsers(jobid);
+                    return Request.CreateResponse(HttpStatusCode.OK, rtn);
+                }
+                return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have access" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("api/job/applicants/cv/{jobid}")]
+        public HttpResponseMessage ApplicantsCV(int jobid)
+        {
+            try
+            {
+                var job = JobServices.JobPost(jobid);
+                var token = Request.Headers.Authorization.ToString();
+                var userid = AuthServices.GetUserID(token);
+                if (userid == job.UserID)
+                {
+                    var rtn = JobApplicationServices.ApplicantsInfo(jobid);
+                    return Request.CreateResponse(HttpStatusCode.OK, rtn);
+                }
+                return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have access" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        [HttpPost]
+        [Route("api/job/application/update/{jobid}/userid/{status}")]
+        public HttpResponseMessage UpdateUserApplication(int jobid, int userid, int status)
+        {
+            try
+            {
+                if (jobid > 0 && userid > 0 && status > 0)
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var jobpostuserid = AuthServices.GetUserID(token);
+                    var job = JobServices.JobPost(jobid);
+                    if (job.UserID == jobpostuserid)
+                    {
+                        var application = JobApplicationServices.AppliedJobByUser(jobid, userid);
+                        if (application != null)
+                        {
+                            application.ApplicationStatus = status;
+                            bool rtn = JobApplicationServices.ModifyApplication(application);
+                            if (rtn == true)
+                            {
+                                return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User application updated" });
+                            }
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have access to modify" });
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Jobid or Userid or status " });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+        // show user his applied job status
+        [HttpGet]
+        [Route("api/job/applied")]
+        public HttpResponseMessage ApplicationsStatus()
+        {
+            try
+            {
+                var tk = Request.Headers.Authorization.ToString();
+                int userid = AuthServices.GetUserID(tk);
+                var appliations = JobApplicationServices.UserApplications(userid);
+                return Request.CreateResponse(HttpStatusCode.OK, appliations);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
     }
 }
