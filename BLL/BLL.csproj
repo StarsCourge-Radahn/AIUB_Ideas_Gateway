@@ -53,6 +53,7 @@
     <Compile Include="DTOs\CvDTO.cs" />
     <Compile Include="DTOs\CVInfoDTO.cs" />
     <Compile Include="DTOs\ExperienceDTO.cs" />
+    <Compile Include="DTOs\JobApplicationDTO.cs" />
     <Compile Include="DTOs\JobDTO.cs" />
     <Compile Include="DTOs\OTPDTO.cs" />
     <Compile Include="DTOs\PostDTO.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Services\AuthServices.cs" />
     <Compile Include="Services\CommentServices.cs" />
     <Compile Include="Services\CvServices.cs" />
+    <Compile Include="Services\JobApplicationServices.cs" />
     <Compile Include="Services\JobServices.cs" />
     <Compile Include="Services\MappingService.cs" />
     <Compile Include="Services\PostServices.cs" />

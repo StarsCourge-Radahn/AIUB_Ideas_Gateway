@@ -14,7 +14,7 @@ namespace DLL.EF.Models
         public int JobApplicationId { get; set; }
 
         [Required]
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public virtual User User { get; set; }
 
         [ForeignKey("Job")]

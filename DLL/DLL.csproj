@@ -70,6 +70,7 @@
     <Compile Include="Interfaces\IAuth.cs" />
     <Compile Include="Interfaces\IComment.cs" />
     <Compile Include="Interfaces\ICV.cs" />
+    <Compile Include="Interfaces\IJobApply.cs" />
     <Compile Include="Interfaces\IOTP.cs" />
     <Compile Include="Interfaces\IRepo.cs" />
     <Compile Include="Interfaces\IStatistical.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Repos\CVRepo.cs" />
     <Compile Include="Repos\DataRepository.cs" />
     <Compile Include="Repos\ExperienceRepo.cs" />
+    <Compile Include="Repos\JobApplicationRepo.cs" />
     <Compile Include="Repos\JobRepo.cs" />
     <Compile Include="Repos\OtpRepo.cs" />
     <Compile Include="Repos\PostRepo.cs" />
