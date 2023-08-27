@@ -67,6 +67,7 @@
     <Compile Include="Services\AuthServices.cs" />
     <Compile Include="Services\CommentServices.cs" />
     <Compile Include="Services\CvServices.cs" />
+    <Compile Include="Services\EmailServices.cs" />
     <Compile Include="Services\JobApplicationServices.cs" />
     <Compile Include="Services\JobServices.cs" />
     <Compile Include="Services\MappingService.cs" />
