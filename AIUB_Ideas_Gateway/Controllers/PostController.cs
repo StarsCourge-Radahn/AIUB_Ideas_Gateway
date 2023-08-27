@@ -127,5 +127,29 @@ namespace AIUB_Ideas_Gateway.Controllers
             else
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post information" });
         }
+
+        [LoggedIn] 
+        [HttpGet]
+        [Route("api/post/reports/monthly_postcount")]
+        public HttpResponseMessage GetMonthlyPostCountForCurrentYear()
+        {
+            try
+            {
+                var monthlyPostCounts = PostServices.GetMonthlyPostCountForCurrentYear();
+
+                if (monthlyPostCounts != null && monthlyPostCounts.Any())
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, monthlyPostCounts);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No data available for the current year." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

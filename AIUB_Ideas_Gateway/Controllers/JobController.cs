@@ -254,5 +254,29 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+
+        [LoggedIn]
+        [HttpGet]
+        [Route("api/job/reports/monthly_jobtpostcount")]
+        public HttpResponseMessage GetMonthlyPostCountForCurrentYear()
+        {
+            try
+            {
+                var monthlyPostCounts = JobServices.GetMonthlyPostCountForCurrentYear();
+
+                if (monthlyPostCounts != null && monthlyPostCounts.Any())
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, monthlyPostCounts);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No data available for the current year." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

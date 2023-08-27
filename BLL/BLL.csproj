@@ -55,6 +55,7 @@
     <Compile Include="DTOs\ExperienceDTO.cs" />
     <Compile Include="DTOs\JobApplicationDTO.cs" />
     <Compile Include="DTOs\JobDTO.cs" />
+    <Compile Include="DTOs\MonthlyPostCountDTO.cs" />
     <Compile Include="DTOs\OTPDTO.cs" />
     <Compile Include="DTOs\PostDTO.cs" />
     <Compile Include="DTOs\SessionDTO.cs" />

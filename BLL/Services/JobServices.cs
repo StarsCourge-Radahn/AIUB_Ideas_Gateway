@@ -114,5 +114,27 @@ namespace BLL.Services
             }
             catch (Exception){ return null; }
         }
+
+        public static List<MonthlyPostCountDTO> GetMonthlyPostCountForCurrentYear()
+        {
+            DateTime currentDate = DateTime.Today;
+            int currentYear = currentDate.Year;
+
+            // Query the database to get all posts created in the current year
+            var posts = DataAccessFactory.JobDataAccess().GetAll(false);
+
+            var postCounts = posts
+                .Where(post => post.CreatedAt.Year == currentYear)
+                .GroupBy(post => post.CreatedAt.Month)
+                .Select(group => new MonthlyPostCountDTO
+                {
+                    Year = currentYear,
+                    Month = group.Key,
+                    PostCount = group.Count()
+                })
+                .ToList();
+
+            return postCounts;
+        }
     }
 }
