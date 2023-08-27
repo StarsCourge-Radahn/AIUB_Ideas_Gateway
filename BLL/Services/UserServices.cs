@@ -143,20 +143,25 @@ namespace BLL.Services
                 IsUsed = false,
                 UserID = user.UserID
             };
+           
+            var sentmail = EmailServices.SendForgotPasswordEmail(email, otp);
 
-            var otpMapper = MappingService<OTPDTO, OTP>.GetMapper();
-
-            var _otp = otpMapper.Map<OTP>(obj);
-            var success = DataAccessFactory.OtpDataAccess().Create(_otp);
-
-            // Return the OTP object if created successfully
-            if (success)
+            if (sentmail)
             {
-                return obj;
+                var otpMapper = MappingService<OTPDTO, OTP>.GetMapper();
+
+                var _otp = otpMapper.Map<OTP>(obj);
+                var success = DataAccessFactory.OtpDataAccess().Create(_otp);
+
+                // Return the OTP object if created successfully
+                if (success)
+                {
+                    return obj;
+                }
             }
+
             return null;
         }
-
         public static bool GetValidOTP(string OTP,int UserId)
         {
             var otpDTO = new OTPDTO
