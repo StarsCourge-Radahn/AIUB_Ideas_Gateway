@@ -7,9 +7,11 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace AIUB_Ideas_Gateway.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class HomeController : ApiController
     {
         [HttpGet]

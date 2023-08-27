@@ -54,7 +54,7 @@ namespace BLL.Services
 
         public static bool CreatePost(PostDTO obj)
         {
-            var mapper = MappingService<Post, PostDTO>.GetMapper();
+            var mapper = MappingService<PostDTO, Post>.GetMapper();
 
             var pst = mapper.Map<Post>(obj);
             var rtn = DataAccessFactory.PostDataAccess().Create(pst);
@@ -89,7 +89,7 @@ namespace BLL.Services
             var data = DataAccessFactory.PostDataAccess().GetByName(q);
             if (data != null)
             {
-                var mapper = MappingService<PostDTO, Post>.GetMapper();
+                var mapper = MappingService<Post, PostDTO>.GetMapper();
                 var rtn = mapper.Map<List<PostDTO>>(data);
                 return rtn;
             }

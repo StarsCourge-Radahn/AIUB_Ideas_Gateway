@@ -19,6 +19,7 @@ namespace AIUB_Ideas_Gateway
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.EnableCors();
         }
     }
 }
