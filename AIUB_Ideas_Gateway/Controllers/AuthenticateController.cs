@@ -85,7 +85,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                             return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Logged-Out" });
                         }
                         else
-                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not able to change the user session.");
+                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not able to change the user session or token");
                     }
                     else
                         return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Not getting the user session.");
@@ -99,11 +99,11 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-
+        // with this, a user can change his password from account settings 
         [LoggedIn]
         [HttpPost]
         [Route("api/changepassword")]   // change password
-        public HttpResponseMessage ChangePassword(ChangePassword changePassword)
+        public HttpResponseMessage ChangePassword(ChangePasswordModel changePassword)
         {
             try
             {
@@ -111,7 +111,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                 var userId = AuthServices.GetUserID(token);
                 if (userId > 0)
                 {
-                    
                     var changePasswordDTO = new ChangePasswordDTO
                     {
                         UserId = userId,

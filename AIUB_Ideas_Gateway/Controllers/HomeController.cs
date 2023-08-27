@@ -21,7 +21,11 @@ namespace AIUB_Ideas_Gateway.Controllers
             try
             {
                 var posts = PostServices.AllPosts();
-                return Request.CreateResponse(HttpStatusCode.OK, posts);
+                if (posts.Count > 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, posts);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Currently, we don't have any post" });
             }
             catch (Exception ex)
             {

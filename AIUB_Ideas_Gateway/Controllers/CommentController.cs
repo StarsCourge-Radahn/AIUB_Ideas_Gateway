@@ -12,14 +12,14 @@ namespace AIUB_Ideas_Gateway.Controllers
 {
     public class CommentController : ApiController
     {
-        [LoggedIn]
+        // Only admin has acces to all the comments
+        [Admin]
         [HttpGet]
         [Route("api/comment/all")]
         public HttpResponseMessage All() // all comment(post and job)
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
                 var commments = CommentServices.AllComments();
                 return Request.CreateResponse(HttpStatusCode.OK, commments);
             }
@@ -27,10 +27,10 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
-
         }
 
-        [LoggedIn]
+        // only admin can see all the post comments
+        [Admin]
         [HttpGet]
         [Route("api/comment/postcomment_count")]
         public HttpResponseMessage AllPostCount() // all comment(post and job)
@@ -42,7 +42,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
                 if (commentCounts != null && commentCounts.Any())
                 {
-                    
                     return Request.CreateResponse(HttpStatusCode.OK, commentCounts);
                 }
                 else
@@ -60,10 +59,11 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+        // only admin can see all the job comments.
+        [Admin]
         [HttpGet]
         [Route("api/comment/job_postcomment_count")]
-        public HttpResponseMessage AllJobPostCount() 
+        public HttpResponseMessage AllJobPostCount()
         {
             try
             {
@@ -71,7 +71,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 var commentCounts = CommentServices.AllComment_Count_JobPost();
 
                 if (commentCounts != null && commentCounts.Any())
-                {        
+                {
                     return Request.CreateResponse(HttpStatusCode.OK, commentCounts);
                 }
                 else
@@ -88,7 +88,9 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-        [LoggedIn]
+
+
+        [Admin]
         [HttpGet]
         [Route("api/comment/averagecountpost")]
         public HttpResponseMessage AverageCountPost()
@@ -103,10 +105,9 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
-
         }
 
-        [LoggedIn]
+        [Admin]
         [HttpGet]
         [Route("api/comment/averagecountjobpost")]
         public HttpResponseMessage AverageCountJob()
@@ -155,6 +156,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Comment object" });
             }
         }
+
         [LoggedIn]
         [HttpPost]
         [Route("api/comment/{id}")]  // Find comment by comment id
@@ -170,7 +172,6 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-
         }
 
         [LoggedIn]
@@ -181,11 +182,23 @@ namespace AIUB_Ideas_Gateway.Controllers
             try
             {
                 var token = Request.Headers.Authorization.ToString();
-                var data = CommentServices.DeleteComment(id);
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
-                else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete of Comment" });
+
+                var userid = AuthServices.GetUserID(token);
+                var comment = CommentServices.CommentById(id);
+
+                if (comment != null)
+                {
+                    if (comment.UserID != userid)
+                    {
+                        var data = CommentServices.DeleteComment(id);
+                        if (data == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete of Comment" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to delete the comment!" });
+                }
+                return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No comment found with this id" });
             }
             catch (Exception ex)
             {
@@ -201,8 +214,12 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var data = CommentServices.PostId(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                if (id > 0)
+                {
+                    var data = CommentServices.PostId(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post id!" });
             }
             catch (Exception ex)
             {
@@ -210,6 +227,8 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
+
+
         [LoggedIn]
         [HttpPost]
         [Route("api/comment/job/{id}")] // Find all comments for a Job by job id
@@ -217,8 +236,12 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var data = CommentServices.JobId(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                if (id > 0)
+                {
+                    var data = CommentServices.JobId(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job id!" });
             }
             catch (Exception ex)
             {
@@ -226,6 +249,8 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
+
+
         [LoggedIn]
         [HttpPost]
         [Route("api/comment/user")]  // Find all comments create by session User 
@@ -235,6 +260,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 var token = Request.Headers.Authorization.ToString();
                 var userId = AuthServices.GetUserID(token);
+
                 var data = CommentServices.UserId(userId);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
@@ -242,17 +268,15 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-
         }
 
-        [LoggedIn]
+        [Admin]
         [HttpPost]
         [Route("api/comment/user/{id}")]  // Find all comments create by User (User id)
         public HttpResponseMessage UserId(int id)
         {
             try
             {
-
                 var data = CommentServices.UserId(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
@@ -260,21 +284,20 @@ namespace AIUB_Ideas_Gateway.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-
         }
+
 
         [LoggedIn]
         [HttpGet]
-        [Route("api/comment/userpost/{postId}")]   // Session user can see his/her comment in  specfic post by post id 
-        public HttpResponseMessage GetUserPostComments(int postId)
+        [Route("api/comment/userpost/{postId}")]   // Session user can see his/her comment in  specific post by post id 
+        public HttpResponseMessage UserPostedComments(int postId)
         {
             try
             {
                 var token = Request.Headers.Authorization.ToString();
                 var userId = AuthServices.GetUserID(token);
 
-                CommentServices commentServices = new CommentServices(); // Create an instance
-                var comments = commentServices.GetUserPostComments(userId, postId);
+                var comments = CommentServices.GetUserPostComments(userId, postId);
 
                 return Request.CreateResponse(HttpStatusCode.OK, comments);
             }
@@ -294,8 +317,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 var token = Request.Headers.Authorization.ToString();
                 var userId = AuthServices.GetUserID(token);
 
-                CommentServices commentServices = new CommentServices();
-                var comments = commentServices.GetUserJobComments(userId, jobId);
+                var comments = CommentServices.GetUserJobComments(userId, jobId);
 
                 return Request.CreateResponse(HttpStatusCode.OK, comments);
             }
@@ -316,8 +338,12 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                int count = CommentServices.CountByPost(id);
-                return Request.CreateResponse(HttpStatusCode.OK, new { Count = count });
+                if (id > 0)
+                {
+                    int cnt = CommentServices.CountByPost(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, cnt);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "invalid id!" });
             }
             catch (Exception ex)
             {
@@ -332,15 +358,20 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-             
-                int count = CommentServices.CountByJob(id);
-                return Request.CreateResponse(HttpStatusCode.OK, new { Count = count });
+                if (id > 0)
+                {
+                    int cnt = CommentServices.CountByJob(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, cnt);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid id!" });
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
+
+
         [LoggedIn]
         [HttpPost]
         [Route("api/comment/update/{id}")] // Update only the comment Text
@@ -378,7 +409,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-
+        [Admin]
         [HttpGet]
         [Route("api/stats/comments-today")]
         public HttpResponseMessage GetCommentStatsForToday()

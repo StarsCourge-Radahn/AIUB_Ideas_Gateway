@@ -43,6 +43,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 {
                     var token = Request.Headers.Authorization.ToString();
                     var userId = AuthServices.GetUserID(token);
+
                     obj.CreatedAt = DateTime.Now;
                     obj.UpdatedAt = null;
                     obj.UserID = userId;

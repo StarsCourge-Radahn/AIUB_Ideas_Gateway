@@ -59,7 +59,7 @@ namespace DLL.Repos
             try
             {
                 var session = _context.Sessions.
-                    Where(s=>s.UserID == id && s.IsActive == true && s.LogoutTime==null)
+                    Where(s=>s.UserID == id && s.IsActive == true && s.LogoutTime == null)
                     .FirstOrDefault();
                 return session;
             }

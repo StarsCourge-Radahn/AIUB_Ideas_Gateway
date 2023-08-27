@@ -16,14 +16,18 @@ namespace AIUB_Ideas_Gateway.Controllers
     public class CVController : ApiController
     {
         [HttpPost]
-        [Route("api/cv/{id}")]  
+        [Route("api/cv/{id}")]
         public HttpResponseMessage CVById(int id)
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
-                var data = CvServices.GetByID(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                if (id > 0)
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var data = CvServices.GetByID(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid cv id!" });
             }
             catch (Exception ex)
             {
@@ -56,7 +60,6 @@ namespace AIUB_Ideas_Gateway.Controllers
                             return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in adding Acadenic Qualification///" });
                     }
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in adding Acadenic Qualification" });
-
                 }
                 catch (Exception ex)
                 {
@@ -75,9 +78,13 @@ namespace AIUB_Ideas_Gateway.Controllers
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
-                var data = CvServices.AcademicByCvId(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                if (id > 0)
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var data = CvServices.AcademicByCvId(id);
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid id!" });
             }
             catch (Exception ex)
             {
@@ -86,27 +93,29 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         }
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/cv/academic/delete/{id}")] // DeleteAcademicQualification by id
         public HttpResponseMessage DeleteAcademic(int id)
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
-                var data = CvServices.DeleteAcademic(id);
-                if (data == true)
-                    return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
-                else
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete." });
-
+                if (id > 0)
+                {
+                    var data = CvServices.DeleteAcademic(id);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Delete Successfully!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Delete." });
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid id!" });
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
-
         }
+
+
         //Award
 
         [HttpPost]
@@ -394,7 +403,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
-        
+
 
         [HttpPost]
         [Route("api/cv/thesis/delete/{id}")] // DeleteThesis by id
@@ -417,7 +426,6 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
         // Find by id................
 
-        [LoggedIn]
         [HttpPost]
         [Route("api/academicqualification/{id}")]  // Find AcademicQualification by ID
         public HttpResponseMessage AcademicQualificationById(int id)
@@ -506,8 +514,6 @@ namespace AIUB_Ideas_Gateway.Controllers
 
 
         // Update All...............
-
-
         [HttpPost]
         [Route("api/academic/update/{id}")] // Update AcademicQualification by ID
         public HttpResponseMessage UpdateAcademicQualification(int id, AcademicQualificationDTO updatedAcademic)
@@ -685,8 +691,5 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-
-
-
     }
 }

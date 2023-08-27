@@ -14,14 +14,59 @@ namespace AIUB_Ideas_Gateway.Controllers
     [LoggedIn]
     public class AdminController : ApiController
     {
+        //                                ####### User centric operations #########
+        // Admin can see all users
+        [HttpGet]
+        [Route("api/admin/user/all")]
+        public HttpResponseMessage Allusers()
+        {
+            try
+            {
+                var users = UserServices.GetUsers();
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message.ToString());
+            }
+        }
 
+        // Admin has access to individual user
+        [HttpPost]
+        [Route("api/admin/user/{id}")]
+        public HttpResponseMessage ByUserId(int id)
+        {
+            try
+            {
+                var user = UserServices.GetUser(id);
+                return Request.CreateResponse(HttpStatusCode.OK, user);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message.ToString());
+            }
+        }
 
-        // job seeker can orient cv --> user profile
-        // same formate to download cv all the applicants
+        //total active user
 
-        // upvote and reporting
-        // apply for job from job post 
+        [HttpGet]
+        [Route("api/admin/user/active")]
+        public HttpResponseMessage ActiveUsers()
+        {
+            try
+            {
+                var res = UserServices.CurrentlyActiveUsers();
+                return Request.CreateResponse(HttpStatusCode.OK, res);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
 
+        //                                ####### Post centric operations #########
+
+        // Admin can access any individual post
         [HttpPost]
         [Route("api/admin/post/{id}")]
         public HttpResponseMessage AdminPost(int id)
@@ -39,6 +84,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
+        // Admin can create post [redandent]
         [HttpPost]
         [Route("api/admin/post/create")]
         public HttpResponseMessage AdminCreate(PostDTO obj)
@@ -69,27 +115,38 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Post object" });
             }
         }
-        // Admin post update
+
+        // Admin can update any post
         [HttpPost]
         [Route("api/admin/post/update")]
-        public HttpResponseMessage AdminUpdate(PostDTO obj)
+        public HttpResponseMessage AdminPostUpdate(PostDTO obj)
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
-                var adminID = AuthServices.GetUserID(token);
-                if (obj.UserID == adminID)
+                if (obj != null && obj.PostID > 0)
                 {
-                    var res = PostServices.UpdatePost(obj);
-                    if (res == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post update" });
+                    var post = PostServices.GetPost(obj.PostID);
+                    if (post != null)
+                    {
+                        post.Title = obj.Title;
+                        post.Content = obj.Content;
+                        post.UpdatedAt = DateTime.Now;
+                        post.IsBan = obj.IsBan;
+                        post.IsDeleted = obj.IsDeleted;
+
+                        var res = PostServices.UpdatePost(post);
+                        if (res == true)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Updated" });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post update" });
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found!" });
                 }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this post!" });
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post id or post object" });
             }
             catch (Exception ex)
             {
@@ -97,34 +154,173 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
 
         }
+
         //Admin post delete
         [HttpPost]
         [Route("api/admin/post/delete/{id}")]
-        public HttpResponseMessage AdminDelete(PostDTO obj)
+        public HttpResponseMessage AdminDeletePost(int id)
         {
             try
             {
-                var token = Request.Headers.Authorization.ToString();
-                var adminID = AuthServices.GetUserID(token);
-                if (obj.UserID == adminID)
+                if (id > 0)
                 {
-                    var res = PostServices.DeletePost(obj.PostID);
-                    if (res == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post deleted" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post delete" });
+                    var post = PostServices.GetPost(id);
+                    if (post != null)
+                    {
+                        var res = PostServices.DeletePost(post.PostID);
+                        if (res == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post deleted" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in post delete" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found with this 'ID'." });
                 }
-                else
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this post!" });
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post id" });
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-        //Admin see total number of posts
+
+        //                                ####### Job centric operations #########
+
+        //Admin can see job post
+        [HttpPost]
+        [Route("api/admin/jobpost/{id}")]
+        public HttpResponseMessage AdminJobPost(int id)
+        {
+            try
+            {
+                var data = JobServices.JobPost(id);
+                if (data != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, data);
+                else
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Job post not found!" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
+
+        //Admin  create job posts
+        [HttpPost]
+        [Route("api/admin/jobpost/create")]
+        public HttpResponseMessage AdminJobPostCreate(JobDTO obj)
+        {
+            if (obj.Title != null && obj.Description != null)
+            {
+                try
+                {
+                    var token = Request.Headers.Authorization.ToString();
+                    var adminID = AuthServices.GetUserID(token);
+                    obj.CreatedAt = DateTime.Now;
+                    obj.UpdatedAt = null;
+                    obj.UserID = adminID;
+
+                    var data = JobServices.CreateJobPost(obj);
+                    if (data == true)
+                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Created!" });
+                    else
+                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of job" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job object" });
+        }
+
+        //Admin can update any job post
+        [HttpPost]
+        [Route("api/admin/jobpost/update")]
+        public HttpResponseMessage AdminJobUpdate(JobDTO obj)
+        {
+            try
+            {
+                if (obj != null && obj.JobID > 0)
+                {
+                    var job = JobServices.JobPost(obj.JobID);
+                    if (job != null)
+                    {
+                        job.Title = obj.Title;
+                        job.Description = obj.Description;
+                        job.UpdatedAt = DateTime.Now;
+                        job.IsBan = obj.IsBan;
+                        job.IsDeleted = obj.IsDeleted;
+
+                        var res = JobServices.UpdateJobPost(job);
+                        if (res == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Updated" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job update" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No job found with this id!" });
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post object" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
+        //Admin delete job posts
+        [HttpPost]
+        [Route("api/admin/jobpost/delete/{id}")]
+        public HttpResponseMessage AdminJobDelete(int id)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var job = JobServices.JobPost(id);
+                    if (job != null)
+                    {
+                        var res = JobServices.DeleteJobPost(id);
+                        if (res == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Deleted" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Job delete" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No job found with this id!" });
+                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job id!" });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+        }
+
+
+        //                                ####### Statistical operations #########
+
         [HttpGet]
-        [Route("api/admin/post/totalpost")]
+        [Route("api/admin/totalcount/users")]
+        public HttpResponseMessage TotalUser()
+        {
+            try
+            {
+                var cnt = UserServices.CountUsers();
+                return Request.CreateResponse(HttpStatusCode.OK, cnt);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+            }
+        }
+
+
+        //Admin can see total number of posts available
+        [HttpGet]
+        [Route("api/admin/totalcount/post")]
         public HttpResponseMessage TotalPosts()
         {
             try
@@ -138,9 +334,9 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        //Admin see total number of jobposts
+        //Admin see total number of job posts
         [HttpGet]
-        [Route("api/admin/post/totaljob")]
+        [Route("api/admin/totalcount/job")]
         public HttpResponseMessage TotalJobPosts()
         {
             try
@@ -154,32 +350,72 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        //total active user
 
+        //Getting posts with in a date range
         [HttpGet]
-        [Route("api/admin/active")]
-        public HttpResponseMessage ActiveUsers()
+        [Route("api/admin/post/within/{today}/{uptoDay}")]
+        public HttpResponseMessage GetPostsWithinRange(string today, string uptoDay)
         {
-            try
+            DateTime parsedToday;
+            DateTime parsedUptoDay;
+
+            if (DateTime.TryParse(today, out parsedToday) && DateTime.TryParse(uptoDay, out parsedUptoDay))
             {
-                var res = UserServices.CurrentlyActiveUsers();
-                return Request.CreateResponse(HttpStatusCode.OK, res);
+                try
+                {
+                    var posts = PostServices.GetPostsInRange(parsedToday, parsedUptoDay);
+                    if (posts != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, posts);
+                    else
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No post found!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
             }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid date value. Please pass dates as 'YYYY-MM-DD' format!" });
         }
 
 
-        //Admin Can temporary ban users can be loggedin but other activities will be disabled until the ban time expires
+        // Getting job post with in a rang
+        [HttpGet]
+        [Route("api/admin/job/within/{today}/{uptoDay}")]
+        public HttpResponseMessage JobsWithinRange(string today, string uptoDay)
+        {
+            DateTime parsedToday;
+            DateTime parsedUptoDay;
+
+            if (DateTime.TryParse(today, out parsedToday) && DateTime.TryParse(uptoDay, out parsedUptoDay))
+            {
+                try
+                {
+                    var jobs = JobServices.GetPostsInRange(parsedToday, parsedUptoDay);
+                    if (jobs != null)
+                        return Request.CreateResponse(HttpStatusCode.OK, jobs);
+                    else
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No job found!" });
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+                }
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid date value. Please pass dates as 'YYYY-MM-DD' format!" });
+        }
+
+
+        //                                #######  Access revoke operations #########
+
+
+        //Admin Can temporary ban users can be login but other activities will be disabled until the ban time expires
         [HttpPost]
         [Route("api/admin/ban/user/{uid}")]
         public HttpResponseMessage BanUser(int uid)
         {
-            if (uid > 0)
+            try
             {
-                try
+                if (uid > 0)
                 {
                     var user = UserServices.GetUser(uid);
                     if (user != null)
@@ -192,16 +428,17 @@ namespace AIUB_Ideas_Gateway.Controllers
                         }
                         else
                         {
-                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Somthing went wrong in user ban!" });
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in user ban!" });
                         }
                     }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User doesn't exists. Please check the user id!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid user id" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
         }
 
         // Permanent ban cannot create account with same email and username
@@ -210,9 +447,9 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/admin/tempban/user/{uid}")]
         public HttpResponseMessage TemporaryBanUser(int uid)
         {
-            if (uid > 0)
+            try
             {
-                try
+                if (uid > 0)
                 {
                     var user = UserServices.GetUser(uid);
                     if (user != null)
@@ -230,52 +467,53 @@ namespace AIUB_Ideas_Gateway.Controllers
                     }
                     return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User doesn't exists. Please check the user id!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid user id!" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+            }
         }
 
         [HttpPost]
-        [Route("api/admin/unban/user/uid")]
+        [Route("api/admin/unban/user/{uid}")]
         public HttpResponseMessage UnbanUser(int uid)
         {
-            if (uid > 0)
+            try
             {
-                try
+                if (uid > 0)
                 {
-                    var user = UserServices.GetUser(uid); if (user != null)
-                        if (user != null)
+                    var user = UserServices.GetUser(uid);
+                    if (user != null)
+                    {
+                        user.IsBan = false;
+                        bool rtn = UserServices.UpdateUser(user);
+                        if (rtn == true)
                         {
-                            user.IsBan = false;
-                            bool rtn = UserServices.UpdateUser(user);
-                            if (rtn == true)
-                            {
-                                return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & user is unbanned now!" });
-                            }
-                            else
-                            {
-                                return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in user un ban!" });
-                            }
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "User information update & user is unbanned now!" });
                         }
+                        else
+                        {
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in user un ban!" });
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User not found!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid user id" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
         }
 
         [HttpPost]
         [Route("api/admin/tempunban/user/{uid}")]
         public HttpResponseMessage TemporaryUnBanUser(int uid)
         {
-            if (uid > 0)
+            try
             {
-                try
+                if (uid > 0)
                 {
                     var user = UserServices.GetUser(uid);
                     if (user != null)
@@ -293,21 +531,22 @@ namespace AIUB_Ideas_Gateway.Controllers
                     }
                     return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "User doesn't exists. Please check the user id!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid user id!" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
+            }
+
         }
 
         [HttpPost]
         [Route("api/admin/ban/post/{postid}")]
         public HttpResponseMessage BanPost(int postid)
         {
-            if (postid > 0)
+            try
             {
-                try
+                if (postid > 0)
                 {
                     var post = PostServices.GetPost(postid);
                     if (post != null)
@@ -325,36 +564,15 @@ namespace AIUB_Ideas_Gateway.Controllers
                     }
                     return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post id" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+
         }
 
-        //[HttpPost]
-        //[Route("api/admin/tempban/post/{postid}")]
-        //public HttpResponseMessage TmeporayBanPost(int postid)
-        //{
-        //    if (postid > 0)
-        //    {
-        //        try
-        //        {
-        //            var post = PostServices.GetPost(postid);
-        //            if(post != null)
-        //            {
-        //                post.
-        //            }
-        //            return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Post not found" });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, ex.Message.ToString());
-        //        }
-        //    }
-        //    return Request.CreateResponse(HttpStatusCode.BadRequest);
-        //}
 
         [HttpPost]
         [Route("api/admin/unban/post/postid")]
@@ -389,9 +607,10 @@ namespace AIUB_Ideas_Gateway.Controllers
         [Route("api/admin/ban/job/{jobid}")]
         public HttpResponseMessage BanJob(int jobid)
         {
-            if (jobid > 0)
+
+            try
             {
-                try
+                if (jobid > 0)
                 {
                     var job = JobServices.JobPost(jobid);
                     if (job != null)
@@ -407,34 +626,25 @@ namespace AIUB_Ideas_Gateway.Controllers
                             return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Something went wrong in job ban!" });
                         }
                     }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Job not found" });
-                    }
+                    return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No job found with this id!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid Job id!" });
             }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
+            }
+
         }
-        // Permanent ban cannot create account with same email and username
 
-        //[HttpPost]
-        //[Route("api/admin/tempban/job/{jobid}")]
-        //public HttpResponseMessage TmeporayBanJob(int postid)
-        //{
-        //    return Request.CreateResponse(HttpStatusCode.InternalServerError);
-        //}
-
+        // Unban a job post
         [HttpPost]
         [Route("api/admin/unban/job/{jobid}")]
         public HttpResponseMessage UnbanJob(int jobid)
         {
-            if (jobid > 0)
+            try
             {
-                try
+                if (jobid > 0)
                 {
                     var job = JobServices.JobPost(jobid);
                     if (job != null)
@@ -449,149 +659,13 @@ namespace AIUB_Ideas_Gateway.Controllers
                     }
                     return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "Job not found!" });
                 }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
-            }
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
-        }
-
-
-        //comment
-        //Complex feature: Statistic analyze of total active users their post, job post last 1 week or 3 days.  
-        // for implementing this we have different search login at user / post/
-
-        //Getting posts with in a date range
-        [HttpGet]
-        [Route("api/admin/posts/within/{today}/{uptoDay}")]
-        // GET api/post/within?today=2023-08-10&uptoDay=2023-08-14
-        public HttpResponseMessage GetPostsWithinRange(DateTime today, DateTime uptoDay)
-        {
-            if (today != null && uptoDay != null)
-            {
-                try
-                {
-                    var posts = PostServices.GetPostsInRange(today, uptoDay);
-                    if (posts != null)
-                        return Request.CreateResponse(HttpStatusCode.OK, posts);
-                    else
-                        return Request.CreateResponse(HttpStatusCode.NotFound, new { Msg = "No post found!" });
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
-            }
-            return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid data value" });
-        }
-
-
-
-        //Admin see job posts
-        [HttpPost]
-        [Route("api/admin/jobpost/{id}")]
-        public HttpResponseMessage AdminjobPost(int id)
-        {
-            try
-            {
-                var data = JobServices.JobPost(id);
-                return Request.CreateResponse(HttpStatusCode.OK, data);
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
             }
         }
-            
-        
 
-        //Admin  create job posts
-        [HttpPost]
-        [Route("api/admin/jobpost/create")]
-        public HttpResponseMessage AdminjobpostCreate(JobDTO obj)
-        {
-            if (obj.Title != null && obj.Description != null)
-            {
-                try
-                {
-                    var token = Request.Headers.Authorization.ToString();
-                    var adminID = AuthServices.GetUserID(token);
-                    obj.CreatedAt = DateTime.Now;
-                    obj.UpdatedAt = null;
-                    obj.UserID = adminID;
-
-                    var data = JobServices.CreateJobPost(obj);
-                    if (data == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Created!" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of job" });
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-                }
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid job object" });
-            }
-        }
-
-        //Admin update job post
-        [HttpPost]
-        [Route("api/admin/post/update")]
-        public HttpResponseMessage AdminJobUpdate(JobDTO obj)
-        {
-            try
-            {
-                var token = Request.Headers.Authorization.ToString();
-                var adminID = AuthServices.GetUserID(token);
-                if (obj.UserID == adminID)
-                {
-                    var res = JobServices.UpdateJobPost(obj);
-                    if (res == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Updated" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in job update" });
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have permission to update this job!" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-
-        }
-
-
-        //Admin delete job posts
-        [HttpPost]
-        [Route("api/admin/jobpost/delete/{id}")]
-        public HttpResponseMessage AdminJobDelete(JobDTO obj)
-        {
-            try
-            {
-                var token = Request.Headers.Authorization.ToString();
-                var adminID = AuthServices.GetUserID(token);
-                if (obj.UserID == adminID)
-                {
-                    var res = JobServices.DeleteJobPost(obj.JobID);
-                    if (res == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Deleted" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Job delete" });
-                }
-                else
-                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have the permission to delete this job!" });
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message.ToString());
-            }
-        }
     }
 }

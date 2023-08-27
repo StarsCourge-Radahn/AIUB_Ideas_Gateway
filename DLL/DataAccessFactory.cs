@@ -55,6 +55,11 @@ namespace DLL
         {
             return new UserRepo();
         }
+
+        public static IStatistical<Session, int, bool, Session, string> AllActiveUserData()
+        {
+            return new SessionRepo();
+        }
         public static IStatistical<Post, int, bool, Post, string> PostStatisticalDataAccess()
         {
             return new PostRepo();

@@ -55,7 +55,6 @@ namespace BLL.Services
         public static UserDTO GetUserName(string userName)
         {
             var user = DataAccessFactory.AuthDataAccess().GetByUsername(userName);
-            //var config = new MapperConfiguration(cfg => { cfg.CreateMap<User, UserDTO>(); });
             var mapper = MappingService<User, UserDTO>.GetMapper();
             var rtn = mapper.Map<UserDTO>(user);
             return rtn;
@@ -63,12 +62,6 @@ namespace BLL.Services
         public static List<UserDTO> GetUsers()
         {
             var users = DataAccessFactory.UserDataAccess().GetAll(true);
-
-            //var config = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.CreateMap<User, UserDTO>();
-            //});
-
             var mapper = MappingService<User, UserDTO>.GetMapper();
             var rtn = mapper.Map<List<UserDTO>>(users);
 
@@ -78,12 +71,15 @@ namespace BLL.Services
         public static UserDTO GetUser(int id)
         {
             var user = DataAccessFactory.UserDataAccess().GetByID(id);
-            //var config = new MapperConfiguration(cfg => { cfg.CreateMap<User, UserDTO>(); });
             var mapper = MappingService<User, UserDTO>.GetMapper();
             var rtn = mapper.Map<UserDTO>(user);
             return rtn;
         }
-
+        public static int CountUsers()
+        {
+            var users = DataAccessFactory.UserDataAccess().GetAll(true);
+            return users.Count();
+        }
         public static bool UpdateUser(UserDTO obj)
         {
             var user = DataAccessFactory.UserDataAccess().GetByID(obj.UserID);
@@ -109,7 +105,7 @@ namespace BLL.Services
         }
         public static int CurrentlyActiveUsers()
         {
-            var cnt = DataAccessFactory.ActiveUsersDataAccess().ActiveAll();
+            var cnt = DataAccessFactory.AllActiveUserData().ActiveAll();
             return cnt.Count();
         }
 

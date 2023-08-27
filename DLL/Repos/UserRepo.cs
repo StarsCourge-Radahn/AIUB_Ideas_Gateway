@@ -103,7 +103,7 @@ namespace DLL.Repos
             throw new NotImplementedException();
         }
 
-        public List<User> AllBan()
+        public List<User> AllBan()  
         {
             return _context.Users.Where(u => u.IsBan == true).ToList();
         }

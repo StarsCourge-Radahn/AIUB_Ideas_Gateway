@@ -6,7 +6,7 @@ using System.Web;
 
 namespace AIUB_Ideas_Gateway.Models
 {
-    public class ChangePassword
+    public class ChangePasswordModel
     {
         public int UserId { get; set; } 
         [Required]

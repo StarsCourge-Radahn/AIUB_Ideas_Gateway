@@ -48,8 +48,7 @@ namespace BLL.Services
         }
         public static double AverageCommentCountPost()
         {
-            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
-
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(true);
 
             var commentCounts = comments
                 .Where(c => c.JobID == null)
@@ -67,9 +66,7 @@ namespace BLL.Services
 
         public static double AverageCommentCountJob()
         {
-            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
-
-
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(true);
             var commentCounts = comments
                 .Where(c => c.PostID == null)
                 .GroupBy(c => c.JobID)
@@ -156,16 +153,17 @@ namespace BLL.Services
             return result;
         }
 
-        public List<CommentDTO> GetUserPostComments(int userId, int postId)
+        public static List<CommentDTO> GetUserPostComments(int userId, int postId)
         {
             var comments = DataAccessFactory.CommentDataAccess().GetUserPostComments(userId, postId);
 
             var mapper = MappingService<Comment, CommentDTO>.GetMapper();
+
             var result = mapper.Map<List<CommentDTO>>(comments);
             return result;
         }
 
-        public List<CommentDTO> GetUserJobComments(int userId, int postId)
+        public static List<CommentDTO> GetUserJobComments(int userId, int postId)
         {
             var comments = DataAccessFactory.CommentDataAccess().GetUserJobComments(userId, postId);
 

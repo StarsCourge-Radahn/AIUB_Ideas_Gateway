@@ -46,10 +46,13 @@ namespace BLL.Services
         public static PostDTO GetPost(int id)
         {
             var post = DataAccessFactory.PostDataAccess().GetByID(id);
-
-            var mapper = MappingService<Post, PostDTO>.GetMapper();
-            var rtn = mapper.Map<PostDTO>(post);
-            return rtn;
+            if (post != null)
+            {
+                var mapper = MappingService<Post, PostDTO>.GetMapper();
+                var rtn = mapper.Map<PostDTO>(post);
+                return rtn;
+            }
+            return null;
         }
 
         public static bool CreatePost(PostDTO obj)
