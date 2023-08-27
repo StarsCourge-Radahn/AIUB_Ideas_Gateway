@@ -39,7 +39,7 @@ namespace BLL.Services
                 .Select(group => new CommentCountDTO
                 {
                     PostId = (int)group.Key,                   // Post ID
-                    PostContent = group.First().Post.Content, // Get the post content correctly
+                    PostContent = group.First().Post.Title, // Get the post content correctly
                     CommentCount = group.Count()          // Number of comments for the post
                 })
                 .ToList();
@@ -198,5 +198,39 @@ namespace BLL.Services
             }
             catch(Exception) { return false; }
         }
+
+        public static List<CommentCountDTO> GetCommentCountForPostsToday()
+        {
+            DateTime todayStart = DateTime.Today;
+            DateTime todayEnd = todayStart.AddDays(1);
+
+            // Query the database to get the comment counts for each post created today
+            var comments = DataAccessFactory.CommentDataAccess().GetAll(false);
+
+            var commentCounts = comments
+                .Where(comment => comment.CreatedAt >= todayStart && comment.CreatedAt < todayEnd)
+                .GroupBy(comment => comment.PostID)
+                .Select(group => new CommentCountDTO
+                {
+                    PostId = (int)group.Key,                   // Post ID
+                    PostContent = group.First().Post.Title, // Get the post content correctly
+                    CommentCount = group.Count()          // Number of comments for the post
+                })
+                .ToList();
+
+            // Load the post content for each PostId
+            //foreach (var commentCount in commentCounts)
+            //{
+            //    var post = DataAccessFactory.PostDataAccess().GetByID(commentCount.PostId);
+            //    if (post != null)
+            //    {
+            //        commentCount.PostContent = post.Title;
+            //    }
+            //}
+
+            return commentCounts;
+        }
+
+
     }
 }

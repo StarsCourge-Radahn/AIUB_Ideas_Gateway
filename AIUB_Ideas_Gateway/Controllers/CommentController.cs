@@ -379,6 +379,23 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
 
+        [HttpGet]
+        [Route("api/stats/comments-today")]
+        public HttpResponseMessage GetCommentStatsForToday()
+        {
+            try
+            {
+                var commentStats = CommentServices.GetCommentCountForPostsToday();
+                return Request.CreateResponse(HttpStatusCode.OK, commentStats);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+
+
 
     }
 }
