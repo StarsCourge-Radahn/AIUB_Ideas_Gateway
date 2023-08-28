@@ -30,7 +30,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
         // only admin can see all the post comments
-        [Admin]
+        [LoggedIn]
         [HttpGet]
         [Route("api/comment/postcomment_count")]
         public HttpResponseMessage AllPostCount() // all comment(post and job)
@@ -60,7 +60,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
         // only admin can see all the job comments.
-        [Admin]
+        [LoggedIn]
         [HttpGet]
         [Route("api/comment/job_postcomment_count")]
         public HttpResponseMessage AllJobPostCount()
@@ -140,11 +140,16 @@ namespace AIUB_Ideas_Gateway.Controllers
                     obj.CreatedAt = DateTime.Now;
                     obj.UserID = userId;
 
-                    var data = CommentServices.CreateComment(obj);
-                    if (data == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Comment Created!" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Comment" });
+                    bool IsUserBan = UserServices.CheckUserBan(userId);
+                    if (IsUserBan == false)
+                    {
+                        var data = CommentServices.CreateComment(obj);
+                        if (data == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Comment Created!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Comment" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "User don't have permission to comment." });
                 }
                 catch (Exception ex)
                 {
@@ -424,9 +429,5 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-
-
-
-
     }
 }

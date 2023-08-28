@@ -48,11 +48,16 @@ namespace AIUB_Ideas_Gateway.Controllers
                     obj.UpdatedAt = null;
                     obj.UserID = userId;
 
-                    var data = PostServices.CreatePost(obj);
-                    if (data == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                    bool IsTempBan = UserServices.CheckUserBan(userId);
+                    if (IsTempBan == false)
+                    {
+                        var data = PostServices.CreatePost(obj);
+                        if (data == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Post Created!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of post" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "You don't have access to create post. User temporary ban now!" });
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +76,7 @@ namespace AIUB_Ideas_Gateway.Controllers
 
         public HttpResponseMessage Update(PostDTO obj)
         {
-            if (obj.UserID >0 && obj.PostID > 0)
+            if (obj.UserID > 0 && obj.PostID > 0)
             {
                 try
                 {
@@ -129,7 +134,7 @@ namespace AIUB_Ideas_Gateway.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new { Msg = "Invalid post information" });
         }
 
-        [LoggedIn] 
+        [Admin]
         [HttpGet]
         [Route("api/post/reports/monthly_postcount")]
         public HttpResponseMessage GetMonthlyPostCountForCurrentYear()

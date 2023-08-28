@@ -75,11 +75,7 @@ namespace BLL.Services
             var rtn = mapper.Map<UserDTO>(user);
             return rtn;
         }
-        public static int CountUsers()
-        {
-            var users = DataAccessFactory.UserDataAccess().GetAll(true);
-            return users.Count();
-        }
+        
         public static bool UpdateUser(UserDTO obj)
         {
             var user = DataAccessFactory.UserDataAccess().GetByID(obj.UserID);
@@ -96,6 +92,18 @@ namespace BLL.Services
                 return rtn == true;
             }
             return false;
+        }
+
+        public static bool CheckUserBan(int id)
+        {
+            var user = GetUser(id);
+            return user.TemporaryBan;
+        }
+
+        public static int CountUsers()
+        {
+            var users = DataAccessFactory.UserDataAccess().GetAll(true);
+            return users.Count();
         }
 
         public static bool DeleteUser(int id)

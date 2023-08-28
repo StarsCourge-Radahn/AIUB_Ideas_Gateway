@@ -121,7 +121,7 @@ namespace BLL.Services
             int currentYear = currentDate.Year;
 
             // Query the database to get all posts created in the current year
-            var posts = DataAccessFactory.JobDataAccess().GetAll(false);
+            var posts = DataAccessFactory.JobDataAccess().GetAll(true);
 
             var postCounts = posts
                 .Where(post => post.CreatedAt.Year == currentYear)

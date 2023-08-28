@@ -67,11 +67,16 @@ namespace AIUB_Ideas_Gateway.Controllers
                     obj.IsBan = false;
                     obj.IsDeleted = false;
 
-                    var data = JobServices.CreateJobPost(obj);
-                    if (data == true)
-                        return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Post Created!" });
-                    else
-                        return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Job post" });
+                    bool IsBan = UserServices.CheckUserBan(userId);
+                    if (IsBan == false)
+                    {
+                        var data = JobServices.CreateJobPost(obj);
+                        if (data == true)
+                            return Request.CreateResponse(HttpStatusCode.OK, new { Msg = "Job Post Created!" });
+                        else
+                            return Request.CreateResponse(HttpStatusCode.InternalServerError, new { Msg = "Something went wrong in Creation of Job post" });
+                    }
+                    return Request.CreateResponse(HttpStatusCode.Forbidden, new { Msg = "User don't have permission. User temporary ban!" });
                 }
                 catch (Exception ex)
                 {
@@ -137,6 +142,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
+        // Apply for a job
         [HttpPost]
         [Route("api/job/apply/{jobid}")]
         public HttpResponseMessage ApplyAJob(int jobid)
@@ -158,7 +164,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-
+        // show applied users
         [HttpGet]
         [Route("api/job/applicants/{jobid}")]
         public HttpResponseMessage AppliedUsers(int jobid)
@@ -204,7 +210,7 @@ namespace AIUB_Ideas_Gateway.Controllers
         }
 
         [HttpPost]
-        [Route("api/job/application/update/{jobid}/userid/{status}")]
+        [Route("api/job/application/update/{jobid}/{userid}/{status}")]
         public HttpResponseMessage UpdateUserApplication(int jobid, int userid, int status)
         {
             try
@@ -255,7 +261,7 @@ namespace AIUB_Ideas_Gateway.Controllers
             }
         }
 
-        [LoggedIn]
+        [Admin]
         [HttpGet]
         [Route("api/job/reports/monthly_jobtpostcount")]
         public HttpResponseMessage GetMonthlyPostCountForCurrentYear()
